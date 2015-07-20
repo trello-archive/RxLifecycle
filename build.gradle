@@ -1,0 +1,14 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:1.2.3'
+    }
+}
+
+ext {
+    minSdkVersion = 15
+    compileSdkVersion = 22
+    buildToolsVersion = '22.0.1'
+}
