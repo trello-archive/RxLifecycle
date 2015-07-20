@@ -32,73 +32,99 @@ import static org.junit.Assert.assertTrue;
 @Config(manifest = Config.NONE)
 public class RxLifecycleTest {
 
-    private BehaviorSubject<LifecycleEvent> lifecycle;
     private Observable<Object> observable;
 
     @Before
     public void setup() {
-        lifecycle = BehaviorSubject.create();
-
         // Simulate an actual lifecycle (hot Observable that does not end)
         observable = PublishSubject.create().asObservable();
     }
 
     @Test
-    public void testBindUntilLifecycleEvent() {
-        Subscription untilStop =
-            observable.compose(RxLifecycle.bindUntilEvent(lifecycle, LifecycleEvent.STOP)).subscribe();
+    public void testBindUntilFragmentEvent() {
+        BehaviorSubject<FragmentEvent> lifecycle = BehaviorSubject.create();
 
-        lifecycle.onNext(LifecycleEvent.CREATE);
+        Subscription untilStop =
+            observable.compose(RxLifecycle.bindUntilFragmentEvent(lifecycle, FragmentEvent.STOP)).subscribe();
+
+        lifecycle.onNext(FragmentEvent.ATTACH);
         assertFalse(untilStop.isUnsubscribed());
-        lifecycle.onNext(LifecycleEvent.START);
+        lifecycle.onNext(FragmentEvent.CREATE);
         assertFalse(untilStop.isUnsubscribed());
-        lifecycle.onNext(LifecycleEvent.RESUME);
+        lifecycle.onNext(FragmentEvent.CREATE_VIEW);
         assertFalse(untilStop.isUnsubscribed());
-        lifecycle.onNext(LifecycleEvent.PAUSE);
+        lifecycle.onNext(FragmentEvent.START);
         assertFalse(untilStop.isUnsubscribed());
-        lifecycle.onNext(LifecycleEvent.STOP);
+        lifecycle.onNext(FragmentEvent.RESUME);
+        assertFalse(untilStop.isUnsubscribed());
+        lifecycle.onNext(FragmentEvent.PAUSE);
+        assertFalse(untilStop.isUnsubscribed());
+        lifecycle.onNext(FragmentEvent.STOP);
+        assertTrue(untilStop.isUnsubscribed());
+    }
+
+    @Test
+    public void testBindUntilActivityEvent() {
+        BehaviorSubject<ActivityEvent> lifecycle = BehaviorSubject.create();
+
+        Subscription untilStop =
+            observable.compose(RxLifecycle.bindUntilActivityEvent(lifecycle, ActivityEvent.STOP)).subscribe();
+
+        lifecycle.onNext(ActivityEvent.CREATE);
+        assertFalse(untilStop.isUnsubscribed());
+        lifecycle.onNext(ActivityEvent.START);
+        assertFalse(untilStop.isUnsubscribed());
+        lifecycle.onNext(ActivityEvent.RESUME);
+        assertFalse(untilStop.isUnsubscribed());
+        lifecycle.onNext(ActivityEvent.PAUSE);
+        assertFalse(untilStop.isUnsubscribed());
+        lifecycle.onNext(ActivityEvent.STOP);
         assertTrue(untilStop.isUnsubscribed());
     }
 
     @Test
     public void testBindActivityLifecycle() {
-        lifecycle.onNext(LifecycleEvent.CREATE);
+        BehaviorSubject<ActivityEvent> lifecycle = BehaviorSubject.create();
+
+        lifecycle.onNext(ActivityEvent.CREATE);
         Subscription createSub = observable.compose(RxLifecycle.bindActivity(lifecycle)).subscribe();
 
-        lifecycle.onNext(LifecycleEvent.START);
+        lifecycle.onNext(ActivityEvent.START);
         assertFalse(createSub.isUnsubscribed());
         Subscription startSub = observable.compose(RxLifecycle.bindActivity(lifecycle)).subscribe();
 
-        lifecycle.onNext(LifecycleEvent.RESUME);
+        lifecycle.onNext(ActivityEvent.RESUME);
         assertFalse(createSub.isUnsubscribed());
         assertFalse(startSub.isUnsubscribed());
         Subscription resumeSub = observable.compose(RxLifecycle.bindActivity(lifecycle)).subscribe();
 
-        lifecycle.onNext(LifecycleEvent.PAUSE);
+        lifecycle.onNext(ActivityEvent.PAUSE);
         assertFalse(createSub.isUnsubscribed());
         assertFalse(startSub.isUnsubscribed());
         assertTrue(resumeSub.isUnsubscribed());
         Subscription pauseSub = observable.compose(RxLifecycle.bindActivity(lifecycle)).subscribe();
 
-        lifecycle.onNext(LifecycleEvent.STOP);
+        lifecycle.onNext(ActivityEvent.STOP);
         assertFalse(createSub.isUnsubscribed());
         assertTrue(startSub.isUnsubscribed());
         assertTrue(pauseSub.isUnsubscribed());
         Subscription stopSub = observable.compose(RxLifecycle.bindActivity(lifecycle)).subscribe();
 
-        lifecycle.onNext(LifecycleEvent.DESTROY);
+        lifecycle.onNext(ActivityEvent.DESTROY);
         assertTrue(createSub.isUnsubscribed());
         assertTrue(stopSub.isUnsubscribed());
     }
 
     @Test(expected = RuntimeException.class)
     public void testThrowsExceptionOutsideActivityLifecycle() {
-        lifecycle.onNext(LifecycleEvent.CREATE);
-        lifecycle.onNext(LifecycleEvent.START);
-        lifecycle.onNext(LifecycleEvent.RESUME);
-        lifecycle.onNext(LifecycleEvent.PAUSE);
-        lifecycle.onNext(LifecycleEvent.STOP);
-        lifecycle.onNext(LifecycleEvent.DESTROY);
+        BehaviorSubject<ActivityEvent> lifecycle = BehaviorSubject.create();
+
+        lifecycle.onNext(ActivityEvent.CREATE);
+        lifecycle.onNext(ActivityEvent.START);
+        lifecycle.onNext(ActivityEvent.RESUME);
+        lifecycle.onNext(ActivityEvent.PAUSE);
+        lifecycle.onNext(ActivityEvent.STOP);
+        lifecycle.onNext(ActivityEvent.DESTROY);
 
         observable.compose(RxLifecycle.bindActivity(lifecycle))
             .subscribe(null, new Action1<Throwable>() {
@@ -111,32 +137,34 @@ public class RxLifecycleTest {
 
     @Test
     public void testBindFragmentLifecycle() {
-        lifecycle.onNext(LifecycleEvent.ATTACH);
+        BehaviorSubject<FragmentEvent> lifecycle = BehaviorSubject.create();
+
+        lifecycle.onNext(FragmentEvent.ATTACH);
         Subscription attachSub = observable.compose(RxLifecycle.bindFragment(lifecycle)).subscribe();
 
-        lifecycle.onNext(LifecycleEvent.CREATE);
+        lifecycle.onNext(FragmentEvent.CREATE);
         assertFalse(attachSub.isUnsubscribed());
         Subscription createSub = observable.compose(RxLifecycle.bindFragment(lifecycle)).subscribe();
 
-        lifecycle.onNext(LifecycleEvent.CREATE_VIEW);
+        lifecycle.onNext(FragmentEvent.CREATE_VIEW);
         assertFalse(attachSub.isUnsubscribed());
         assertFalse(createSub.isUnsubscribed());
         Subscription createViewSub = observable.compose(RxLifecycle.bindFragment(lifecycle)).subscribe();
 
-        lifecycle.onNext(LifecycleEvent.START);
+        lifecycle.onNext(FragmentEvent.START);
         assertFalse(attachSub.isUnsubscribed());
         assertFalse(createSub.isUnsubscribed());
         assertFalse(createViewSub.isUnsubscribed());
         Subscription startSub = observable.compose(RxLifecycle.bindFragment(lifecycle)).subscribe();
 
-        lifecycle.onNext(LifecycleEvent.RESUME);
+        lifecycle.onNext(FragmentEvent.RESUME);
         assertFalse(attachSub.isUnsubscribed());
         assertFalse(createSub.isUnsubscribed());
         assertFalse(createViewSub.isUnsubscribed());
         assertFalse(startSub.isUnsubscribed());
         Subscription resumeSub = observable.compose(RxLifecycle.bindFragment(lifecycle)).subscribe();
 
-        lifecycle.onNext(LifecycleEvent.PAUSE);
+        lifecycle.onNext(FragmentEvent.PAUSE);
         assertFalse(attachSub.isUnsubscribed());
         assertFalse(createSub.isUnsubscribed());
         assertFalse(createViewSub.isUnsubscribed());
@@ -144,7 +172,7 @@ public class RxLifecycleTest {
         assertTrue(resumeSub.isUnsubscribed());
         Subscription pauseSub = observable.compose(RxLifecycle.bindFragment(lifecycle)).subscribe();
 
-        lifecycle.onNext(LifecycleEvent.STOP);
+        lifecycle.onNext(FragmentEvent.STOP);
         assertFalse(attachSub.isUnsubscribed());
         assertFalse(createSub.isUnsubscribed());
         assertFalse(createViewSub.isUnsubscribed());
@@ -152,36 +180,38 @@ public class RxLifecycleTest {
         assertTrue(pauseSub.isUnsubscribed());
         Subscription stopSub = observable.compose(RxLifecycle.bindFragment(lifecycle)).subscribe();
 
-        lifecycle.onNext(LifecycleEvent.DESTROY_VIEW);
+        lifecycle.onNext(FragmentEvent.DESTROY_VIEW);
         assertFalse(attachSub.isUnsubscribed());
         assertFalse(createSub.isUnsubscribed());
         assertTrue(createViewSub.isUnsubscribed());
         assertTrue(stopSub.isUnsubscribed());
         Subscription destroyViewSub = observable.compose(RxLifecycle.bindFragment(lifecycle)).subscribe();
 
-        lifecycle.onNext(LifecycleEvent.DESTROY);
+        lifecycle.onNext(FragmentEvent.DESTROY);
         assertFalse(attachSub.isUnsubscribed());
         assertTrue(createSub.isUnsubscribed());
         assertTrue(destroyViewSub.isUnsubscribed());
         Subscription destroySub = observable.compose(RxLifecycle.bindFragment(lifecycle)).subscribe();
 
-        lifecycle.onNext(LifecycleEvent.DETACH);
+        lifecycle.onNext(FragmentEvent.DETACH);
         assertTrue(attachSub.isUnsubscribed());
         assertTrue(destroySub.isUnsubscribed());
     }
 
     @Test(expected = RuntimeException.class)
     public void testThrowsExceptionOutsideFragmentLifecycle() {
-        lifecycle.onNext(LifecycleEvent.ATTACH);
-        lifecycle.onNext(LifecycleEvent.CREATE);
-        lifecycle.onNext(LifecycleEvent.CREATE_VIEW);
-        lifecycle.onNext(LifecycleEvent.START);
-        lifecycle.onNext(LifecycleEvent.RESUME);
-        lifecycle.onNext(LifecycleEvent.PAUSE);
-        lifecycle.onNext(LifecycleEvent.STOP);
-        lifecycle.onNext(LifecycleEvent.DESTROY_VIEW);
-        lifecycle.onNext(LifecycleEvent.DESTROY);
-        lifecycle.onNext(LifecycleEvent.DETACH);
+        BehaviorSubject<FragmentEvent> lifecycle = BehaviorSubject.create();
+
+        lifecycle.onNext(FragmentEvent.ATTACH);
+        lifecycle.onNext(FragmentEvent.CREATE);
+        lifecycle.onNext(FragmentEvent.CREATE_VIEW);
+        lifecycle.onNext(FragmentEvent.START);
+        lifecycle.onNext(FragmentEvent.RESUME);
+        lifecycle.onNext(FragmentEvent.PAUSE);
+        lifecycle.onNext(FragmentEvent.STOP);
+        lifecycle.onNext(FragmentEvent.DESTROY_VIEW);
+        lifecycle.onNext(FragmentEvent.DESTROY);
+        lifecycle.onNext(FragmentEvent.DETACH);
 
         observable.compose(RxLifecycle.bindFragment(lifecycle))
             .subscribe(null, new Action1<Throwable>() {

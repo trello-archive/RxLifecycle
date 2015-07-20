@@ -15,9 +15,9 @@
 package com.trello.rxlifecycle;
 
 /**
- * Lifecycle events that can be emitted by Activities or Fragments.
+ * Lifecycle events that can be emitted by Fragments.
  */
-public enum LifecycleEvent {
+public enum FragmentEvent {
 
     ATTACH,
     CREATE,
