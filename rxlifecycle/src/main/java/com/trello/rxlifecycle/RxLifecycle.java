@@ -27,36 +27,45 @@ public class RxLifecycle {
     /**
      * Binds the given source to a lifecycle.
      * <p/>
+     * Use with {@link Observable#compose(Observable.Transformer)}:
+     * {@code source.compose(RxLifecycle.bindUntilLifecycleEvent(lifecycle, LifecycleEvent.STOP)).subscribe()}
+     * <p/>
      * When the lifecycle event occurs, the source will cease to emit any notifications.
      * <p/>
      * Warning: In order for this to work in all possible cases, this should only be called
      * immediately before calling subscribe().
      *
      * @param lifecycle the lifecycle sequence
-     * @param source the source sequence
      * @param event the event which should conclude notifications from the source
      */
-    public static <T> Observable<T> bindUntilLifecycleEvent(Observable<LifecycleEvent> lifecycle,
-                                                            Observable<T> source,
-                                                            final LifecycleEvent event) {
-        if (lifecycle == null || source == null) {
-            throw new IllegalArgumentException("Lifecycle and Observable must be given");
+    public static <T> Observable.Transformer<T, T> bindUntilLifecycleEvent(final Observable<LifecycleEvent> lifecycle,
+                                                                           final LifecycleEvent event) {
+        if (lifecycle == null) {
+            throw new IllegalArgumentException("Lifecycle must be given");
         }
 
-        return source.lift(
-            new OperatorSubscribeUntil<T, LifecycleEvent>(
-                lifecycle.takeFirst(new Func1<LifecycleEvent, Boolean>() {
-                    @Override
-                    public Boolean call(LifecycleEvent lifecycleEvent) {
-                        return lifecycleEvent == event;
-                    }
-                })
-            )
-        );
+        return new Observable.Transformer<T, T>() {
+            @Override
+            public Observable<T> call(Observable<T> source) {
+                return source.lift(
+                    new OperatorSubscribeUntil<T, LifecycleEvent>(
+                        lifecycle.takeFirst(new Func1<LifecycleEvent, Boolean>() {
+                            @Override
+                            public Boolean call(LifecycleEvent lifecycleEvent) {
+                                return lifecycleEvent == event;
+                            }
+                        })
+                    )
+                );
+            }
+        };
     }
 
     /**
      * Binds the given source to an Activity lifecycle.
+     * <p/>
+     * Use with {@link Observable#compose(Observable.Transformer)}:
+     * {@code source.compose(RxLifecycle.bindActivityLifecycle(lifecycle)).subscribe()}
      * <p/>
      * This helper automatically determines (based on the lifecycle sequence itself) when the source
      * should stop emitting items. In the case that the lifecycle sequence is in the
@@ -71,14 +80,16 @@ public class RxLifecycle {
      * immediately before calling subscribe().
      *
      * @param lifecycle the lifecycle sequence of an Activity
-     * @param source the source sequence
      */
-    public static <T> Observable<T> bindActivityLifecycle(Observable<LifecycleEvent> lifecycle, Observable<T> source) {
-        return bindLifecycle(lifecycle, source, ACTIVITY_LIFECYCLE);
+    public static <T> Observable.Transformer<T, T> bindActivityLifecycle(Observable<LifecycleEvent> lifecycle) {
+        return bindLifecycle(lifecycle, ACTIVITY_LIFECYCLE);
     }
 
     /**
      * Binds the given source to a Fragment lifecycle.
+     * <p/>
+     * Use with {@link Observable#compose(Observable.Transformer)}:
+     * {@code source.compose(RxLifecycle.bindFragmentLifecycle(lifecycle)).subscribe()}
      * <p/>
      * This helper automatically determines (based on the lifecycle sequence itself) when the source
      * should stop emitting items. In the case that the lifecycle sequence is in the
@@ -93,42 +104,45 @@ public class RxLifecycle {
      * immediately before calling subscribe().
      *
      * @param lifecycle the lifecycle sequence of a Fragment
-     * @param source the source sequence
      */
-    public static <T> Observable<T> bindFragmentLifecycle(Observable<LifecycleEvent> lifecycle, Observable<T> source) {
-        return bindLifecycle(lifecycle, source, FRAGMENT_LIFECYCLE);
+    public static <T> Observable.Transformer<T, T> bindFragmentLifecycle(Observable<LifecycleEvent> lifecycle) {
+        return bindLifecycle(lifecycle, FRAGMENT_LIFECYCLE);
     }
 
-    private static <T> Observable<T> bindLifecycle(Observable<LifecycleEvent> lifecycle,
-                                                   Observable<T> source,
-                                                   Func1<LifecycleEvent, LifecycleEvent> correspondingEvents) {
-        if (lifecycle == null || source == null) {
-            throw new IllegalArgumentException("Lifecycle and Observable must be given");
+    private static <T> Observable.Transformer<T, T> bindLifecycle(Observable<LifecycleEvent> lifecycle,
+                                                                  final Func1<LifecycleEvent, LifecycleEvent> correspondingEvents) {
+        if (lifecycle == null) {
+            throw new IllegalArgumentException("Lifecycle must be given");
         }
 
         // Make sure we're truly comparing a single stream to itself
-        Observable<LifecycleEvent> sharedLifecycle = lifecycle.share();
+        final Observable<LifecycleEvent> sharedLifecycle = lifecycle.share();
 
         // Keep emitting from source until the corresponding event occurs in the lifecycle
-        return source.lift(
-            new OperatorSubscribeUntil<T, Boolean>(
-                Observable.combineLatest(
-                    sharedLifecycle.take(1).map(correspondingEvents),
-                    sharedLifecycle.skip(1),
-                    new Func2<LifecycleEvent, LifecycleEvent, Boolean>() {
-                        @Override
-                        public Boolean call(LifecycleEvent bindUntilEvent, LifecycleEvent lifecycleEvent) {
-                            return lifecycleEvent == bindUntilEvent;
-                        }
-                    })
-                    .takeFirst(new Func1<Boolean, Boolean>() {
-                        @Override
-                        public Boolean call(Boolean shouldComplete) {
-                            return shouldComplete;
-                        }
-                    })
-            )
-        );
+        return new Observable.Transformer<T, T>() {
+            @Override
+            public Observable<T> call(Observable<T> source) {
+                return source.lift(
+                    new OperatorSubscribeUntil<T, Boolean>(
+                        Observable.combineLatest(
+                            sharedLifecycle.take(1).map(correspondingEvents),
+                            sharedLifecycle.skip(1),
+                            new Func2<LifecycleEvent, LifecycleEvent, Boolean>() {
+                                @Override
+                                public Boolean call(LifecycleEvent bindUntilEvent, LifecycleEvent lifecycleEvent) {
+                                    return lifecycleEvent == bindUntilEvent;
+                                }
+                            })
+                            .takeFirst(new Func1<Boolean, Boolean>() {
+                                @Override
+                                public Boolean call(Boolean shouldComplete) {
+                                    return shouldComplete;
+                                }
+                            })
+                    )
+                );
+            }
+        };
     }
 
     // Figures out which corresponding next lifecycle event in which to unsubscribe, for Activities
