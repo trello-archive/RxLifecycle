@@ -15,6 +15,7 @@
 package com.trello.rxlifecycle.components;
 
 import com.trello.rxlifecycle.ActivityEvent;
+import com.trello.rxlifecycle.components.support.RxFragmentActivity;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -44,6 +45,20 @@ public class RxActivityLifecycleTest {
     public void testRxActivity() {
         testBindUntilEvent(Robolectric.buildActivity(RxActivity.class));
         testBindToLifecycle(Robolectric.buildActivity(RxActivity.class));
+    }
+
+    @Test
+    public void testRxFragmentActivity() {
+        testBindUntilEvent(Robolectric.buildActivity(RxFragmentActivity.class));
+        testBindToLifecycle(Robolectric.buildActivity(RxFragmentActivity.class));
+    }
+
+    @Test
+    public void testRxAppCompatActivity() {
+        // TODO: Doesn't work due to https://github.com/robolectric/robolectric/issues/1796
+        //
+        // testBindUntilEvent(Robolectric.buildActivity(RxAppCompatActivity.class));
+        // testBindToLifecycle(Robolectric.buildActivity(RxAppCompatActivity.class));
     }
 
     // Tests bindUntil for any given RxActivityLifecycle implementation
