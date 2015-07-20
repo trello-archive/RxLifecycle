@@ -28,7 +28,7 @@ public class RxLifecycle {
      * Binds the given source to a lifecycle.
      * <p/>
      * Use with {@link Observable#compose(Observable.Transformer)}:
-     * {@code source.compose(RxLifecycle.bindUntilLifecycleEvent(lifecycle, LifecycleEvent.STOP)).subscribe()}
+     * {@code source.compose(RxLifecycle.bindUntilEvent(lifecycle, LifecycleEvent.STOP)).subscribe()}
      * <p/>
      * When the lifecycle event occurs, the source will cease to emit any notifications.
      * <p/>
@@ -38,8 +38,8 @@ public class RxLifecycle {
      * @param lifecycle the lifecycle sequence
      * @param event the event which should conclude notifications from the source
      */
-    public static <T> Observable.Transformer<T, T> bindUntilLifecycleEvent(final Observable<LifecycleEvent> lifecycle,
-                                                                           final LifecycleEvent event) {
+    public static <T> Observable.Transformer<T, T> bindUntilEvent(final Observable<LifecycleEvent> lifecycle,
+                                                                  final LifecycleEvent event) {
         if (lifecycle == null) {
             throw new IllegalArgumentException("Lifecycle must be given");
         }
@@ -65,7 +65,7 @@ public class RxLifecycle {
      * Binds the given source to an Activity lifecycle.
      * <p/>
      * Use with {@link Observable#compose(Observable.Transformer)}:
-     * {@code source.compose(RxLifecycle.bindActivityLifecycle(lifecycle)).subscribe()}
+     * {@code source.compose(RxLifecycle.bindActivity(lifecycle)).subscribe()}
      * <p/>
      * This helper automatically determines (based on the lifecycle sequence itself) when the source
      * should stop emitting items. In the case that the lifecycle sequence is in the
@@ -81,15 +81,15 @@ public class RxLifecycle {
      *
      * @param lifecycle the lifecycle sequence of an Activity
      */
-    public static <T> Observable.Transformer<T, T> bindActivityLifecycle(Observable<LifecycleEvent> lifecycle) {
-        return bindLifecycle(lifecycle, ACTIVITY_LIFECYCLE);
+    public static <T> Observable.Transformer<T, T> bindActivity(Observable<LifecycleEvent> lifecycle) {
+        return bind(lifecycle, ACTIVITY_LIFECYCLE);
     }
 
     /**
      * Binds the given source to a Fragment lifecycle.
      * <p/>
      * Use with {@link Observable#compose(Observable.Transformer)}:
-     * {@code source.compose(RxLifecycle.bindFragmentLifecycle(lifecycle)).subscribe()}
+     * {@code source.compose(RxLifecycle.bindFragment(lifecycle)).subscribe()}
      * <p/>
      * This helper automatically determines (based on the lifecycle sequence itself) when the source
      * should stop emitting items. In the case that the lifecycle sequence is in the
@@ -105,12 +105,12 @@ public class RxLifecycle {
      *
      * @param lifecycle the lifecycle sequence of a Fragment
      */
-    public static <T> Observable.Transformer<T, T> bindFragmentLifecycle(Observable<LifecycleEvent> lifecycle) {
-        return bindLifecycle(lifecycle, FRAGMENT_LIFECYCLE);
+    public static <T> Observable.Transformer<T, T> bindFragment(Observable<LifecycleEvent> lifecycle) {
+        return bind(lifecycle, FRAGMENT_LIFECYCLE);
     }
 
-    private static <T> Observable.Transformer<T, T> bindLifecycle(Observable<LifecycleEvent> lifecycle,
-                                                                  final Func1<LifecycleEvent, LifecycleEvent> correspondingEvents) {
+    private static <T> Observable.Transformer<T, T> bind(Observable<LifecycleEvent> lifecycle,
+                                                         final Func1<LifecycleEvent, LifecycleEvent> correspondingEvents) {
         if (lifecycle == null) {
             throw new IllegalArgumentException("Lifecycle must be given");
         }
