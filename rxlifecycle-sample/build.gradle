@@ -1,0 +1,25 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    defaultConfig {
+        applicationId "com.trello.rxlifecycle.sample"
+        minSdkVersion rootProject.ext.minSdkVersion
+
+        targetSdkVersion 22
+        versionCode 1
+        versionName "1.0"
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile project(':rxlifecycle-components')
+
+    compile 'com.android.support:appcompat-v7:22.2.1'
+}
