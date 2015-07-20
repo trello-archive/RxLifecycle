@@ -28,6 +28,9 @@ public class RxLifecycle {
      * Binds the given source to a lifecycle.
      * <p/>
      * When the lifecycle event occurs, the source will cease to emit any notifications.
+     * <p/>
+     * Warning: In order for this to work in all possible cases, this should only be called
+     * immediately before calling subscribe().
      *
      * @param lifecycle the lifecycle sequence
      * @param source    the source sequence
@@ -63,6 +66,9 @@ public class RxLifecycle {
      * <p/>
      * Due to the differences between the Activity and Fragment lifecycles, this method should only
      * be used for an Activity lifecycle.
+     * <p/>
+     * Warning: In order for this to work in all possible cases, this should only be called
+     * immediately before calling subscribe().
      *
      * @param lifecycle the lifecycle sequence of an Activity
      * @param source    the source sequence
@@ -82,6 +88,9 @@ public class RxLifecycle {
      * <p/>
      * Due to the differences between the Activity and Fragment lifecycles, this method should only
      * be used for a Fragment lifecycle.
+     * <p/>
+     * Warning: In order for this to work in all possible cases, this should only be called
+     * immediately before calling subscribe().
      *
      * @param lifecycle the lifecycle sequence of a Fragment
      * @param source    the source sequence
