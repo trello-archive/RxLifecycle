@@ -18,9 +18,9 @@ import rx.Observable;
 import rx.functions.Func1;
 import rx.functions.Func2;
 
-public class LifecycleObservable {
+public class RxLifecycle {
 
-    private LifecycleObservable() {
+    private RxLifecycle() {
         throw new AssertionError("No instances");
     }
 
