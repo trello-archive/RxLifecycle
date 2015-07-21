@@ -18,5 +18,8 @@ dependencies {
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:1.10.19'
-    testCompile 'org.robolectric:robolectric:2.4'
+    testCompile 'org.robolectric:robolectric:3.0'
 }
+
+apply from: "$rootDir/gradle/artifacts.gradle"
+apply from: "$rootDir/gradle/gradle-mvn-push.gradle"

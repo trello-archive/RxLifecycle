@@ -26,17 +26,18 @@ public class RxLifecycle {
 
     /**
      * Binds the given source to a Fragment lifecycle.
-     * <p/>
+     * <p>
      * When the lifecycle event occurs, the source will cease to emit any notifications.
-     * <p/>
+     * <p>
      * Use with {@link Observable#compose(Observable.Transformer)}:
      * {@code source.compose(RxLifecycle.bindUntilEvent(lifecycle, FragmentEvent.STOP)).subscribe()}
-     * <p/>
+     * <p>
      * Warning: In order for this to work in all possible cases, this should only be called
      * immediately before calling subscribe().
      *
      * @param lifecycle the Fragment lifecycle sequence
      * @param event the event which should conclude notifications from the source
+     * @return a reusable {@link Observable.Transformer} that unsubscribes the source at the specified event
      */
     public static <T> Observable.Transformer<T, T> bindUntilFragmentEvent(
         final Observable<FragmentEvent> lifecycle, final FragmentEvent event) {
@@ -45,17 +46,18 @@ public class RxLifecycle {
 
     /**
      * Binds the given source to an Activity lifecycle.
-     * <p/>
+     * <p>
      * When the lifecycle event occurs, the source will cease to emit any notifications.
-     * <p/>
+     * <p>
      * Use with {@link Observable#compose(Observable.Transformer)}:
      * {@code source.compose(RxLifecycle.bindUntilEvent(lifecycle, ActivityEvent.STOP)).subscribe()}
-     * <p/>
+     * <p>
      * Warning: In order for this to work in all possible cases, this should only be called
      * immediately before calling subscribe().
      *
      * @param lifecycle the Activity lifecycle sequence
      * @param event the event which should conclude notifications from the source
+     * @return a reusable {@link Observable.Transformer} that unsubscribes the source at the specified event
      */
     public static <T> Observable.Transformer<T, T> bindUntilActivityEvent(
         final Observable<ActivityEvent> lifecycle, final ActivityEvent event) {
@@ -87,23 +89,24 @@ public class RxLifecycle {
 
     /**
      * Binds the given source to an Activity lifecycle.
-     * <p/>
+     * <p>
      * Use with {@link Observable#compose(Observable.Transformer)}:
      * {@code source.compose(RxLifecycle.bindActivity(lifecycle)).subscribe()}
-     * <p/>
+     * <p>
      * This helper automatically determines (based on the lifecycle sequence itself) when the source
      * should stop emitting items. In the case that the lifecycle sequence is in the
      * creation phase (CREATE, START, etc) it will choose the equivalent destructive phase (DESTROY,
      * STOP, etc). If used in the destructive phase, the notifications will cease at the next event;
      * for example, if used in PAUSE, it will unsubscribe in STOP.
-     * <p/>
+     * <p>
      * Due to the differences between the Activity and Fragment lifecycles, this method should only
      * be used for an Activity lifecycle.
-     * <p/>
+     * <p>
      * Warning: In order for this to work in all possible cases, this should only be called
      * immediately before calling subscribe().
      *
      * @param lifecycle the lifecycle sequence of an Activity
+     * * @return a reusable {@link Observable.Transformer} that unsubscribes the source during the Activity lifecycle
      */
     public static <T> Observable.Transformer<T, T> bindActivity(Observable<ActivityEvent> lifecycle) {
         return bind(lifecycle, ACTIVITY_LIFECYCLE);
@@ -111,23 +114,24 @@ public class RxLifecycle {
 
     /**
      * Binds the given source to a Fragment lifecycle.
-     * <p/>
+     * <p>
      * Use with {@link Observable#compose(Observable.Transformer)}:
      * {@code source.compose(RxLifecycle.bindFragment(lifecycle)).subscribe()}
-     * <p/>
+     * <p>
      * This helper automatically determines (based on the lifecycle sequence itself) when the source
      * should stop emitting items. In the case that the lifecycle sequence is in the
      * creation phase (CREATE, START, etc) it will choose the equivalent destructive phase (DESTROY,
      * STOP, etc). If used in the destructive phase, the notifications will cease at the next event;
      * for example, if used in PAUSE, it will unsubscribe in STOP.
-     * <p/>
+     * <p>
      * Due to the differences between the Activity and Fragment lifecycles, this method should only
      * be used for a Fragment lifecycle.
-     * <p/>
+     * <p>
      * Warning: In order for this to work in all possible cases, this should only be called
      * immediately before calling subscribe().
      *
      * @param lifecycle the lifecycle sequence of a Fragment
+     * @return a reusable {@link Observable.Transformer} that unsubscribes the source during the Fragment lifecycle
      */
     public static <T> Observable.Transformer<T, T> bindFragment(Observable<FragmentEvent> lifecycle) {
         return bind(lifecycle, FRAGMENT_LIFECYCLE);
