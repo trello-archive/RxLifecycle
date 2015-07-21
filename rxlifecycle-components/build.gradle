@@ -27,3 +27,4 @@ dependencies {
 }
 
 apply from: "$rootDir/gradle/artifacts.gradle"
+apply from: "$rootDir/gradle/gradle-mvn-push.gradle"
