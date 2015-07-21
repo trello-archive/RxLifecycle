@@ -54,9 +54,7 @@ or `Fragment` lifecycle.
 
 ## Installation
 
-**TODO: It's not uploaded anywhere yet!**
-
-**TODO: A second module for components**
+Currently, you'll just have to build/include this library yourself. It has not been uploaded to any repository (but snapshots should be soon).
 
 ## License
 
