@@ -13,17 +13,17 @@ public class RxDialogFragment extends DialogFragment implements FragmentLifecycl
     private final BehaviorSubject<FragmentEvent> lifecycleSubject = BehaviorSubject.create();
 
     @Override
-    public Observable<FragmentEvent> lifecycle() {
+    public final Observable<FragmentEvent> lifecycle() {
         return lifecycleSubject.asObservable();
     }
 
     @Override
-    public <T> Observable.Transformer<T, T> bindUntilEvent(FragmentEvent event) {
+    public final <T> Observable.Transformer<T, T> bindUntilEvent(FragmentEvent event) {
         return RxLifecycle.bindUntilFragmentEvent(lifecycleSubject, event);
     }
 
     @Override
-    public <T> Observable.Transformer<T, T> bindToLifecycle() {
+    public final <T> Observable.Transformer<T, T> bindToLifecycle() {
         return RxLifecycle.bindFragment(lifecycleSubject);
     }
 

@@ -12,17 +12,17 @@ public class RxActivity extends Activity implements ActivityLifecycleProvider {
     private final BehaviorSubject<ActivityEvent> lifecycleSubject = BehaviorSubject.create();
 
     @Override
-    public Observable<ActivityEvent> lifecycle() {
+    public final Observable<ActivityEvent> lifecycle() {
         return lifecycleSubject.asObservable();
     }
 
     @Override
-    public <T> Observable.Transformer<T, T> bindUntilEvent(ActivityEvent event) {
+    public final <T> Observable.Transformer<T, T> bindUntilEvent(ActivityEvent event) {
         return RxLifecycle.bindUntilActivityEvent(lifecycleSubject, event);
     }
 
     @Override
-    public <T> Observable.Transformer<T, T> bindToLifecycle() {
+    public final <T> Observable.Transformer<T, T> bindToLifecycle() {
         return RxLifecycle.bindActivity(lifecycleSubject);
     }
 
