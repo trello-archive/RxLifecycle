@@ -54,7 +54,22 @@ or `Fragment` lifecycle.
 
 ## Installation
 
-Currently, you'll just have to build/include this library yourself. It has not been uploaded to any repository (but snapshots should be soon).
+They're currently only released as snapshots:
+
+```gradle
+compile 'com.trello:rxlifecycle:0.1.0-SNAPSHOT'
+compile 'com.trello:rxlifecycle-components:0.1.0-SNAPSHOT'
+```
+
+You'll have to use Sonatype snapshot repository:
+
+```gradle
+repositories {
+    maven {
+        url 'https://oss.sonatype.org/content/repositories/snapshots/'
+    }
+}
+```
 
 ## License
 
