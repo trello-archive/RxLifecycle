@@ -12,7 +12,7 @@ You can then unsubscribe explicitly when an event occurs:
 
 ```java
 myObservable
-    .compose(RxLifecycle.bindUntilEvent(lifecycle, ActivityEvent.DESTROY))
+    .compose(RxLifecycle.bindUntilActivityEvent(lifecycle, ActivityEvent.DESTROY))
     .subscribe();
 ```
 
@@ -36,7 +36,7 @@ calling `subscribe()`. Otherwise, some operators may ignore the unsubscription r
 Where do the sequences of `ActivityEvent` or `FragmentEvent` come from? You can either write it yourself, or you can
 include rxlifecycle-components, which comes with pre-built `Activity` and `Fragment` implementations with lifecycles.
 
-If you use rxlifecycle-components, just extend the appropriate class, then use the built-in `bindToLifecycle()` method:
+If you use rxlifecycle-components, just extend the appropriate class, then use the built-in `bindToLifecycle()` (or `bindUntilEvent()`) methods:
 
 ```java
 public class MyActivity extends RxActivity {
