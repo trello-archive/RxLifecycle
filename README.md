@@ -54,21 +54,9 @@ or `Fragment` lifecycle.
 
 ## Installation
 
-They're currently only released as snapshots:
-
 ```gradle
-compile 'com.trello:rxlifecycle:0.1.0-SNAPSHOT'
-compile 'com.trello:rxlifecycle-components:0.1.0-SNAPSHOT'
-```
-
-You'll have to use Sonatype snapshot repository:
-
-```gradle
-repositories {
-    maven {
-        url 'https://oss.sonatype.org/content/repositories/snapshots/'
-    }
-}
+compile 'com.trello:rxlifecycle:0.1.0'
+compile 'com.trello:rxlifecycle-components:0.1.0'
 ```
 
 ## License

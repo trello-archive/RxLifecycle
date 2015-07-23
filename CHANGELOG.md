@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.1.0 (*in development*)
+## 0.1.0
 
 Initial independent release (split from RxAndroid 0.25.0)
 
