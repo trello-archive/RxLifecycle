@@ -14,17 +14,27 @@
 
 package com.trello.rxlifecycle;
 
+import android.app.Activity;
+import android.view.View;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
+
+import java.util.concurrent.CopyOnWriteArrayList;
+
 import rx.Observable;
+import rx.Subscription;
 import rx.observers.TestSubscriber;
 import rx.subjects.BehaviorSubject;
 import rx.subjects.PublishSubject;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(manifest = Config.NONE)
@@ -224,5 +234,42 @@ public class RxLifecycleTest {
         TestSubscriber<Object> testSubscriber = new TestSubscriber<>();
         observable.compose(RxLifecycle.bindFragment(lifecycle)).subscribe(testSubscriber);
         testSubscriber.assertError(IllegalStateException.class);
+    }
+
+    @Test
+    public void testBindViewLifecycle() {
+        BehaviorSubject<ViewEvent> lifecycle = BehaviorSubject.create();
+        lifecycle.onNext(ViewEvent.ATTACH);
+        Subscription attachSub = observable.compose(RxLifecycle.bindView(lifecycle)).subscribe();
+        assertFalse(attachSub.isUnsubscribed());
+        lifecycle.onNext(ViewEvent.DETACH);
+        assertTrue(attachSub.isUnsubscribed());
+    }
+
+    @Test
+    public void testBindView() {
+        Activity activity = Robolectric.buildActivity(Activity.class).create().get();
+        View view = new View(activity);
+        CopyOnWriteArrayList<View.OnAttachStateChangeListener> listeners = TestUtil.getAttachStateChangeListeners(view);
+
+        // Do the attach notification
+        if (listeners != null) {
+            for (View.OnAttachStateChangeListener listener : listeners) {
+                listener.onViewAttachedToWindow(view);
+            }
+        }
+
+        // Subscribe
+        Subscription viewAttachSub = observable.compose(RxLifecycle.bindView(view)).subscribe();
+        assertFalse(viewAttachSub.isUnsubscribed());
+        listeners = TestUtil.getAttachStateChangeListeners(view);
+        assertNotNull(listeners);
+        assertFalse(listeners.isEmpty());
+
+        // Now detach
+        for (View.OnAttachStateChangeListener listener : listeners) {
+            listener.onViewDetachedFromWindow(view);
+        }
+        assertTrue(viewAttachSub.isUnsubscribed());
     }
 }
