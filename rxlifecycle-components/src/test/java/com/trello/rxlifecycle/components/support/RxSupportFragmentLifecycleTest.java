@@ -74,6 +74,7 @@ public class RxSupportFragmentLifecycleTest {
         fragment.onPause();
         assertFalse(testSubscriber.isUnsubscribed());
         fragment.onStop();
+        testSubscriber.assertCompleted();
         testSubscriber.assertUnsubscribed();
     }
 
@@ -117,6 +118,7 @@ public class RxSupportFragmentLifecycleTest {
         assertFalse(createTestSub.isUnsubscribed());
         assertFalse(createViewTestSub.isUnsubscribed());
         assertFalse(startTestSub.isUnsubscribed());
+        resumeTestSub.assertCompleted();
         resumeTestSub.assertUnsubscribed();
         TestSubscriber<Object> pauseTestSub = new TestSubscriber<>();
         observable.compose(provider.bindToLifecycle()).subscribe(pauseTestSub);
@@ -125,7 +127,9 @@ public class RxSupportFragmentLifecycleTest {
         assertFalse(attachTestSub.isUnsubscribed());
         assertFalse(createTestSub.isUnsubscribed());
         assertFalse(createViewTestSub.isUnsubscribed());
+        startTestSub.assertCompleted();
         startTestSub.assertUnsubscribed();
+        pauseTestSub.assertCompleted();
         pauseTestSub.assertUnsubscribed();
         TestSubscriber<Object> stopTestSub = new TestSubscriber<>();
         observable.compose(provider.bindToLifecycle()).subscribe(stopTestSub);
@@ -133,20 +137,26 @@ public class RxSupportFragmentLifecycleTest {
         fragment.onDestroyView();
         assertFalse(attachTestSub.isUnsubscribed());
         assertFalse(createTestSub.isUnsubscribed());
+        createViewTestSub.assertCompleted();
         createViewTestSub.assertUnsubscribed();
+        stopTestSub.assertCompleted();
         stopTestSub.assertUnsubscribed();
         TestSubscriber<Object> destroyViewTestSub = new TestSubscriber<>();
         observable.compose(provider.bindToLifecycle()).subscribe(destroyViewTestSub);
 
         fragment.onDestroy();
         assertFalse(attachTestSub.isUnsubscribed());
+        createTestSub.assertCompleted();
         createTestSub.assertUnsubscribed();
+        destroyViewTestSub.assertCompleted();
         destroyViewTestSub.assertUnsubscribed();
         TestSubscriber<Object> destroyTestSub = new TestSubscriber<>();
         observable.compose(provider.bindToLifecycle()).subscribe(destroyTestSub);
 
         fragment.onDetach();
+        attachTestSub.assertCompleted();
         attachTestSub.assertUnsubscribed();
+        destroyTestSub.assertCompleted();
         destroyTestSub.assertUnsubscribed();
     }
 

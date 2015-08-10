@@ -59,6 +59,7 @@ public class RxLifecycleTest {
         lifecycle.onNext(FragmentEvent.PAUSE);
         assertFalse(testSubscriber.isUnsubscribed());
         lifecycle.onNext(FragmentEvent.STOP);
+        testSubscriber.assertCompleted();
         testSubscriber.assertUnsubscribed();
     }
 
@@ -79,6 +80,7 @@ public class RxLifecycleTest {
         lifecycle.onNext(ActivityEvent.PAUSE);
         assertFalse(testSubscriber.isUnsubscribed());
         lifecycle.onNext(ActivityEvent.STOP);
+        testSubscriber.assertCompleted();
         testSubscriber.assertUnsubscribed();
     }
 
@@ -104,19 +106,24 @@ public class RxLifecycleTest {
         lifecycle.onNext(ActivityEvent.PAUSE);
         assertFalse(createTestSub.isUnsubscribed());
         assertFalse(startTestSub.isUnsubscribed());
+        resumeTestSub.assertCompleted();
         resumeTestSub.assertUnsubscribed();
         TestSubscriber<Object> pauseTestSub = new TestSubscriber<>();
         observable.compose(RxLifecycle.bindActivity(lifecycle)).subscribe(pauseTestSub);
 
         lifecycle.onNext(ActivityEvent.STOP);
         assertFalse(createTestSub.isUnsubscribed());
+        startTestSub.assertCompleted();
         startTestSub.assertUnsubscribed();
+        pauseTestSub.assertCompleted();
         pauseTestSub.assertUnsubscribed();
         TestSubscriber<Object> stopTestSub = new TestSubscriber<>();
         observable.compose(RxLifecycle.bindActivity(lifecycle)).subscribe(stopTestSub);
 
         lifecycle.onNext(ActivityEvent.DESTROY);
+        createTestSub.assertCompleted();
         createTestSub.assertUnsubscribed();
+        stopTestSub.assertCompleted();
         stopTestSub.assertUnsubscribed();
     }
 
@@ -168,6 +175,7 @@ public class RxLifecycleTest {
         assertFalse(createTestSub.isUnsubscribed());
         assertFalse(createViewTestSub.isUnsubscribed());
         assertFalse(startTestSub.isUnsubscribed());
+        resumeTestSub.assertCompleted();
         resumeTestSub.assertUnsubscribed();
         TestSubscriber<Object> pauseTestSub = new TestSubscriber<>();
         observable.compose(RxLifecycle.bindFragment(lifecycle)).subscribe(pauseTestSub);
@@ -176,7 +184,9 @@ public class RxLifecycleTest {
         assertFalse(attachTestSub.isUnsubscribed());
         assertFalse(createTestSub.isUnsubscribed());
         assertFalse(createViewTestSub.isUnsubscribed());
+        startTestSub.assertCompleted();
         startTestSub.assertUnsubscribed();
+        pauseTestSub.assertCompleted();
         pauseTestSub.assertUnsubscribed();
         TestSubscriber<Object> stopTestSub = new TestSubscriber<>();
         observable.compose(RxLifecycle.bindFragment(lifecycle)).subscribe(stopTestSub);
@@ -184,20 +194,26 @@ public class RxLifecycleTest {
         lifecycle.onNext(FragmentEvent.DESTROY_VIEW);
         assertFalse(attachTestSub.isUnsubscribed());
         assertFalse(createTestSub.isUnsubscribed());
+        createViewTestSub.assertCompleted();
         createViewTestSub.assertUnsubscribed();
+        stopTestSub.assertCompleted();
         stopTestSub.assertUnsubscribed();
         TestSubscriber<Object> desroyViewTestSub = new TestSubscriber<>();
         observable.compose(RxLifecycle.bindFragment(lifecycle)).subscribe(desroyViewTestSub);
 
         lifecycle.onNext(FragmentEvent.DESTROY);
         assertFalse(attachTestSub.isUnsubscribed());
+        createTestSub.assertCompleted();
         createTestSub.assertUnsubscribed();
+        desroyViewTestSub.assertCompleted();
         desroyViewTestSub.assertUnsubscribed();
         TestSubscriber<Object> destroyTestSub = new TestSubscriber<>();
         observable.compose(RxLifecycle.bindFragment(lifecycle)).subscribe(destroyTestSub);
 
         lifecycle.onNext(FragmentEvent.DETACH);
+        attachTestSub.assertCompleted();
         attachTestSub.assertUnsubscribed();
+        destroyTestSub.assertCompleted();
         destroyTestSub.assertUnsubscribed();
     }
 

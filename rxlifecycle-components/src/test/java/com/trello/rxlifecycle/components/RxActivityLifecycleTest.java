@@ -76,6 +76,7 @@ public class RxActivityLifecycleTest {
         controller.pause();
         assertFalse(testSubscriber.isUnsubscribed());
         controller.stop();
+        testSubscriber.assertCompleted();
         testSubscriber.assertUnsubscribed();
     }
 
@@ -101,19 +102,24 @@ public class RxActivityLifecycleTest {
         controller.pause();
         assertFalse(createTestSub.isUnsubscribed());
         assertFalse(startTestSub.isUnsubscribed());
+        resumeTestSub.assertCompleted();
         resumeTestSub.assertUnsubscribed();
         TestSubscriber<Object> pauseTestSub = new TestSubscriber<>();
         observable.compose(activity.bindToLifecycle()).subscribe(pauseTestSub);
 
         controller.stop();
         assertFalse(createTestSub.isUnsubscribed());
+        startTestSub.assertCompleted();
         startTestSub.assertUnsubscribed();
+        pauseTestSub.assertCompleted();
         pauseTestSub.assertUnsubscribed();
         TestSubscriber<Object> stopTestSub = new TestSubscriber<>();
         observable.compose(activity.bindToLifecycle()).subscribe(stopTestSub);
 
         controller.destroy();
+        createTestSub.assertCompleted();
         createTestSub.assertUnsubscribed();
+        stopTestSub.assertCompleted();
         stopTestSub.assertUnsubscribed();
     }
 }
