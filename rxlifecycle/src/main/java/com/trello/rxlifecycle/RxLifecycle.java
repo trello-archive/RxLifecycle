@@ -65,7 +65,7 @@ public class RxLifecycle {
     }
 
     private static <T, R> Observable.Transformer<T, T> bindUntilEvent(final Observable<R> lifecycle,
-                                                                            final R event) {
+                                                                      final R event) {
         if (lifecycle == null) {
             throw new IllegalArgumentException("Lifecycle must be given");
         }
@@ -73,15 +73,13 @@ public class RxLifecycle {
         return new Observable.Transformer<T, T>() {
             @Override
             public Observable<T> call(Observable<T> source) {
-                return source.lift(
-                    new OperatorSubscribeUntil<T, R>(
-                        lifecycle.takeFirst(new Func1<R, Boolean>() {
-                            @Override
-                            public Boolean call(R lifecycleEvent) {
-                                return lifecycleEvent == event;
-                            }
-                        })
-                    )
+                return source.takeUntil(
+                    lifecycle.takeFirst(new Func1<R, Boolean>() {
+                        @Override
+                        public Boolean call(R lifecycleEvent) {
+                            return lifecycleEvent == event;
+                        }
+                    })
                 );
             }
         };
@@ -138,7 +136,7 @@ public class RxLifecycle {
     }
 
     private static <T, R> Observable.Transformer<T, T> bind(Observable<R> lifecycle,
-                                                                  final Func1<R, R> correspondingEvents) {
+                                                            final Func1<R, R> correspondingEvents) {
         if (lifecycle == null) {
             throw new IllegalArgumentException("Lifecycle must be given");
         }
@@ -150,24 +148,22 @@ public class RxLifecycle {
         return new Observable.Transformer<T, T>() {
             @Override
             public Observable<T> call(Observable<T> source) {
-                return source.lift(
-                    new OperatorSubscribeUntil<T, Boolean>(
-                        Observable.combineLatest(
-                            sharedLifecycle.take(1).map(correspondingEvents),
-                            sharedLifecycle.skip(1),
-                            new Func2<R, R, Boolean>() {
-                                @Override
-                                public Boolean call(R bindUntilEvent, R lifecycleEvent) {
-                                    return lifecycleEvent == bindUntilEvent;
-                                }
-                            })
-                            .takeFirst(new Func1<Boolean, Boolean>() {
-                                @Override
-                                public Boolean call(Boolean shouldComplete) {
-                                    return shouldComplete;
-                                }
-                            })
-                    )
+                return source.takeUntil(
+                    Observable.combineLatest(
+                        sharedLifecycle.take(1).map(correspondingEvents),
+                        sharedLifecycle.skip(1),
+                        new Func2<R, R, Boolean>() {
+                            @Override
+                            public Boolean call(R bindUntilEvent, R lifecycleEvent) {
+                                return lifecycleEvent == bindUntilEvent;
+                            }
+                        })
+                        .takeFirst(new Func1<Boolean, Boolean>() {
+                            @Override
+                            public Boolean call(Boolean shouldComplete) {
+                                return shouldComplete;
+                            }
+                        })
                 );
             }
         };

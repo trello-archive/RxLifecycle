@@ -24,11 +24,10 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 import org.robolectric.util.ActivityController;
 import rx.Observable;
-import rx.Subscription;
+import rx.observers.TestSubscriber;
 import rx.subjects.PublishSubject;
 
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(manifest = Config.NONE)
@@ -65,18 +64,20 @@ public class RxActivityLifecycleTest {
     void testBindUntilEvent(ActivityController<? extends ActivityLifecycleProvider> controller) {
         ActivityLifecycleProvider activity = controller.get();
 
-        Subscription untilStop = observable.compose(activity.bindUntilEvent(ActivityEvent.STOP)).subscribe();
+        TestSubscriber<Object> testSubscriber = new TestSubscriber<>();
+        observable.compose(activity.bindUntilEvent(ActivityEvent.STOP)).subscribe(testSubscriber);
 
         controller.create();
-        assertFalse(untilStop.isUnsubscribed());
+        assertFalse(testSubscriber.isUnsubscribed());
         controller.start();
-        assertFalse(untilStop.isUnsubscribed());
+        assertFalse(testSubscriber.isUnsubscribed());
         controller.resume();
-        assertFalse(untilStop.isUnsubscribed());
+        assertFalse(testSubscriber.isUnsubscribed());
         controller.pause();
-        assertFalse(untilStop.isUnsubscribed());
+        assertFalse(testSubscriber.isUnsubscribed());
         controller.stop();
-        assertTrue(untilStop.isUnsubscribed());
+        testSubscriber.assertCompleted();
+        testSubscriber.assertUnsubscribed();
     }
 
     // Tests bindToLifecycle for any given RxActivityLifecycle implementation
@@ -84,31 +85,41 @@ public class RxActivityLifecycleTest {
         ActivityLifecycleProvider activity = controller.get();
 
         controller.create();
-        Subscription createSub = observable.compose(activity.bindToLifecycle()).subscribe();
+        TestSubscriber<Object> createTestSub = new TestSubscriber<>();
+        observable.compose(activity.bindToLifecycle()).subscribe(createTestSub);
 
         controller.start();
-        assertFalse(createSub.isUnsubscribed());
-        Subscription startSub = observable.compose(activity.bindToLifecycle()).subscribe();
+        assertFalse(createTestSub.isUnsubscribed());
+        TestSubscriber<Object> startTestSub = new TestSubscriber<>();
+        observable.compose(activity.bindToLifecycle()).subscribe(startTestSub);
 
         controller.resume();
-        assertFalse(createSub.isUnsubscribed());
-        assertFalse(startSub.isUnsubscribed());
-        Subscription resumeSub = observable.compose(activity.bindToLifecycle()).subscribe();
+        assertFalse(createTestSub.isUnsubscribed());
+        assertFalse(startTestSub.isUnsubscribed());
+        TestSubscriber<Object> resumeTestSub = new TestSubscriber<>();
+        observable.compose(activity.bindToLifecycle()).subscribe(resumeTestSub);
 
         controller.pause();
-        assertFalse(createSub.isUnsubscribed());
-        assertFalse(startSub.isUnsubscribed());
-        assertTrue(resumeSub.isUnsubscribed());
-        Subscription pauseSub = observable.compose(activity.bindToLifecycle()).subscribe();
+        assertFalse(createTestSub.isUnsubscribed());
+        assertFalse(startTestSub.isUnsubscribed());
+        resumeTestSub.assertCompleted();
+        resumeTestSub.assertUnsubscribed();
+        TestSubscriber<Object> pauseTestSub = new TestSubscriber<>();
+        observable.compose(activity.bindToLifecycle()).subscribe(pauseTestSub);
 
         controller.stop();
-        assertFalse(createSub.isUnsubscribed());
-        assertTrue(startSub.isUnsubscribed());
-        assertTrue(pauseSub.isUnsubscribed());
-        Subscription stopSub = observable.compose(activity.bindToLifecycle()).subscribe();
+        assertFalse(createTestSub.isUnsubscribed());
+        startTestSub.assertCompleted();
+        startTestSub.assertUnsubscribed();
+        pauseTestSub.assertCompleted();
+        pauseTestSub.assertUnsubscribed();
+        TestSubscriber<Object> stopTestSub = new TestSubscriber<>();
+        observable.compose(activity.bindToLifecycle()).subscribe(stopTestSub);
 
         controller.destroy();
-        assertTrue(createSub.isUnsubscribed());
-        assertTrue(stopSub.isUnsubscribed());
+        createTestSub.assertCompleted();
+        createTestSub.assertUnsubscribed();
+        stopTestSub.assertCompleted();
+        stopTestSub.assertUnsubscribed();
     }
 }
