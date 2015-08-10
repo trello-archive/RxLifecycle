@@ -17,7 +17,7 @@ dependencies {
     // TODO: Include maven dependency once released
     compile project(':rxlifecycle')
 
-    compile 'io.reactivex:rxjava:1.0.12'
+    compile 'io.reactivex:rxjava:1.0.13'
 
     compile 'com.android.support:appcompat-v7:22.2.1'
 
