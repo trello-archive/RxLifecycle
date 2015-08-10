@@ -23,11 +23,10 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 import org.robolectric.util.FragmentTestUtil;
 import rx.Observable;
-import rx.Subscription;
+import rx.observers.TestSubscriber;
 import rx.subjects.PublishSubject;
 
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(manifest = Config.NONE)
@@ -57,22 +56,23 @@ public class RxFragmentLifecycleTest {
         Fragment fragment = (Fragment) provider;
         FragmentTestUtil.startFragment(fragment);
 
-        Subscription untilStop = observable.compose(provider.bindUntilEvent(FragmentEvent.STOP)).subscribe();
+        TestSubscriber<Object> testSubscriber = new TestSubscriber<>();
+        observable.compose(provider.bindUntilEvent(FragmentEvent.STOP)).subscribe(testSubscriber);
 
         fragment.onAttach(null);
-        assertFalse(untilStop.isUnsubscribed());
+        assertFalse(testSubscriber.isUnsubscribed());
         fragment.onCreate(null);
-        assertFalse(untilStop.isUnsubscribed());
+        assertFalse(testSubscriber.isUnsubscribed());
         fragment.onViewCreated(null, null);
-        assertFalse(untilStop.isUnsubscribed());
+        assertFalse(testSubscriber.isUnsubscribed());
         fragment.onStart();
-        assertFalse(untilStop.isUnsubscribed());
+        assertFalse(testSubscriber.isUnsubscribed());
         fragment.onResume();
-        assertFalse(untilStop.isUnsubscribed());
+        assertFalse(testSubscriber.isUnsubscribed());
         fragment.onPause();
-        assertFalse(untilStop.isUnsubscribed());
+        assertFalse(testSubscriber.isUnsubscribed());
         fragment.onStop();
-        assertTrue(untilStop.isUnsubscribed());
+        testSubscriber.assertUnsubscribed();
     }
 
     // Tests bindToLifecycle for any given FragmentLifecycleProvider implementation
@@ -81,61 +81,70 @@ public class RxFragmentLifecycleTest {
         FragmentTestUtil.startFragment(fragment);
 
         fragment.onAttach(null);
-        Subscription attachSub = observable.compose(provider.bindToLifecycle()).subscribe();
+        TestSubscriber<Object> attachTestSub = new TestSubscriber<>();
+        observable.compose(provider.bindToLifecycle()).subscribe(attachTestSub);
 
         fragment.onCreate(null);
-        assertFalse(attachSub.isUnsubscribed());
-        Subscription createSub = observable.compose(provider.bindToLifecycle()).subscribe();
+        assertFalse(attachTestSub.isUnsubscribed());
+        TestSubscriber<Object> createTestSub = new TestSubscriber<>();
+        observable.compose(provider.bindToLifecycle()).subscribe(createTestSub);
 
         fragment.onViewCreated(null, null);
-        assertFalse(attachSub.isUnsubscribed());
-        assertFalse(createSub.isUnsubscribed());
-        Subscription createViewSub = observable.compose(provider.bindToLifecycle()).subscribe();
+        assertFalse(attachTestSub.isUnsubscribed());
+        assertFalse(createTestSub.isUnsubscribed());
+        TestSubscriber<Object> createViewTestSub = new TestSubscriber<>();
+        observable.compose(provider.bindToLifecycle()).subscribe(createViewTestSub);
 
         fragment.onStart();
-        assertFalse(attachSub.isUnsubscribed());
-        assertFalse(createSub.isUnsubscribed());
-        assertFalse(createViewSub.isUnsubscribed());
-        Subscription startSub = observable.compose(provider.bindToLifecycle()).subscribe();
+        assertFalse(attachTestSub.isUnsubscribed());
+        assertFalse(createTestSub.isUnsubscribed());
+        assertFalse(createViewTestSub.isUnsubscribed());
+        TestSubscriber<Object> startTestSub = new TestSubscriber<>();
+        observable.compose(provider.bindToLifecycle()).subscribe(startTestSub);
 
         fragment.onResume();
-        assertFalse(attachSub.isUnsubscribed());
-        assertFalse(createSub.isUnsubscribed());
-        assertFalse(createViewSub.isUnsubscribed());
-        assertFalse(startSub.isUnsubscribed());
-        Subscription resumeSub = observable.compose(provider.bindToLifecycle()).subscribe();
+        assertFalse(attachTestSub.isUnsubscribed());
+        assertFalse(createTestSub.isUnsubscribed());
+        assertFalse(createViewTestSub.isUnsubscribed());
+        assertFalse(startTestSub.isUnsubscribed());
+        TestSubscriber<Object> resumeTestSub = new TestSubscriber<>();
+        observable.compose(provider.bindToLifecycle()).subscribe(resumeTestSub);
 
         fragment.onPause();
-        assertFalse(attachSub.isUnsubscribed());
-        assertFalse(createSub.isUnsubscribed());
-        assertFalse(createViewSub.isUnsubscribed());
-        assertFalse(startSub.isUnsubscribed());
-        assertTrue(resumeSub.isUnsubscribed());
-        Subscription pauseSub = observable.compose(provider.bindToLifecycle()).subscribe();
+        assertFalse(attachTestSub.isUnsubscribed());
+        assertFalse(createTestSub.isUnsubscribed());
+        assertFalse(createViewTestSub.isUnsubscribed());
+        assertFalse(startTestSub.isUnsubscribed());
+        resumeTestSub.assertUnsubscribed();
+        TestSubscriber<Object> pauseTestSub = new TestSubscriber<>();
+        observable.compose(provider.bindToLifecycle()).subscribe(pauseTestSub);
 
         fragment.onStop();
-        assertFalse(attachSub.isUnsubscribed());
-        assertFalse(createSub.isUnsubscribed());
-        assertFalse(createViewSub.isUnsubscribed());
-        assertTrue(startSub.isUnsubscribed());
-        assertTrue(pauseSub.isUnsubscribed());
-        Subscription stopSub = observable.compose(provider.bindToLifecycle()).subscribe();
+        assertFalse(attachTestSub.isUnsubscribed());
+        assertFalse(createTestSub.isUnsubscribed());
+        assertFalse(createViewTestSub.isUnsubscribed());
+        startTestSub.assertUnsubscribed();
+        pauseTestSub.assertUnsubscribed();
+        TestSubscriber<Object> stopTestSub = new TestSubscriber<>();
+        observable.compose(provider.bindToLifecycle()).subscribe(stopTestSub);
 
         fragment.onDestroyView();
-        assertFalse(attachSub.isUnsubscribed());
-        assertFalse(createSub.isUnsubscribed());
-        assertTrue(createViewSub.isUnsubscribed());
-        assertTrue(stopSub.isUnsubscribed());
-        Subscription destroyViewSub = observable.compose(provider.bindToLifecycle()).subscribe();
+        assertFalse(attachTestSub.isUnsubscribed());
+        assertFalse(createTestSub.isUnsubscribed());
+        createViewTestSub.assertUnsubscribed();
+        stopTestSub.assertUnsubscribed();
+        TestSubscriber<Object> destroyViewTestSub = new TestSubscriber<>();
+        observable.compose(provider.bindToLifecycle()).subscribe(destroyViewTestSub);
 
         fragment.onDestroy();
-        assertFalse(attachSub.isUnsubscribed());
-        assertTrue(createSub.isUnsubscribed());
-        assertTrue(destroyViewSub.isUnsubscribed());
-        Subscription destroySub = observable.compose(provider.bindToLifecycle()).subscribe();
+        assertFalse(attachTestSub.isUnsubscribed());
+        createTestSub.assertUnsubscribed();
+        destroyViewTestSub.assertUnsubscribed();
+        TestSubscriber<Object> destroyTestSub = new TestSubscriber<>();
+        observable.compose(provider.bindToLifecycle()).subscribe(destroyTestSub);
 
         fragment.onDetach();
-        assertTrue(attachSub.isUnsubscribed());
-        assertTrue(destroySub.isUnsubscribed());
+        attachTestSub.assertUnsubscribed();
+        destroyTestSub.assertUnsubscribed();
     }
 }
