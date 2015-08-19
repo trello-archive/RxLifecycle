@@ -42,12 +42,14 @@ public class RxActivityLifecycleTest {
 
     @Test
     public void testRxActivity() {
+        testLifecycle(Robolectric.buildActivity(RxActivity.class));
         testBindUntilEvent(Robolectric.buildActivity(RxActivity.class));
         testBindToLifecycle(Robolectric.buildActivity(RxActivity.class));
     }
 
     @Test
     public void testRxFragmentActivity() {
+        testLifecycle(Robolectric.buildActivity(RxFragmentActivity.class));
         testBindUntilEvent(Robolectric.buildActivity(RxFragmentActivity.class));
         testBindToLifecycle(Robolectric.buildActivity(RxFragmentActivity.class));
     }
@@ -58,6 +60,29 @@ public class RxActivityLifecycleTest {
         //
         // testBindUntilEvent(Robolectric.buildActivity(RxAppCompatActivity.class));
         // testBindToLifecycle(Robolectric.buildActivity(RxAppCompatActivity.class));
+    }
+
+    void testLifecycle(ActivityController<? extends ActivityLifecycleProvider> controller) {
+        ActivityLifecycleProvider activity = controller.get();
+
+        TestSubscriber<ActivityEvent> testSubscriber = new TestSubscriber<>();
+        activity.lifecycle().subscribe(testSubscriber);
+
+        controller.create();
+        controller.start();
+        controller.resume();
+        controller.pause();
+        controller.stop();
+        controller.destroy();
+
+        testSubscriber.assertValues(
+            ActivityEvent.CREATE,
+            ActivityEvent.START,
+            ActivityEvent.RESUME,
+            ActivityEvent.PAUSE,
+            ActivityEvent.STOP,
+            ActivityEvent.DESTROY
+        );
     }
 
     // Tests bindUntil for any given RxActivityLifecycle implementation

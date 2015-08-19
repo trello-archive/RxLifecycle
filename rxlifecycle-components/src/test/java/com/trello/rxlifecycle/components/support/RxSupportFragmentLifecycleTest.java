@@ -43,14 +43,48 @@ public class RxSupportFragmentLifecycleTest {
 
     @Test
     public void testRxFragment() {
+        testLifecycle(new RxFragment());
         testBindUntilEvent(new RxFragment());
         testBindToLifecycle(new RxFragment());
     }
 
     @Test
     public void testRxDialogFragment() {
+        testLifecycle(new RxDialogFragment());
         testBindUntilEvent(new RxDialogFragment());
         testBindToLifecycle(new RxDialogFragment());
+    }
+
+    void testLifecycle(FragmentLifecycleProvider provider) {
+        Fragment fragment = (Fragment) provider;
+        startFragment(fragment);
+
+        TestSubscriber<FragmentEvent> testSubscriber = new TestSubscriber<>();
+        provider.lifecycle().skip(1).subscribe(testSubscriber);
+
+        fragment.onAttach(null);
+        fragment.onCreate(null);
+        fragment.onViewCreated(null, null);
+        fragment.onStart();
+        fragment.onResume();
+        fragment.onPause();
+        fragment.onStop();
+        fragment.onDestroyView();
+        fragment.onDestroy();
+        fragment.onDetach();
+
+        testSubscriber.assertValues(
+            FragmentEvent.ATTACH,
+            FragmentEvent.CREATE,
+            FragmentEvent.CREATE_VIEW,
+            FragmentEvent.START,
+            FragmentEvent.RESUME,
+            FragmentEvent.PAUSE,
+            FragmentEvent.STOP,
+            FragmentEvent.DESTROY_VIEW,
+            FragmentEvent.DESTROY,
+            FragmentEvent.DETACH
+        );
     }
 
     // Tests bindUntil for any given FragmentLifecycleProvider implementation
