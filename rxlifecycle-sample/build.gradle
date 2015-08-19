@@ -8,7 +8,7 @@ android {
         applicationId "com.trello.rxlifecycle.sample"
         minSdkVersion rootProject.ext.minSdkVersion
 
-        targetSdkVersion 22
+        targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
     }
@@ -21,5 +21,5 @@ repositories {
 dependencies {
     compile project(':rxlifecycle-components')
 
-    compile 'com.android.support:appcompat-v7:22.2.1'
+    compile rootProject.ext.appCompat
 }

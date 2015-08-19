@@ -14,16 +14,15 @@ repositories {
 }
 
 dependencies {
-    // TODO: Include maven dependency once released
     compile project(':rxlifecycle')
 
-    compile 'io.reactivex:rxjava:1.0.13'
+    compile rootProject.ext.rxJava
 
-    compile 'com.android.support:appcompat-v7:22.2.1'
+    compile rootProject.ext.appCompat
 
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:1.10.19'
-    testCompile 'org.robolectric:robolectric:3.0'
+    testCompile rootProject.ext.junit
+    testCompile rootProject.ext.mockito
+    testCompile rootProject.ext.robolectric
 }
 
 apply from: "$rootDir/gradle/artifacts.gradle"
