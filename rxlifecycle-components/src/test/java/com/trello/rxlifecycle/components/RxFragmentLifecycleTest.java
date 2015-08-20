@@ -15,6 +15,7 @@
 package com.trello.rxlifecycle.components;
 
 import android.app.Fragment;
+import android.content.Context;
 import com.trello.rxlifecycle.FragmentEvent;
 import org.junit.Before;
 import org.junit.Test;
@@ -60,7 +61,7 @@ public class RxFragmentLifecycleTest {
         TestSubscriber<FragmentEvent> testSubscriber = new TestSubscriber<>();
         provider.lifecycle().skip(1).subscribe(testSubscriber);
 
-        fragment.onAttach(null);
+        fragment.onAttach((Context) null);
         fragment.onCreate(null);
         fragment.onViewCreated(null, null);
         fragment.onStart();
@@ -93,7 +94,7 @@ public class RxFragmentLifecycleTest {
         TestSubscriber<Object> testSubscriber = new TestSubscriber<>();
         observable.compose(provider.bindUntilEvent(FragmentEvent.STOP)).subscribe(testSubscriber);
 
-        fragment.onAttach(null);
+        fragment.onAttach((Context) null);
         assertFalse(testSubscriber.isUnsubscribed());
         fragment.onCreate(null);
         assertFalse(testSubscriber.isUnsubscribed());
@@ -115,7 +116,7 @@ public class RxFragmentLifecycleTest {
         Fragment fragment = (Fragment) provider;
         FragmentTestUtil.startFragment(fragment);
 
-        fragment.onAttach(null);
+        fragment.onAttach((Context) null);
         TestSubscriber<Object> attachTestSub = new TestSubscriber<>();
         observable.compose(provider.bindToLifecycle()).subscribe(attachTestSub);
 

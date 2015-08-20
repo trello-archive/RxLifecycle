@@ -1,6 +1,9 @@
 package com.trello.rxlifecycle.components;
 
+import android.annotation.TargetApi;
 import android.app.Fragment;
+import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import com.trello.rxlifecycle.FragmentEvent;
@@ -28,6 +31,17 @@ public class RxFragment extends Fragment implements FragmentLifecycleProvider {
     }
 
     @Override
+    @TargetApi(Build.VERSION_CODES.M)
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        lifecycleSubject.onNext(FragmentEvent.ATTACH);
+    }
+
+    /**
+     * @deprecated Use {@link #onAttach(Context)} instead.
+     */
+    @Override
+    @Deprecated
     public void onAttach(android.app.Activity activity) {
         super.onAttach(activity);
         lifecycleSubject.onNext(FragmentEvent.ATTACH);

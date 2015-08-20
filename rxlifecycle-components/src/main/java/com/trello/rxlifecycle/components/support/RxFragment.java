@@ -1,5 +1,6 @@
 package com.trello.rxlifecycle.components.support;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
@@ -29,6 +30,16 @@ public class RxFragment extends Fragment implements FragmentLifecycleProvider {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        lifecycleSubject.onNext(FragmentEvent.ATTACH);
+    }
+
+    /**
+     * @deprecated Use {@link #onAttach(Context)} instead.
+     */
+    @Override
+    @Deprecated
     public void onAttach(android.app.Activity activity) {
         super.onAttach(activity);
         lifecycleSubject.onNext(FragmentEvent.ATTACH);
