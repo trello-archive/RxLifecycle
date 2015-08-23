@@ -16,6 +16,9 @@ package com.trello.rxlifecycle;
 
 import android.view.View;
 
+import com.jakewharton.rxbinding.view.RxView;
+import com.jakewharton.rxbinding.view.ViewAttachEvent;
+
 import rx.Observable;
 import rx.functions.Func1;
 import rx.functions.Func2;
@@ -147,18 +150,19 @@ public class RxLifecycle {
      * should stop emitting items. For views, this effectively means watching for a detach event and
      * unsubscribing the sequence when one occurs.
      * <p>
-     * Note that this will unsubscribe after the first {@link ViewEvent#DETACH} event is received,
+     * Note that this will unsubscribe after the first {@link ViewAttachEvent.Kind#DETACH} event is received,
      * and will not resume if the view is re-attached later.
      *
      * @param view the view to bind the source sequence to
      * @return a reusable {@link Observable.Transformer} that unsubscribes the source during the View lifecycle
      */
     public static <T> Observable.Transformer<T, T> bindView(final View view) {
+
         if (view == null) {
             throw new IllegalArgumentException("View must be given");
         }
-        Observable<ViewEvent> lifecycle = Observable.create(new OnSubscribeViewDetachedFromWindowFirst(view));
-        return bindView(lifecycle);
+
+        return bindView(RxView.detaches(view));
     }
 
     /**
@@ -169,16 +173,24 @@ public class RxLifecycle {
      * <p>
      * This helper automatically determines (based on the lifecycle sequence itself) when the source
      * should stop emitting items. For views, this effectively means watching for a detach event and
-     * unsubscribing the sequence when one occurs.
+     * unsubscribing the sequence when one occurs. Note that this assumes <em>any</em> event
+     * emitted by the given lifecycle indicates a detach event.
      *
      * @param lifecycle the lifecycle sequence of a View
      * @return a reusable {@link Observable.Transformer} that unsubscribes the source during the View lifecycle
      */
-    public static <T> Observable.Transformer<T, T> bindView(Observable<ViewEvent> lifecycle) {
+    public static <T> Observable.Transformer<T, T> bindView(final Observable<Object> lifecycle) {
+
         if (lifecycle == null) {
             throw new IllegalArgumentException("Lifecycle must be given");
         }
-        return bindUntilEvent(lifecycle, ViewEvent.DETACH);
+
+        return new Observable.Transformer<T, T>() {
+            @Override
+            public Observable<T> call(Observable<T> source) {
+                return source.takeUntil(lifecycle);
+            }
+        };
     }
 
     private static <T, R> Observable.Transformer<T, T> bind(Observable<R> lifecycle,

@@ -238,11 +238,10 @@ public class RxLifecycleTest {
 
     @Test
     public void testBindViewLifecycle() {
-        BehaviorSubject<ViewEvent> lifecycle = BehaviorSubject.create();
-        lifecycle.onNext(ViewEvent.ATTACH);
+        BehaviorSubject<Object> lifecycle = BehaviorSubject.create();
         Subscription attachSub = observable.compose(RxLifecycle.bindView(lifecycle)).subscribe();
         assertFalse(attachSub.isUnsubscribed());
-        lifecycle.onNext(ViewEvent.DETACH);
+        lifecycle.onNext(new Object());
         assertTrue(attachSub.isUnsubscribed());
     }
 
