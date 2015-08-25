@@ -246,6 +246,16 @@ public class RxLifecycleTest {
     }
 
     @Test
+    public void testBindViewLifecycleOtherObject() {
+        // Ensures it works with other types as well, and not just "Object"
+        BehaviorSubject<String> lifecycle = BehaviorSubject.create();
+        Subscription attachSub = observable.compose(RxLifecycle.bindView(lifecycle)).subscribe();
+        assertFalse(attachSub.isUnsubscribed());
+        lifecycle.onNext("");
+        assertTrue(attachSub.isUnsubscribed());
+    }
+
+    @Test
     public void testBindView() {
         Activity activity = Robolectric.buildActivity(Activity.class).create().get();
         View view = new View(activity);

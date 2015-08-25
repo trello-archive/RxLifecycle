@@ -178,7 +178,7 @@ public class RxLifecycle {
      * @param lifecycle the lifecycle sequence of a View
      * @return a reusable {@link Observable.Transformer} that unsubscribes the source during the View lifecycle
      */
-    public static <T> Observable.Transformer<T, T> bindView(final Observable<Object> lifecycle) {
+    public static <T, E> Observable.Transformer<T, T> bindView(final Observable<E> lifecycle) {
         if (lifecycle == null) {
             throw new IllegalArgumentException("Lifecycle must be given");
         }
