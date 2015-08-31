@@ -42,6 +42,7 @@ If you use rxlifecycle-components, just extend the appropriate class, then use t
 public class MyActivity extends RxActivity {
     @Override
     public void onResume() {
+        super.onResume();
         myObservable
             .compose(bindToLifecycle())
             .subscribe();
