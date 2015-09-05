@@ -15,11 +15,10 @@
 package com.trello.rxlifecycle;
 
 import android.view.View;
-
 import com.jakewharton.rxbinding.view.RxView;
 import com.jakewharton.rxbinding.view.ViewAttachEvent;
-
 import rx.Observable;
+import rx.exceptions.Exceptions;
 import rx.functions.Func1;
 import rx.functions.Func2;
 
@@ -214,6 +213,17 @@ public class RxLifecycle {
                                 return lifecycleEvent == bindUntilEvent;
                             }
                         })
+                        .onErrorReturn(new Func1<Throwable, Boolean>() {
+                            @Override
+                            public Boolean call(Throwable throwable) {
+                                if (throwable instanceof OutsideLifecycleException) {
+                                    return true;
+                                }
+
+                                Exceptions.propagate(throwable);
+                                return false;
+                            }
+                        })
                         .takeFirst(new Func1<Boolean, Boolean>() {
                             @Override
                             public Boolean call(Boolean shouldComplete) {
@@ -246,7 +256,7 @@ public class RxLifecycle {
                     case STOP:
                         return ActivityEvent.DESTROY;
                     case DESTROY:
-                        throw new IllegalStateException("Cannot bind to Activity lifecycle when outside of it.");
+                        throw new OutsideLifecycleException("Cannot bind to Activity lifecycle when outside of it.");
                     default:
                         throw new UnsupportedOperationException("Binding to " + lastEvent + " not yet implemented");
                 }
@@ -282,10 +292,17 @@ public class RxLifecycle {
                     case DESTROY:
                         return FragmentEvent.DETACH;
                     case DETACH:
-                        throw new IllegalStateException("Cannot bind to Fragment lifecycle when outside of it.");
+                        throw new OutsideLifecycleException("Cannot bind to Fragment lifecycle when outside of it.");
                     default:
                         throw new UnsupportedOperationException("Binding to " + lastEvent + " not yet implemented");
                 }
             }
         };
+
+    private static class OutsideLifecycleException extends IllegalStateException {
+        public OutsideLifecycleException(String detailMessage) {
+            super(detailMessage);
+        }
+    }
+
 }

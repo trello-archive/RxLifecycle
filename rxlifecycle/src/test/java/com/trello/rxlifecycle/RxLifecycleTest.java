@@ -16,21 +16,19 @@ package com.trello.rxlifecycle;
 
 import android.app.Activity;
 import android.view.View;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-
-import java.util.concurrent.CopyOnWriteArrayList;
-
 import rx.Observable;
 import rx.Subscription;
 import rx.observers.TestSubscriber;
 import rx.subjects.BehaviorSubject;
 import rx.subjects.PublishSubject;
+
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -137,13 +135,15 @@ public class RxLifecycleTest {
         stopTestSub.assertUnsubscribed();
     }
 
-    public void testThrowsExceptionOutsideActivityLifecycle() {
+    @Test
+    public void testEndsImmediatelyOutsideActivityLifecycle() {
         BehaviorSubject<ActivityEvent> lifecycle = BehaviorSubject.create();
         lifecycle.onNext(ActivityEvent.DESTROY);
 
         TestSubscriber<Object> testSubscriber = new TestSubscriber<>();
         observable.compose(RxLifecycle.bindActivity(lifecycle)).subscribe(testSubscriber);
-        testSubscriber.assertError(IllegalStateException.class);
+        testSubscriber.assertCompleted();
+        testSubscriber.assertUnsubscribed();
     }
 
     @Test
@@ -227,13 +227,15 @@ public class RxLifecycleTest {
         destroyTestSub.assertUnsubscribed();
     }
 
-    public void testThrowsExceptionOutsideFragmentLifecycle() {
+    @Test
+    public void testEndsImmediatelyOutsideFragmentLifecycle() {
         BehaviorSubject<FragmentEvent> lifecycle = BehaviorSubject.create();
         lifecycle.onNext(FragmentEvent.DETACH);
 
         TestSubscriber<Object> testSubscriber = new TestSubscriber<>();
         observable.compose(RxLifecycle.bindFragment(lifecycle)).subscribe(testSubscriber);
-        testSubscriber.assertError(IllegalStateException.class);
+        testSubscriber.assertCompleted();
+        testSubscriber.assertUnsubscribed();
     }
 
     @Test
