@@ -35,9 +35,6 @@ public class RxLifecycle {
      * <p>
      * Use with {@link Observable#compose(Observable.Transformer)}:
      * {@code source.compose(RxLifecycle.bindUntilEvent(lifecycle, FragmentEvent.STOP)).subscribe()}
-     * <p>
-     * Warning: In order for this to work in all possible cases, this should only be called
-     * immediately before calling subscribe().
      *
      * @param lifecycle the Fragment lifecycle sequence
      * @param event the event which should conclude notifications from the source
@@ -55,9 +52,6 @@ public class RxLifecycle {
      * <p>
      * Use with {@link Observable#compose(Observable.Transformer)}:
      * {@code source.compose(RxLifecycle.bindUntilEvent(lifecycle, ActivityEvent.STOP)).subscribe()}
-     * <p>
-     * Warning: In order for this to work in all possible cases, this should only be called
-     * immediately before calling subscribe().
      *
      * @param lifecycle the Activity lifecycle sequence
      * @param event the event which should conclude notifications from the source
@@ -106,9 +100,6 @@ public class RxLifecycle {
      * <p>
      * Due to the differences between the Activity and Fragment lifecycles, this method should only
      * be used for an Activity lifecycle.
-     * <p>
-     * Warning: In order for this to work in all possible cases, this should only be called
-     * immediately before calling subscribe().
      *
      * @param lifecycle the lifecycle sequence of an Activity
      * * @return a reusable {@link Observable.Transformer} that unsubscribes the source during the Activity lifecycle
@@ -131,9 +122,6 @@ public class RxLifecycle {
      * <p>
      * Due to the differences between the Activity and Fragment lifecycles, this method should only
      * be used for a Fragment lifecycle.
-     * <p>
-     * Warning: In order for this to work in all possible cases, this should only be called
-     * immediately before calling subscribe().
      *
      * @param lifecycle the lifecycle sequence of a Fragment
      * @return a reusable {@link Observable.Transformer} that unsubscribes the source during the Fragment lifecycle
