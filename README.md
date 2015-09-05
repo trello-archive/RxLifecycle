@@ -56,8 +56,8 @@ or `Fragment` lifecycle.
 ## Installation
 
 ```gradle
-compile 'com.trello:rxlifecycle:0.2.0'
-compile 'com.trello:rxlifecycle-components:0.2.0'
+compile 'com.trello:rxlifecycle:0.3.0'
+compile 'com.trello:rxlifecycle-components:0.3.0'
 ```
 
 ## License
