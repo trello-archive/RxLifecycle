@@ -204,27 +204,31 @@ public class RxLifecycle {
                                 return lifecycleEvent == bindUntilEvent;
                             }
                         })
-                        .onErrorReturn(new Func1<Throwable, Boolean>() {
-                            @Override
-                            public Boolean call(Throwable throwable) {
-                                if (throwable instanceof OutsideLifecycleException) {
-                                    return true;
-                                }
-
-                                Exceptions.propagate(throwable);
-                                return false;
-                            }
-                        })
-                        .takeFirst(new Func1<Boolean, Boolean>() {
-                            @Override
-                            public Boolean call(Boolean shouldComplete) {
-                                return shouldComplete;
-                            }
-                        })
+                        .onErrorReturn(RESUME_FUNCTION)
+                        .takeFirst(SHOULD_COMPLETE)
                 );
             }
         };
     }
+
+    private static final Func1<Throwable, Boolean> RESUME_FUNCTION = new Func1<Throwable, Boolean>() {
+        @Override
+        public Boolean call(Throwable throwable) {
+            if (throwable instanceof OutsideLifecycleException) {
+                return true;
+            }
+
+            Exceptions.propagate(throwable);
+            return false;
+        }
+    };
+
+    private static final Func1<Boolean, Boolean> SHOULD_COMPLETE = new Func1<Boolean, Boolean>() {
+        @Override
+        public Boolean call(Boolean shouldComplete) {
+            return shouldComplete;
+        }
+    };
 
     // Figures out which corresponding next lifecycle event in which to unsubscribe, for Activities
     private static final Func1<ActivityEvent, ActivityEvent> ACTIVITY_LIFECYCLE =
