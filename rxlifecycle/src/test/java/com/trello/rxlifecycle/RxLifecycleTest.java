@@ -16,21 +16,19 @@ package com.trello.rxlifecycle;
 
 import android.app.Activity;
 import android.view.View;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-
-import java.util.concurrent.CopyOnWriteArrayList;
-
 import rx.Observable;
 import rx.Subscription;
 import rx.observers.TestSubscriber;
 import rx.subjects.BehaviorSubject;
 import rx.subjects.PublishSubject;
+
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -280,5 +278,49 @@ public class RxLifecycleTest {
             listener.onViewDetachedFromWindow(view);
         }
         assertTrue(viewAttachSub.isUnsubscribed());
+    }
+
+    // Null checks
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testBindUntilFragmentEventThrowsOnNullLifecycle() {
+        RxLifecycle.bindUntilFragmentEvent(null, FragmentEvent.CREATE);
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testBindUntilFragmentEventThrowsOnNullEvent() {
+        BehaviorSubject<FragmentEvent> lifecycle = BehaviorSubject.create();
+        RxLifecycle.bindUntilFragmentEvent(lifecycle, null);
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testBindFragmentThrowsOnNull() {
+        RxLifecycle.bindFragment(null);
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testBindUntilActivityThrowsOnNullLifecycle() {
+        RxLifecycle.bindUntilActivityEvent(null, ActivityEvent.CREATE);
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testBindUntilActivityEventThrowsOnNullEvent() {
+        BehaviorSubject<ActivityEvent> lifecycle = BehaviorSubject.create();
+        RxLifecycle.bindUntilActivityEvent(lifecycle, null);
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testBindActivityThrowsOnNull() {
+        RxLifecycle.bindActivity(null);
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testBindViewThrowsOnNullView() {
+        RxLifecycle.bindView((View) null);
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testBindViewThrowsOnNullLifecycle() {
+        RxLifecycle.bindView((Observable) null);
     }
 }

@@ -74,6 +74,9 @@ public class RxLifecycle {
         if (lifecycle == null) {
             throw new IllegalArgumentException("Lifecycle must be given");
         }
+        else if (event == null) {
+            throw new IllegalArgumentException("Event must be given");
+        }
 
         return new Observable.Transformer<T, T>() {
             @Override
@@ -230,10 +233,6 @@ public class RxLifecycle {
         new Func1<ActivityEvent, ActivityEvent>() {
             @Override
             public ActivityEvent call(ActivityEvent lastEvent) {
-                if (lastEvent == null) {
-                    throw new NullPointerException("Cannot bind to null ActivityEvent.");
-                }
-
                 switch (lastEvent) {
                     case CREATE:
                         return ActivityEvent.DESTROY;
@@ -258,10 +257,6 @@ public class RxLifecycle {
         new Func1<FragmentEvent, FragmentEvent>() {
             @Override
             public FragmentEvent call(FragmentEvent lastEvent) {
-                if (lastEvent == null) {
-                    throw new NullPointerException("Cannot bind to null FragmentEvent.");
-                }
-
                 switch (lastEvent) {
                     case ATTACH:
                         return FragmentEvent.DETACH;
