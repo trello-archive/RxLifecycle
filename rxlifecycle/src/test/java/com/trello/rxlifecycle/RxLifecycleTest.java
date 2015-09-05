@@ -283,4 +283,48 @@ public class RxLifecycleTest {
         }
         assertTrue(viewAttachSub.isUnsubscribed());
     }
+
+    // Null checks
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testBindUntilFragmentEventThrowsOnNullLifecycle() {
+        RxLifecycle.bindUntilFragmentEvent(null, FragmentEvent.CREATE);
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testBindUntilFragmentEventThrowsOnNullEvent() {
+        BehaviorSubject<FragmentEvent> lifecycle = BehaviorSubject.create();
+        RxLifecycle.bindUntilFragmentEvent(lifecycle, null);
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testBindFragmentThrowsOnNull() {
+        RxLifecycle.bindFragment(null);
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testBindUntilActivityThrowsOnNullLifecycle() {
+        RxLifecycle.bindUntilActivityEvent(null, ActivityEvent.CREATE);
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testBindUntilActivityEventThrowsOnNullEvent() {
+        BehaviorSubject<ActivityEvent> lifecycle = BehaviorSubject.create();
+        RxLifecycle.bindUntilActivityEvent(lifecycle, null);
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testBindActivityThrowsOnNull() {
+        RxLifecycle.bindActivity(null);
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testBindViewThrowsOnNullView() {
+        RxLifecycle.bindView((View) null);
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testBindViewThrowsOnNullLifecycle() {
+        RxLifecycle.bindView((Observable) null);
+    }
 }
