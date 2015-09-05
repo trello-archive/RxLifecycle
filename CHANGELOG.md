@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.3.0
+
+* [#12](https://github.com/trello/RxLifecycle/pull/12): Added `RxLifecycle.bindView()`. This allows binding a
+`Subscription` until a `View` detaches itself from the window.
+* [#30](https://github.com/trello/RxLifecycle/pull/30): Calling `bindActivity()` or `bindFragment()` outside of the
+lifecycle causes the sequence to immediately complete (instead of throwing an error).
+* [#31](https://github.com/trello/RxLifecycle/pull/31): Passing nulls to RxLifecycle now always immediately throws an
+exception.
+
 ## 0.2.0
 
 * [#14](https://github.com/trello/RxLifecycle/pull/14): Use takeUntil internally (instead of a faulty custom operator)
