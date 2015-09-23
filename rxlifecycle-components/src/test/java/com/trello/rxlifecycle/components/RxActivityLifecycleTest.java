@@ -62,7 +62,7 @@ public class RxActivityLifecycleTest {
         // testBindToLifecycle(Robolectric.buildActivity(RxAppCompatActivity.class));
     }
 
-    void testLifecycle(ActivityController<? extends ActivityLifecycleProvider> controller) {
+    private void testLifecycle(ActivityController<? extends ActivityLifecycleProvider> controller) {
         ActivityLifecycleProvider activity = controller.get();
 
         TestSubscriber<ActivityEvent> testSubscriber = new TestSubscriber<>();
@@ -86,7 +86,7 @@ public class RxActivityLifecycleTest {
     }
 
     // Tests bindUntil for any given RxActivityLifecycle implementation
-    void testBindUntilEvent(ActivityController<? extends ActivityLifecycleProvider> controller) {
+    private void testBindUntilEvent(ActivityController<? extends ActivityLifecycleProvider> controller) {
         ActivityLifecycleProvider activity = controller.get();
 
         TestSubscriber<Object> testSubscriber = new TestSubscriber<>();
@@ -106,7 +106,7 @@ public class RxActivityLifecycleTest {
     }
 
     // Tests bindToLifecycle for any given RxActivityLifecycle implementation
-    void testBindToLifecycle(ActivityController<? extends ActivityLifecycleProvider> controller) {
+    private void testBindToLifecycle(ActivityController<? extends ActivityLifecycleProvider> controller) {
         ActivityLifecycleProvider activity = controller.get();
 
         controller.create();

@@ -55,7 +55,7 @@ public class RxSupportFragmentLifecycleTest {
         testBindToLifecycle(new RxDialogFragment());
     }
 
-    void testLifecycle(FragmentLifecycleProvider provider) {
+    private void testLifecycle(FragmentLifecycleProvider provider) {
         Fragment fragment = (Fragment) provider;
         startFragment(fragment);
 
@@ -88,7 +88,7 @@ public class RxSupportFragmentLifecycleTest {
     }
 
     // Tests bindUntil for any given FragmentLifecycleProvider implementation
-    void testBindUntilEvent(FragmentLifecycleProvider provider) {
+    private void testBindUntilEvent(FragmentLifecycleProvider provider) {
         Fragment fragment = (Fragment) provider;
         startFragment(fragment);
 
@@ -113,7 +113,7 @@ public class RxSupportFragmentLifecycleTest {
     }
 
     // Tests bindToLifecycle for any given FragmentLifecycleProvider implementation
-    void testBindToLifecycle(FragmentLifecycleProvider provider) {
+    private void testBindToLifecycle(FragmentLifecycleProvider provider) {
         Fragment fragment = (Fragment) provider;
         startFragment(fragment);
 
@@ -195,7 +195,7 @@ public class RxSupportFragmentLifecycleTest {
     }
 
     // Easier than making everyone create their own shadows
-    void startFragment(Fragment fragment) {
+    private void startFragment(Fragment fragment) {
         Robolectric.setupActivity(FragmentActivity.class).getSupportFragmentManager()
             .beginTransaction()
             .add(fragment, null)
