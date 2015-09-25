@@ -1,14 +1,14 @@
 # RxLifecycle
 
-The utilities provided here allow for automatic unsubscription from sequences based on `Activity` or `Fragment`
+The utilities provided here allow for automatic completion of sequences based on `Activity` or `Fragment`
 lifecycle events. This capability is useful in Android, where incomplete subscriptions can cause memory leaks.
 
 ## Usage
 
 You must provide an `Observable<ActivityEvent>` or `Observable<FragmentEvent>` that gives
-RxLifecycle the information needed to unsubscribe at the correct time.
+RxLifecycle the information needed to complete the sequence at the correct time.
 
-You can then unsubscribe explicitly when an event occurs:
+You can then end the sequence explicitly when an event occurs:
 
 ```java
 myObservable
@@ -16,7 +16,7 @@ myObservable
     .subscribe();
 ```
 
-Alternatively, you can let RxLifecycle determine the appropriate time to unsubscribe:
+Alternatively, you can let RxLifecycle determine the appropriate time to end the sequence:
 
 ```java
 myObservable
@@ -24,12 +24,9 @@ myObservable
     .subscribe();
 ```
 
-It assumes you want to unsubscribe in the opposing lifecycle event - e.g., if subscribing during `START`, it will
-unsubscribe on `STOP`. If you subscribe after `PAUSE`, it will unsubscribe at the next destruction event (e.g.,
-`PAUSE` will unsubscribe in `STOP`).
-
-Warning: Due to the way the unsubscription works, it is only 100% safe if you call RxLifecycle immediately before
-calling `subscribe()`. Otherwise, some operators may ignore the unsubscription requests.
+It assumes you want to end the sequence in the opposing lifecycle event - e.g., if subscribing during `START`, it will
+terminate on `STOP`. If you subscribe after `PAUSE`, it will terminate at the next destruction event (e.g.,
+`PAUSE` will terminate in `STOP`).
 
 ## Components
 
@@ -52,6 +49,17 @@ public class MyActivity extends RxActivity {
 
 In addition, these components come with `lifecycle()`, which allows you to do your own logic based on the `Activity`
 or `Fragment` lifecycle.
+
+## Unsubscription
+
+RxLifecycle does not actually unsubscribe the sequence. It terminates it by emitting `onCompleted()`, which ends the
+sequence. This differs from `Subscription.unsubscribe()`, which causes the sequence to simply end.
+
+In most cases this works out fine (since `onCompleted()` is not often used). In cases where you do not want
+`onCompleted()` called during early termination, then it is suggested that you manually handle the `Subscription`
+yourself and call `unsubscribe()` when appropriate.
+
+(To understand why RxLifecycle has this behavior, [read this](https://github.com/trello/RxLifecycle/pull/14))
 
 ## Installation
 
