@@ -24,7 +24,7 @@ public interface FragmentLifecycleProvider {
      * @param event the {@link FragmentEvent} that triggers unsubscription
      * @return a reusable {@link rx.Observable.Transformer} which unsubscribes when the event triggers.
      */
-    <T> Observable.Transformer<T, T> bindUntilEvent(FragmentEvent event);
+    <T> Observable.Transformer<? super T, ? extends T> bindUntilEvent(FragmentEvent event);
 
     /**
      * Binds a source until the next reasonable {@link FragmentEvent} occurs.
@@ -33,6 +33,6 @@ public interface FragmentLifecycleProvider {
      *
      * @return a reusable {@link rx.Observable.Transformer} which unsubscribes at the correct time.
      */
-    <T> Observable.Transformer<T, T> bindToLifecycle();
+    <T> Observable.Transformer<? super T, ? extends T> bindToLifecycle();
 
 }
