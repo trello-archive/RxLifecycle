@@ -62,7 +62,7 @@ public class RxFragmentLifecycleTest {
         TestSubscriber<FragmentEvent> testSubscriber = new TestSubscriber<>();
         provider.lifecycle().skip(1).subscribe(testSubscriber);
 
-        fragment.onAttach(null);
+        fragment.onAttach((Context) null);
         fragment.onCreate(null);
         fragment.onViewCreated(null, null);
         fragment.onStart();
