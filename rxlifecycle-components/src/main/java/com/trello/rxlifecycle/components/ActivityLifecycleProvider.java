@@ -24,7 +24,7 @@ public interface ActivityLifecycleProvider {
      * @param event the {@link ActivityEvent} that triggers unsubscription
      * @return a reusable {@link rx.Observable.Transformer} which unsubscribes when the event triggers.
      */
-    <T> Observable.Transformer<T, T> bindUntilEvent(ActivityEvent event);
+    <T> Observable.Transformer<? super T, ? extends T> bindUntilEvent(ActivityEvent event);
 
     /**
      * Binds a source until the next reasonable {@link ActivityEvent} occurs.
@@ -33,6 +33,6 @@ public interface ActivityLifecycleProvider {
      *
      * @return a reusable {@link rx.Observable.Transformer} which unsubscribes at the correct time.
      */
-    <T> Observable.Transformer<T, T> bindToLifecycle();
+    <T> Observable.Transformer<? super T, ? extends T> bindToLifecycle();
 
 }

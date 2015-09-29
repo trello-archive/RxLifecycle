@@ -15,6 +15,8 @@
 package com.trello.rxlifecycle.components;
 
 import android.app.Fragment;
+import android.content.Context;
+
 import com.trello.rxlifecycle.FragmentEvent;
 import org.junit.Before;
 import org.junit.Test;
