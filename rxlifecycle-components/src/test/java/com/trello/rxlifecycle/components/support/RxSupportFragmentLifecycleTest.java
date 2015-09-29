@@ -14,7 +14,6 @@
 
 package com.trello.rxlifecycle.components.support;
 
-import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import com.trello.rxlifecycle.FragmentEvent;
@@ -63,7 +62,7 @@ public class RxSupportFragmentLifecycleTest {
         TestSubscriber<FragmentEvent> testSubscriber = new TestSubscriber<>();
         provider.lifecycle().skip(1).subscribe(testSubscriber);
 
-        fragment.onAttach((Context) null);
+        fragment.onAttach(null);
         fragment.onCreate(null);
         fragment.onViewCreated(null, null);
         fragment.onStart();
@@ -118,7 +117,7 @@ public class RxSupportFragmentLifecycleTest {
         Fragment fragment = (Fragment) provider;
         startFragment(fragment);
 
-        fragment.onAttach((Context) null);
+        fragment.onAttach(null);
         TestSubscriber<Object> attachTestSub = new TestSubscriber<>();
         observable.compose(provider.bindToLifecycle()).subscribe(attachTestSub);
 

@@ -40,7 +40,7 @@ public class RxLifecycle {
      * @param event the event which should conclude notifications from the source
      * @return a reusable {@link Observable.Transformer} that unsubscribes the source at the specified event
      */
-    public static <T> Observable.Transformer<? super T, ? extends T> bindUntilFragmentEvent(
+    public static <T> Observable.Transformer<T, T> bindUntilFragmentEvent(
         final Observable<FragmentEvent> lifecycle, final FragmentEvent event) {
         return bindUntilEvent(lifecycle, event);
     }
@@ -57,12 +57,12 @@ public class RxLifecycle {
      * @param event the event which should conclude notifications from the source
      * @return a reusable {@link Observable.Transformer} that unsubscribes the source at the specified event
      */
-    public static <T> Observable.Transformer<? super T, ? extends T> bindUntilActivityEvent(
+    public static <T> Observable.Transformer<T, T> bindUntilActivityEvent(
         final Observable<ActivityEvent> lifecycle, final ActivityEvent event) {
         return bindUntilEvent(lifecycle, event);
     }
 
-    private static <T, R> Observable.Transformer<? super T, ? extends T> bindUntilEvent(final Observable<R> lifecycle,
+    private static <T, R> Observable.Transformer<T, T> bindUntilEvent(final Observable<R> lifecycle,
                                                                       final R event) {
         if (lifecycle == null) {
             throw new IllegalArgumentException("Lifecycle must be given");
@@ -104,7 +104,7 @@ public class RxLifecycle {
      * @param lifecycle the lifecycle sequence of an Activity
      * * @return a reusable {@link Observable.Transformer} that unsubscribes the source during the Activity lifecycle
      */
-    public static <T> Observable.Transformer<? super T, ? extends T> bindActivity(Observable<ActivityEvent> lifecycle) {
+    public static <T> Observable.Transformer<T, T> bindActivity(Observable<ActivityEvent> lifecycle) {
         return bind(lifecycle, ACTIVITY_LIFECYCLE);
     }
 
@@ -126,7 +126,7 @@ public class RxLifecycle {
      * @param lifecycle the lifecycle sequence of a Fragment
      * @return a reusable {@link Observable.Transformer} that unsubscribes the source during the Fragment lifecycle
      */
-    public static <T> Observable.Transformer<? super T, ? extends T> bindFragment(Observable<FragmentEvent> lifecycle) {
+    public static <T> Observable.Transformer<T, T> bindFragment(Observable<FragmentEvent> lifecycle) {
         return bind(lifecycle, FRAGMENT_LIFECYCLE);
     }
 
@@ -146,7 +146,7 @@ public class RxLifecycle {
      * @param view the view to bind the source sequence to
      * @return a reusable {@link Observable.Transformer} that unsubscribes the source during the View lifecycle
      */
-    public static <T> Observable.Transformer<? super T, ? extends T> bindView(final View view) {
+    public static <T> Observable.Transformer<T, T> bindView(final View view) {
         if (view == null) {
             throw new IllegalArgumentException("View must be given");
         }
@@ -168,7 +168,7 @@ public class RxLifecycle {
      * @param lifecycle the lifecycle sequence of a View
      * @return a reusable {@link Observable.Transformer} that unsubscribes the source during the View lifecycle
      */
-    public static <T, E> Observable.Transformer<? super T, ? extends T> bindView(final Observable<? extends E> lifecycle) {
+    public static <T, E> Observable.Transformer<T, T> bindView(final Observable<? extends E> lifecycle) {
         if (lifecycle == null) {
             throw new IllegalArgumentException("Lifecycle must be given");
         }
@@ -181,7 +181,7 @@ public class RxLifecycle {
         };
     }
 
-    private static <T, R> Observable.Transformer<? super T, ? extends T> bind(Observable<R> lifecycle,
+    private static <T, R> Observable.Transformer<T, T> bind(Observable<R> lifecycle,
                                                             final Func1<R, R> correspondingEvents) {
         if (lifecycle == null) {
             throw new IllegalArgumentException("Lifecycle must be given");
@@ -218,7 +218,6 @@ public class RxLifecycle {
                 return true;
             }
 
-            //noinspection ThrowableResultOfMethodCallIgnored
             Exceptions.propagate(throwable);
             return false;
         }
