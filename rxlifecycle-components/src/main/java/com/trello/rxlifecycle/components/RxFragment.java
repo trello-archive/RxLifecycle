@@ -1,7 +1,7 @@
 package com.trello.rxlifecycle.components;
 
+import android.app.Activity;
 import android.app.Fragment;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import com.trello.rxlifecycle.FragmentEvent;
@@ -29,8 +29,8 @@ public class RxFragment extends Fragment implements FragmentLifecycleProvider {
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
         lifecycleSubject.onNext(FragmentEvent.ATTACH);
     }
 
