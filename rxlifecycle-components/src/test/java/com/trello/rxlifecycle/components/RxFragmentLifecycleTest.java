@@ -15,6 +15,8 @@
 package com.trello.rxlifecycle.components;
 
 import android.app.Fragment;
+import android.content.Intent;
+
 import com.trello.rxlifecycle.FragmentEvent;
 import org.junit.Before;
 import org.junit.Test;
@@ -44,6 +46,7 @@ public class RxFragmentLifecycleTest {
         testLifecycle(new RxFragment());
         testBindUntilEvent(new RxFragment());
         testBindToLifecycle(new RxFragment());
+        testActivityResult(new RxFragment());
     }
 
     @Test
@@ -51,6 +54,7 @@ public class RxFragmentLifecycleTest {
         testLifecycle(new RxDialogFragment());
         testBindUntilEvent(new RxDialogFragment());
         testBindToLifecycle(new RxDialogFragment());
+        testActivityResult(new RxDialogFragment());
     }
 
     private void testLifecycle(FragmentLifecycleProvider provider) {
@@ -190,5 +194,23 @@ public class RxFragmentLifecycleTest {
         attachTestSub.assertUnsubscribed();
         destroyTestSub.assertCompleted();
         destroyTestSub.assertUnsubscribed();
+    }
+
+    private void testActivityResult(FragmentLifecycleProvider provider) {
+        Fragment fragment = (Fragment) provider;
+        FragmentTestUtil.startFragment(fragment);
+
+        TestSubscriber<ActivityResultEvent> testSubscriber = new TestSubscriber<>();
+        provider.activityResult().subscribe(testSubscriber);
+
+        int requestCode = 1;
+        int resultCode = 2;
+        Intent resultData = new Intent();
+        resultData.putExtra("test", "test");
+        ActivityResultEvent activityResultEvent = ActivityResultEvent.create(requestCode, resultCode, resultData);
+
+        fragment.onActivityResult(requestCode, resultCode, resultData);
+
+        testSubscriber.assertValue(activityResultEvent);
     }
 }

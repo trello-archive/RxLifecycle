@@ -14,6 +14,7 @@
 
 package com.trello.rxlifecycle.components;
 
+import android.content.Intent;
 import com.trello.rxlifecycle.ActivityEvent;
 import com.trello.rxlifecycle.components.support.RxFragmentActivity;
 import org.junit.Before;
@@ -28,6 +29,7 @@ import rx.observers.TestSubscriber;
 import rx.subjects.PublishSubject;
 
 import static org.junit.Assert.assertFalse;
+import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(manifest = Config.NONE)
@@ -45,6 +47,7 @@ public class RxActivityLifecycleTest {
         testLifecycle(Robolectric.buildActivity(RxActivity.class));
         testBindUntilEvent(Robolectric.buildActivity(RxActivity.class));
         testBindToLifecycle(Robolectric.buildActivity(RxActivity.class));
+        testActivityResult(Robolectric.buildActivity(RxActivity.class));
     }
 
     @Test
@@ -52,6 +55,7 @@ public class RxActivityLifecycleTest {
         testLifecycle(Robolectric.buildActivity(RxFragmentActivity.class));
         testBindUntilEvent(Robolectric.buildActivity(RxFragmentActivity.class));
         testBindToLifecycle(Robolectric.buildActivity(RxFragmentActivity.class));
+        testActivityResult(Robolectric.buildActivity(RxFragmentActivity.class));
     }
 
     @Test
@@ -146,5 +150,24 @@ public class RxActivityLifecycleTest {
         createTestSub.assertUnsubscribed();
         stopTestSub.assertCompleted();
         stopTestSub.assertUnsubscribed();
+    }
+
+    private void testActivityResult(ActivityController<? extends ActivityLifecycleProvider> controller) {
+        ActivityLifecycleProvider activity = controller.get();
+
+        TestSubscriber<ActivityResultEvent> testSubscriber = new TestSubscriber<>();
+        activity.activityResult().subscribe(testSubscriber);
+
+        Intent requestIntent = new Intent();
+        int requestCode = 1;
+        int resultCode = 2;
+        Intent resultData = new Intent();
+        resultData.putExtra("test", "test");
+        ActivityResultEvent activityResultEvent = ActivityResultEvent.create(requestCode, resultCode, resultData);
+
+        shadowOf(controller.get()).startActivityForResult(requestIntent, requestCode);
+        shadowOf(controller.get()).receiveResult(requestIntent, resultCode, resultData);
+
+        testSubscriber.assertValue(activityResultEvent);
     }
 }

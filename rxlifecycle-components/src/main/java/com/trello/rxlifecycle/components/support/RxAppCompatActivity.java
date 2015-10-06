@@ -1,16 +1,19 @@
 package com.trello.rxlifecycle.components.support;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import com.trello.rxlifecycle.ActivityEvent;
 import com.trello.rxlifecycle.RxLifecycle;
 import com.trello.rxlifecycle.components.ActivityLifecycleProvider;
+import com.trello.rxlifecycle.components.ActivityResultEvent;
 import rx.Observable;
 import rx.subjects.BehaviorSubject;
 
 public class RxAppCompatActivity extends AppCompatActivity implements ActivityLifecycleProvider {
 
     private final BehaviorSubject<ActivityEvent> lifecycleSubject = BehaviorSubject.create();
+    private final BehaviorSubject<ActivityResultEvent> activityResultSubject = BehaviorSubject.create();
 
     @Override
     public final Observable<ActivityEvent> lifecycle() {
@@ -25,6 +28,11 @@ public class RxAppCompatActivity extends AppCompatActivity implements ActivityLi
     @Override
     public final <T> Observable.Transformer<? super T, ? extends T> bindToLifecycle() {
         return RxLifecycle.bindActivity(lifecycleSubject);
+    }
+
+    @Override
+    public final Observable<ActivityResultEvent> activityResult() {
+        return activityResultSubject.asObservable();
     }
 
     @Override
@@ -61,5 +69,11 @@ public class RxAppCompatActivity extends AppCompatActivity implements ActivityLi
     protected void onDestroy() {
         lifecycleSubject.onNext(ActivityEvent.DESTROY);
         super.onDestroy();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        activityResultSubject.onNext(ActivityResultEvent.create(requestCode, resultCode, data));
     }
 }
