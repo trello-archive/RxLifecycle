@@ -1,7 +1,6 @@
 package com.trello.rxlifecycle.components;
 
 import android.app.Fragment;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import com.trello.rxlifecycle.FragmentEvent;
@@ -12,7 +11,6 @@ import rx.subjects.BehaviorSubject;
 public class RxFragment extends Fragment implements FragmentLifecycleProvider {
 
     private final BehaviorSubject<FragmentEvent> lifecycleSubject = BehaviorSubject.create();
-    private final BehaviorSubject<ActivityResultEvent> activityResultSubject = BehaviorSubject.create();
 
     @Override
     public final Observable<FragmentEvent> lifecycle() {
@@ -27,11 +25,6 @@ public class RxFragment extends Fragment implements FragmentLifecycleProvider {
     @Override
     public final <T> Observable.Transformer<? super T, ? extends T> bindToLifecycle() {
         return RxLifecycle.bindFragment(lifecycleSubject);
-    }
-
-    @Override
-    public final Observable<ActivityResultEvent> activityResult() {
-        return activityResultSubject.asObservable();
     }
 
     @Override
@@ -92,11 +85,5 @@ public class RxFragment extends Fragment implements FragmentLifecycleProvider {
     public void onDetach() {
         lifecycleSubject.onNext(FragmentEvent.DETACH);
         super.onDetach();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        activityResultSubject.onNext(ActivityResultEvent.create(requestCode, resultCode, data));
     }
 }

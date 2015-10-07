@@ -35,8 +35,4 @@ public interface FragmentLifecycleProvider {
      */
     <T> Observable.Transformer<? super T, ? extends T> bindToLifecycle();
 
-    /**
-     * @return a sequence of {@link com.trello.rxlifecycle.components.ActivityResultEvent}
-     */
-    Observable<ActivityResultEvent> activityResult();
 }

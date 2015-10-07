@@ -14,12 +14,11 @@
 
 package com.trello.rxlifecycle.components.support;
 
-import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import com.trello.rxlifecycle.FragmentEvent;
-import com.trello.rxlifecycle.components.ActivityResultEvent;
 import com.trello.rxlifecycle.components.FragmentLifecycleProvider;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -48,7 +47,6 @@ public class RxSupportFragmentLifecycleTest {
         testLifecycle(new RxFragment());
         testBindUntilEvent(new RxFragment());
         testBindToLifecycle(new RxFragment());
-        testActivityResult(new RxFragment());
     }
 
     @Test
@@ -56,7 +54,6 @@ public class RxSupportFragmentLifecycleTest {
         testLifecycle(new RxDialogFragment());
         testBindUntilEvent(new RxDialogFragment());
         testBindToLifecycle(new RxDialogFragment());
-        testActivityResult(new RxDialogFragment());
     }
 
     private void testLifecycle(FragmentLifecycleProvider provider) {
@@ -196,24 +193,6 @@ public class RxSupportFragmentLifecycleTest {
         attachTestSub.assertUnsubscribed();
         destroyTestSub.assertCompleted();
         destroyTestSub.assertUnsubscribed();
-    }
-
-    private void testActivityResult(FragmentLifecycleProvider provider) {
-        Fragment fragment = (Fragment) provider;
-        startFragment(fragment);
-
-        TestSubscriber<ActivityResultEvent> testSubscriber = new TestSubscriber<>();
-        provider.activityResult().subscribe(testSubscriber);
-
-        int requestCode = 1;
-        int resultCode = 2;
-        Intent resultData = new Intent();
-        resultData.putExtra("test", "test");
-        ActivityResultEvent activityResultEvent = ActivityResultEvent.create(requestCode, resultCode, resultData);
-
-        fragment.onActivityResult(requestCode, resultCode, resultData);
-
-        testSubscriber.assertValue(activityResultEvent);
     }
 
     // Easier than making everyone create their own shadows
