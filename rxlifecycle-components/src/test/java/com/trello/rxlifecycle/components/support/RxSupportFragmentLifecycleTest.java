@@ -18,7 +18,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import com.trello.rxlifecycle.FragmentEvent;
 import com.trello.rxlifecycle.components.FragmentLifecycleProvider;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
