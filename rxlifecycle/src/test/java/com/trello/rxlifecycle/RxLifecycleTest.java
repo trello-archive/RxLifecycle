@@ -16,19 +16,21 @@ package com.trello.rxlifecycle;
 
 import android.app.Activity;
 import android.view.View;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
+
+import java.util.concurrent.CopyOnWriteArrayList;
+
 import rx.Observable;
 import rx.Subscription;
 import rx.observers.TestSubscriber;
 import rx.subjects.BehaviorSubject;
 import rx.subjects.PublishSubject;
-
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -88,6 +90,29 @@ public class RxLifecycleTest {
         lifecycle.onNext(ActivityEvent.PAUSE);
         assertFalse(testSubscriber.isUnsubscribed());
         lifecycle.onNext(ActivityEvent.STOP);
+        testSubscriber.assertCompleted();
+        testSubscriber.assertUnsubscribed();
+    }
+
+    @Test
+    public void testBindUntilServiceEvent() {
+        BehaviorSubject<ServiceEvent> lifecycle = BehaviorSubject.create();
+        TestSubscriber<Object> testSubscriber = new TestSubscriber<>();
+
+        observable.compose(RxLifecycle.bindUntilServiceEvent(lifecycle, ServiceEvent.DESTROY))
+                .subscribe(testSubscriber);
+
+        lifecycle.onNext(ServiceEvent.CREATE);
+        assertFalse(testSubscriber.isUnsubscribed());
+        lifecycle.onNext(ServiceEvent.START_COMMAND);
+        assertFalse(testSubscriber.isUnsubscribed());
+        lifecycle.onNext(ServiceEvent.BIND);
+        assertFalse(testSubscriber.isUnsubscribed());
+        lifecycle.onNext(ServiceEvent.REBIND);
+        assertFalse(testSubscriber.isUnsubscribed());
+        lifecycle.onNext(ServiceEvent.UNBIND);
+        assertFalse(testSubscriber.isUnsubscribed());
+        lifecycle.onNext(ServiceEvent.DESTROY);
         testSubscriber.assertCompleted();
         testSubscriber.assertUnsubscribed();
     }
@@ -234,6 +259,61 @@ public class RxLifecycleTest {
 
         TestSubscriber<Object> testSubscriber = new TestSubscriber<>();
         observable.compose(RxLifecycle.bindFragment(lifecycle)).subscribe(testSubscriber);
+        testSubscriber.assertCompleted();
+        testSubscriber.assertUnsubscribed();
+    }
+
+    @Test
+    public void testBindServiceLifecycle() {
+        BehaviorSubject<ServiceEvent> lifecycle = BehaviorSubject.create();
+
+        lifecycle.onNext(ServiceEvent.CREATE);
+        TestSubscriber<Object> createTestSub = new TestSubscriber<>();
+        observable.compose(RxLifecycle.bindService(lifecycle)).subscribe(createTestSub);
+
+        lifecycle.onNext(ServiceEvent.START_COMMAND);
+        assertFalse(createTestSub.isUnsubscribed());
+        TestSubscriber<Object> startTestSub = new TestSubscriber<>();
+        observable.compose(RxLifecycle.bindService(lifecycle)).subscribe(startTestSub);
+
+        lifecycle.onNext(ServiceEvent.BIND);
+        assertFalse(createTestSub.isUnsubscribed());
+        assertFalse(startTestSub.isUnsubscribed());
+        TestSubscriber<Object> bindTestSub = new TestSubscriber<>();
+        observable.compose(RxLifecycle.bindService(lifecycle)).subscribe(bindTestSub);
+
+        lifecycle.onNext(ServiceEvent.REBIND);
+        assertFalse(createTestSub.isUnsubscribed());
+        assertFalse(startTestSub.isUnsubscribed());
+        assertFalse(bindTestSub.isUnsubscribed());
+        TestSubscriber<Object> rebindTestSub = new TestSubscriber<>();
+        observable.compose(RxLifecycle.bindService(lifecycle)).subscribe(rebindTestSub);
+
+        lifecycle.onNext(ServiceEvent.UNBIND);
+        assertFalse(createTestSub.isUnsubscribed());
+        bindTestSub.assertCompleted();
+        bindTestSub.assertUnsubscribed();
+        rebindTestSub.assertCompleted();
+        rebindTestSub.assertUnsubscribed();
+        TestSubscriber<Object> unbindTestSub = new TestSubscriber<>();
+        observable.compose(RxLifecycle.bindService(lifecycle)).subscribe(unbindTestSub);
+
+        lifecycle.onNext(ServiceEvent.DESTROY);
+        startTestSub.assertCompleted();
+        startTestSub.assertUnsubscribed();
+        createTestSub.assertCompleted();
+        createTestSub.assertUnsubscribed();
+        unbindTestSub.assertCompleted();
+        unbindTestSub.assertUnsubscribed();
+    }
+
+    @Test
+    public void testEndsImmediatelyOutsideServiceLifecycle() {
+        BehaviorSubject<ServiceEvent> lifecycle = BehaviorSubject.create();
+        lifecycle.onNext(ServiceEvent.DESTROY);
+
+        TestSubscriber<Object> testSubscriber = new TestSubscriber<>();
+        observable.compose(RxLifecycle.bindService(lifecycle)).subscribe(testSubscriber);
         testSubscriber.assertCompleted();
         testSubscriber.assertUnsubscribed();
     }

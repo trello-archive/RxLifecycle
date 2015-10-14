@@ -15,8 +15,10 @@
 package com.trello.rxlifecycle;
 
 import android.view.View;
+
 import com.jakewharton.rxbinding.view.RxView;
 import com.jakewharton.rxbinding.view.ViewAttachEvent;
+
 import rx.Observable;
 import rx.exceptions.Exceptions;
 import rx.functions.Func1;
@@ -98,7 +100,7 @@ public class RxLifecycle {
      * STOP, etc). If used in the destructive phase, the notifications will cease at the next event;
      * for example, if used in PAUSE, it will unsubscribe in STOP.
      * <p>
-     * Due to the differences between the Activity and Fragment lifecycles, this method should only
+     * Due to the differences between the Activity/Fragment/View/Service lifecycles, this method should only
      * be used for an Activity lifecycle.
      *
      * @param lifecycle the lifecycle sequence of an Activity
@@ -120,7 +122,7 @@ public class RxLifecycle {
      * STOP, etc). If used in the destructive phase, the notifications will cease at the next event;
      * for example, if used in PAUSE, it will unsubscribe in STOP.
      * <p>
-     * Due to the differences between the Activity and Fragment lifecycles, this method should only
+     * Due to the differences between the Activity/Fragment/View/Service lifecycles, this method should only
      * be used for a Fragment lifecycle.
      *
      * @param lifecycle the lifecycle sequence of a Fragment
@@ -211,6 +213,45 @@ public class RxLifecycle {
         };
     }
 
+    /**
+     * Binds the given source to a Service lifecycle.
+     * <p>
+     * When the lifecycle event occurs, the source will cease to emit any notifications.
+     * <p>
+     * Use with {@link Observable#compose(Observable.Transformer)}:
+     * {@code source.compose(RxLifecycle.bindUntilEvent(lifecycle, ServiceEvent.DESTROY)).subscribe()}
+     *
+     * @param lifecycle the Service lifecycle sequence
+     * @param event the event which should conclude notifications from the source
+     * @return a reusable {@link Observable.Transformer} that unsubscribes the source at the specified event
+     */
+    public static <T> Observable.Transformer<? super T, ? extends T> bindUntilServiceEvent(
+            final Observable<ServiceEvent> lifecycle, final ServiceEvent event) {
+        return bindUntilEvent(lifecycle, event);
+    }
+
+    /**
+     * Binds the given source to a Service lifecycle.
+     * <p>
+     * Use with {@link Observable#compose(Observable.Transformer)}:
+     * {@code source.compose(RxLifecycle.bindService(lifecycle)).subscribe()}
+     * <p>
+     * This helper automatically determines (based on the lifecycle sequence itself) when the source
+     * should stop emitting items. In the case that the lifecycle sequence is in the
+     * creation phase (CREATE, BIND, etc) it will choose the equivalent destructive phase (DESTROY,
+     * UNBIND, etc). If used in the destructive phase, the notifications will cease at the next event;
+     * for example, if used in UNBIND, it will unsubscribe in DESTROY.
+     * <p>
+     * Due to the differences between the Activity/Fragment/View/Service lifecycles, this method should only
+     * be used for a Service lifecycle.
+     *
+     * @param lifecycle the lifecycle sequence of a Service
+     * @return a reusable {@link Observable.Transformer} that unsubscribes the source during the Service lifecycle
+     */
+    public static <T> Observable.Transformer<? super T, ? extends T> bindService(Observable<ServiceEvent> lifecycle) {
+        return bind(lifecycle, SERVICE_LIFECYCLE);
+    }
+
     private static final Func1<Throwable, Boolean> RESUME_FUNCTION = new Func1<Throwable, Boolean>() {
         @Override
         public Boolean call(Throwable throwable) {
@@ -285,6 +326,27 @@ public class RxLifecycle {
                 }
             }
         };
+
+    private static final Func1<ServiceEvent, ServiceEvent> SERVICE_LIFECYCLE =
+            new Func1<ServiceEvent, ServiceEvent>() {
+                @Override
+                public ServiceEvent call(ServiceEvent lastEvent) {
+                    switch (lastEvent) {
+                        case CREATE:
+                        case START_COMMAND:
+                            return ServiceEvent.DESTROY;
+                        case BIND:
+                        case REBIND:
+                            return ServiceEvent.UNBIND;
+                        case UNBIND:
+                            return ServiceEvent.DESTROY;
+                        case DESTROY:
+                            throw new OutsideLifecycleException("Cannot bind to Service lifecycle when outside of it.");
+                        default:
+                            throw new UnsupportedOperationException("Binding to " + lastEvent + " not yet implemented");
+                    }
+                }
+            };
 
     private static class OutsideLifecycleException extends IllegalStateException {
         public OutsideLifecycleException(String detailMessage) {
