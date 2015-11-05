@@ -1,11 +1,14 @@
 package com.trello.rxlifecycle.components.support;
 
 import android.os.Bundle;
+import android.support.annotation.CallSuper;
 import android.support.v4.app.DialogFragment;
 import android.view.View;
+
 import com.trello.rxlifecycle.FragmentEvent;
 import com.trello.rxlifecycle.RxLifecycle;
 import com.trello.rxlifecycle.components.FragmentLifecycleProvider;
+
 import rx.Observable;
 import rx.subjects.BehaviorSubject;
 
@@ -29,60 +32,70 @@ public class RxDialogFragment extends DialogFragment implements FragmentLifecycl
     }
 
     @Override
+    @CallSuper
     public void onAttach(android.app.Activity activity) {
         super.onAttach(activity);
         lifecycleSubject.onNext(FragmentEvent.ATTACH);
     }
 
     @Override
+    @CallSuper
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         lifecycleSubject.onNext(FragmentEvent.CREATE);
     }
 
     @Override
+    @CallSuper
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         lifecycleSubject.onNext(FragmentEvent.CREATE_VIEW);
     }
 
     @Override
+    @CallSuper
     public void onStart() {
         super.onStart();
         lifecycleSubject.onNext(FragmentEvent.START);
     }
 
     @Override
+    @CallSuper
     public void onResume() {
         super.onResume();
         lifecycleSubject.onNext(FragmentEvent.RESUME);
     }
 
     @Override
+    @CallSuper
     public void onPause() {
         lifecycleSubject.onNext(FragmentEvent.PAUSE);
         super.onPause();
     }
 
     @Override
+    @CallSuper
     public void onStop() {
         lifecycleSubject.onNext(FragmentEvent.STOP);
         super.onStop();
     }
 
     @Override
+    @CallSuper
     public void onDestroyView() {
         lifecycleSubject.onNext(FragmentEvent.DESTROY_VIEW);
         super.onDestroyView();
     }
 
     @Override
+    @CallSuper
     public void onDestroy() {
         lifecycleSubject.onNext(FragmentEvent.DESTROY);
         super.onDestroy();
     }
 
     @Override
+    @CallSuper
     public void onDetach() {
         lifecycleSubject.onNext(FragmentEvent.DETACH);
         super.onDetach();
