@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.1 (2015-11-27)
+
+* [#46](https://github.com/trello/RxLifecycle/pull/46): Updated generic parameters of `Transformer<T, T>` to support Kotlin type inference.
+
 ## 0.3.0
 
 * [#12](https://github.com/trello/RxLifecycle/pull/12): Added `RxLifecycle.bindView()`. This allows binding a

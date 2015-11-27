@@ -64,8 +64,8 @@ yourself and call `unsubscribe()` when appropriate.
 ## Installation
 
 ```gradle
-compile 'com.trello:rxlifecycle:0.3.0'
-compile 'com.trello:rxlifecycle-components:0.3.0'
+compile 'com.trello:rxlifecycle:0.3.1'
+compile 'com.trello:rxlifecycle-components:0.3.1'
 ```
 
 ## License
