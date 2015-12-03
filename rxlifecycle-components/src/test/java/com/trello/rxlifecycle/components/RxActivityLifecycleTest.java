@@ -15,6 +15,7 @@
 package com.trello.rxlifecycle.components;
 
 import com.trello.rxlifecycle.ActivityEvent;
+import com.trello.rxlifecycle.ActivityLifecycleProvider;
 import com.trello.rxlifecycle.components.support.RxFragmentActivity;
 import org.junit.Before;
 import org.junit.Test;

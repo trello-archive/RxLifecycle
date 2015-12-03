@@ -6,6 +6,7 @@ import android.support.annotation.CallSuper;
 import android.view.View;
 
 import com.trello.rxlifecycle.FragmentEvent;
+import com.trello.rxlifecycle.FragmentLifecycleProvider;
 import com.trello.rxlifecycle.RxLifecycle;
 
 import rx.Observable;
