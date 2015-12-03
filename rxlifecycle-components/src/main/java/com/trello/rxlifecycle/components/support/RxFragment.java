@@ -5,7 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 import com.trello.rxlifecycle.FragmentEvent;
 import com.trello.rxlifecycle.RxLifecycle;
-import com.trello.rxlifecycle.components.FragmentLifecycleProvider;
+import com.trello.rxlifecycle.FragmentLifecycleProvider;
 import rx.Observable;
 import rx.subjects.BehaviorSubject;
 

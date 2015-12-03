@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentActivity;
 
 import com.trello.rxlifecycle.ActivityEvent;
 import com.trello.rxlifecycle.RxLifecycle;
-import com.trello.rxlifecycle.components.ActivityLifecycleProvider;
+import com.trello.rxlifecycle.ActivityLifecycleProvider;
 
 import rx.Observable;
 import rx.subjects.BehaviorSubject;

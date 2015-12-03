@@ -1,6 +1,5 @@
-package com.trello.rxlifecycle.components;
+package com.trello.rxlifecycle;
 
-import com.trello.rxlifecycle.ActivityEvent;
 import rx.Observable;
 
 /**

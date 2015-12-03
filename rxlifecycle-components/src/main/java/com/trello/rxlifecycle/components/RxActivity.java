@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.CallSuper;
 
 import com.trello.rxlifecycle.ActivityEvent;
+import com.trello.rxlifecycle.ActivityLifecycleProvider;
 import com.trello.rxlifecycle.RxLifecycle;
 
 import rx.Observable;

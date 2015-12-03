@@ -1,4 +1,4 @@
-package com.trello.rxlifecycle.components;
+package com.trello.rxlifecycle;
 
 import com.trello.rxlifecycle.FragmentEvent;
 import rx.Observable;
