@@ -25,9 +25,11 @@ import rx.Observable;
 import rx.observers.TestSubscriber;
 import rx.subjects.PublishSubject;
 
+import java.lang.ref.WeakReference;
 import java.util.HashSet;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 
 public class NaviFragmentLifecycleTest {
 
@@ -180,5 +182,72 @@ public class NaviFragmentLifecycleTest {
         notEnoughEvents.add(Event.ATTACH);
         NaviComponent badHandler = new NaviEmitter(notEnoughEvents);
         NaviLifecycle.createFragmentLifecycleProvider(badHandler);
+    }
+
+    @Test
+    public void testPersistance() {
+        NaviEmitter fragment = NaviEmitter.createFragmentEmitter();
+        FragmentLifecycleProvider provider = NaviLifecycle.createFragmentLifecycleProvider(fragment);
+
+        TestSubscriber<FragmentEvent> testSubscriber = new TestSubscriber<>();
+        provider.lifecycle().subscribe(testSubscriber);
+
+        fragment.onAttach(null);
+        fragment.onCreate(null);
+        fragment.onCreateView(null);
+        fragment.onStart();
+        fragment.onResume();
+        fragment.onPause();
+        fragment.onStop();
+        fragment.onDestroyView();
+        fragment.onDestroy();
+        fragment.onDetach();
+
+        // Verify that you can remain subscribed until the Fragment is completely gone
+        fragment.onAttach(null);
+
+        testSubscriber.assertValues(
+            FragmentEvent.ATTACH,
+            FragmentEvent.CREATE,
+            FragmentEvent.CREATE_VIEW,
+            FragmentEvent.START,
+            FragmentEvent.RESUME,
+            FragmentEvent.PAUSE,
+            FragmentEvent.STOP,
+            FragmentEvent.DESTROY_VIEW,
+            FragmentEvent.DESTROY,
+            FragmentEvent.DETACH,
+            FragmentEvent.ATTACH
+        );
+    }
+
+    @Test
+    public void testLeakFree() {
+        NaviEmitter fragment = NaviEmitter.createFragmentEmitter();
+        FragmentLifecycleProvider provider = NaviLifecycle.createFragmentLifecycleProvider(fragment);
+        WeakReference<NaviEmitter> fragmentRef = new WeakReference<>(fragment);
+        WeakReference<FragmentLifecycleProvider> providerRef = new WeakReference<>(provider);
+
+        Observable<Object> observable = PublishSubject.create().asObservable();
+        TestSubscriber<Object> testSubscriber = new TestSubscriber<>();
+        observable.compose(provider.bindUntilEvent(FragmentEvent.STOP)).subscribe(testSubscriber);
+
+        fragment.onAttach(null);
+        fragment.onCreate(null);
+        fragment.onCreateView(null);
+        fragment.onStart();
+        fragment.onResume();
+        fragment.onPause();
+        fragment.onStop();
+        fragment.onDestroyView();
+        fragment.onDestroy();
+        fragment.onDetach();
+
+        fragment = null;
+        provider = null;
+        TestUtil.cleanGarbage();
+
+        assertNull(fragmentRef.get());
+        assertNull(providerRef.get());
     }
 }

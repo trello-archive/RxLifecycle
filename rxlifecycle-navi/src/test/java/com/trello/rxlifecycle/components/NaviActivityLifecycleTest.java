@@ -25,9 +25,11 @@ import rx.Observable;
 import rx.observers.TestSubscriber;
 import rx.subjects.PublishSubject;
 
+import java.lang.ref.WeakReference;
 import java.util.HashSet;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 
 public class NaviActivityLifecycleTest {
 
@@ -130,5 +132,60 @@ public class NaviActivityLifecycleTest {
         notEnoughEvents.add(Event.CREATE);
         NaviComponent badHandler = new NaviEmitter(notEnoughEvents);
         NaviLifecycle.createActivityLifecycleProvider(badHandler);
+    }
+
+    @Test
+    public void testPersistance() {
+        NaviEmitter activity = NaviEmitter.createActivityEmitter();
+        ActivityLifecycleProvider provider = NaviLifecycle.createActivityLifecycleProvider(activity);
+
+        TestSubscriber<ActivityEvent> testSubscriber = new TestSubscriber<>();
+        provider.lifecycle().subscribe(testSubscriber);
+
+        activity.onCreate(null);
+        activity.onStart();
+        activity.onResume();
+        activity.onPause();
+        activity.onStop();
+        activity.onDestroy();
+
+        // Verify that you can remain subscribed until the Activity is completely gone
+        activity.onCreate(null);
+
+        testSubscriber.assertValues(
+            ActivityEvent.CREATE,
+            ActivityEvent.START,
+            ActivityEvent.RESUME,
+            ActivityEvent.PAUSE,
+            ActivityEvent.STOP,
+            ActivityEvent.DESTROY,
+            ActivityEvent.CREATE
+        );
+    }
+
+    @Test
+    public void testLeakFree() {
+        NaviEmitter activity = NaviEmitter.createActivityEmitter();
+        ActivityLifecycleProvider provider = NaviLifecycle.createActivityLifecycleProvider(activity);
+        WeakReference<NaviEmitter> activityRef = new WeakReference<>(activity);
+        WeakReference<ActivityLifecycleProvider> providerRef = new WeakReference<>(provider);
+
+        Observable<Object> observable = PublishSubject.create().asObservable();
+        TestSubscriber<Object> testSubscriber = new TestSubscriber<>();
+        observable.compose(provider.bindUntilEvent(ActivityEvent.STOP)).subscribe(testSubscriber);
+
+        activity.onCreate(null);
+        activity.onStart();
+        activity.onResume();
+        activity.onPause();
+        activity.onStop();
+        activity.onDestroy();
+
+        activity = null;
+        provider = null;
+        TestUtil.cleanGarbage();
+
+        assertNull(activityRef.get());
+        assertNull(providerRef.get());
     }
 }
