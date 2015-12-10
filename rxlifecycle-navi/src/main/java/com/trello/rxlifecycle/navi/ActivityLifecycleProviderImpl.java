@@ -1,8 +1,6 @@
 package com.trello.rxlifecycle.navi;
 
-import android.os.Bundle;
 import com.trello.navi.Event;
-import com.trello.navi.Listener;
 import com.trello.navi.NaviComponent;
 import com.trello.navi.rx.RxNavi;
 import com.trello.rxlifecycle.ActivityEvent;
@@ -19,19 +17,10 @@ final class ActivityLifecycleProviderImpl implements ActivityLifecycleProvider {
             throw new IllegalArgumentException("NaviComponent does not handle all required events");
         }
 
-        activity.addListener(Event.CREATE, new Listener<Bundle>() {
-            @Override
-            public void call(Bundle bundle) {
-                RxNavi.observe(activity, Event.ALL)
-                    .map(NaviLifecycleMaps.ACTIVITY_EVENT_MAP)
-                    .filter(RxUtils.notNull())
-                    .takeUntil(RxNavi.observe(activity, Event.DESTROY))
-                    .subscribe(lifecycleSubject);
-
-                // Subscribing in onCreate won't emit, so we need to do this ourselves
-                lifecycleSubject.onNext(ActivityEvent.CREATE);
-            }
-        });
+        RxNavi.observe(activity, Event.ALL)
+            .map(NaviLifecycleMaps.ACTIVITY_EVENT_MAP)
+            .filter(RxUtils.notNull())
+            .subscribe(lifecycleSubject);
     }
 
     @Override

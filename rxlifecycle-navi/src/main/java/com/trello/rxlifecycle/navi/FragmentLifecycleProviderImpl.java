@@ -1,8 +1,6 @@
 package com.trello.rxlifecycle.navi;
 
-import android.content.Context;
 import com.trello.navi.Event;
-import com.trello.navi.Listener;
 import com.trello.navi.NaviComponent;
 import com.trello.navi.rx.RxNavi;
 import com.trello.rxlifecycle.FragmentEvent;
@@ -20,19 +18,10 @@ final class FragmentLifecycleProviderImpl implements FragmentLifecycleProvider {
             throw new IllegalArgumentException("NaviComponent does not handle all required events");
         }
 
-        fragment.addListener(Event.ATTACH, new Listener<Context>() {
-            @Override
-            public void call(Context context) {
-                RxNavi.observe(fragment, Event.ALL)
-                    .map(NaviLifecycleMaps.FRAGMENT_EVENT_MAP)
-                    .filter(RxUtils.notNull())
-                    .takeUntil(RxNavi.observe(fragment, Event.DETACH))
-                    .subscribe(lifecycleSubject);
-
-                // Subscribing in onCreate won't emit, so we need to do this ourselves
-                lifecycleSubject.onNext(FragmentEvent.ATTACH);
-            }
-        });
+        RxNavi.observe(fragment, Event.ALL)
+            .map(NaviLifecycleMaps.FRAGMENT_EVENT_MAP)
+            .filter(RxUtils.notNull())
+            .subscribe(lifecycleSubject);
     }
 
     @Override
