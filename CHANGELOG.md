@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.4.0 (2015-12-10)
+
+* [#62](https://github.com/trello/RxLifecycle/pull/62), [#67](https://github.com/trello/RxLifecycle/pull/67): Added
+[Navi](https://github.com/trello/navi/)-based implementation of providers.
+* [#61](https://github.com/trello/RxLifecycle/pull/61): Moved `ActivityLifecycleProvider` and
+`FragmentLifecycleProvider` into the core library so that multiple implementations can share them easily. The package
+ name changed so you may need to re-import them in your code.
+* [#60](https://github.com/trello/RxLifecycle/pull/60): Reverted generic parameters back to `Transformer<T, T>`
+
 ## 0.3.1 (2015-11-27)
 
 * [#46](https://github.com/trello/RxLifecycle/pull/46): Updated generic parameters of `Transformer<T, T>` to support Kotlin type inference.
