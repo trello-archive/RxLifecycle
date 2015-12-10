@@ -28,10 +28,16 @@ It assumes you want to end the sequence in the opposing lifecycle event - e.g., 
 terminate on `STOP`. If you subscribe after `PAUSE`, it will terminate at the next destruction event (e.g.,
 `PAUSE` will terminate in `STOP`).
 
-## Components
+## Providers
 
-Where do the sequences of `ActivityEvent` or `FragmentEvent` come from? You can either write it yourself, or you can
-include rxlifecycle-components, which comes with pre-built `Activity` and `Fragment` implementations with lifecycles.
+Where do the sequences of `ActivityEvent` or `FragmentEvent` come from? Generally, they are provided by
+`ActivityLifecycleProvider` and `FragmentLifecycleProvider`. But where are those implemented?
+
+You have a few options for that:
+
+1. Use rxlifecycle-components and subclass the provided `RxActivity`, `RxFragment`, etc. classes.
+1. Use [Navi](https://github.com/trello/navi/) + rxlifecycle-navi to generate providers.
+1. Write the implementation yourself.
 
 If you use rxlifecycle-components, just extend the appropriate class, then use the built-in `bindToLifecycle()` (or `bindUntilEvent()`) methods:
 
@@ -47,8 +53,22 @@ public class MyActivity extends RxActivity {
 }
 ```
 
-In addition, these components come with `lifecycle()`, which allows you to do your own logic based on the `Activity`
-or `Fragment` lifecycle.
+If you use rxlifecycle-navi, then you just pass your `NaviComponent` to `NaviLifecycle` to generate a provider:
+
+```java
+public class MyActivity extends NaviActivity {
+    private final ActivityLifecycleProvider provider
+        = NaviLifecycle.createActivityLifecycleProvider(this);
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        myObservable
+            .compose(provider.bindToLifecycle())
+            .subscribe();
+    }
+}
+```
 
 ## Unsubscription
 
@@ -64,8 +84,13 @@ yourself and call `unsubscribe()` when appropriate.
 ## Installation
 
 ```gradle
-compile 'com.trello:rxlifecycle:0.3.1'
-compile 'com.trello:rxlifecycle-components:0.3.1'
+compile 'com.trello:rxlifecycle:0.4.0'
+
+// If you want pre-written Activities and Fragments you can subclass as providers
+compile 'com.trello:rxlifecycle-components:0.4.0'
+
+// If you want to use Navi for providers
+compile 'com.trello:rxlifecycle-navi:0.4.0'
 ```
 
 ## License
