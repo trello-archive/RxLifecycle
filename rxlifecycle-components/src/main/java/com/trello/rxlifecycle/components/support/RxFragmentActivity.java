@@ -31,6 +31,16 @@ public class RxFragmentActivity extends FragmentActivity implements ActivityLife
     }
 
     @Override
+    public final <T> Observable.Transformer<T, T> bindToLifecycle(Observable.Transformer<T, T> customTransformer) {
+        return RxLifecycle.bindActivity(lifecycleSubject,customTransformer);
+    }
+
+    @Override
+    public final <T> Observable.Transformer<T, T> bindUntilEvent(ActivityEvent event, Observable.Transformer<T, T> customerTransformer) {
+        return RxLifecycle.bindUntilActivityEvent(lifecycleSubject, event, customerTransformer);
+    }
+
+    @Override
     @CallSuper
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

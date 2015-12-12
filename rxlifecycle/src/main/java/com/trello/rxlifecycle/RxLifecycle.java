@@ -2,9 +2,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * <p/>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p/>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,96 +30,160 @@ public class RxLifecycle {
 
     /**
      * Binds the given source to a Fragment lifecycle.
-     * <p>
+     * <p/>
      * When the lifecycle event occurs, the source will cease to emit any notifications.
-     * <p>
+     * <p/>
      * Use with {@link Observable#compose(Observable.Transformer)}:
      * {@code source.compose(RxLifecycle.bindUntilEvent(lifecycle, FragmentEvent.STOP)).subscribe()}
      *
      * @param lifecycle the Fragment lifecycle sequence
-     * @param event the event which should conclude notifications from the source
+     * @param event     the event which should conclude notifications from the source
      * @return a reusable {@link Observable.Transformer} that unsubscribes the source at the specified event
      */
     public static <T> Observable.Transformer<T, T> bindUntilFragmentEvent(
-        final Observable<FragmentEvent> lifecycle, final FragmentEvent event) {
-        return bindUntilEvent(lifecycle, event);
+            final Observable<FragmentEvent> lifecycle, final FragmentEvent event) {
+        return bindUntilEvent(lifecycle, event, null);
+    }
+
+    /**
+     * Binds the given source to a Fragment lifecycle.
+     * <p/>
+     * When the lifecycle event occurs, the source will cease to emit any notifications.
+     * <p/>
+     * Use with {@link Observable#compose(Observable.Transformer)}:
+     * {@code source.compose(RxLifecycle.bindUntilEvent(lifecycle, FragmentEvent.STOP)).subscribe()}
+     *
+     * @param lifecycle         the Fragment lifecycle sequence
+     * @param event             the event which should conclude notifications from the source
+     * @param customTransformer the Transformer for customer input
+     * @return a reusable {@link Observable.Transformer} that unsubscribes the source at the specified event
+     */
+    public static <T> Observable.Transformer<T, T> bindUntilFragmentEvent(
+            final Observable<FragmentEvent> lifecycle, final FragmentEvent event, Observable.Transformer<T, T> customTransformer) {
+        return bindUntilEvent(lifecycle, event, customTransformer);
     }
 
     /**
      * Binds the given source to an Activity lifecycle.
-     * <p>
+     * <p/>
      * When the lifecycle event occurs, the source will cease to emit any notifications.
-     * <p>
+     * <p/>
      * Use with {@link Observable#compose(Observable.Transformer)}:
      * {@code source.compose(RxLifecycle.bindUntilEvent(lifecycle, ActivityEvent.STOP)).subscribe()}
      *
      * @param lifecycle the Activity lifecycle sequence
-     * @param event the event which should conclude notifications from the source
+     * @param event     the event which should conclude notifications from the source
      * @return a reusable {@link Observable.Transformer} that unsubscribes the source at the specified event
      */
     public static <T> Observable.Transformer<T, T> bindUntilActivityEvent(
-        final Observable<ActivityEvent> lifecycle, final ActivityEvent event) {
-        return bindUntilEvent(lifecycle, event);
+            final Observable<ActivityEvent> lifecycle, final ActivityEvent event) {
+        return bindUntilEvent(lifecycle, event, null);
+    }
+
+    /**
+     * Binds the given source to an Activity lifecycle.
+     * <p/>
+     * When the lifecycle event occurs, the source will cease to emit any notifications.
+     * <p/>
+     * Use with {@link Observable#compose(Observable.Transformer)}:
+     * {@code source.compose(RxLifecycle.bindUntilEvent(lifecycle, ActivityEvent.STOP)).subscribe()}
+     *
+     * @param lifecycle         the Activity lifecycle sequence
+     * @param event             the event which should conclude notifications from the source
+     * @param customTransformer the Transformer for customer input
+     * @return a reusable {@link Observable.Transformer} that unsubscribes the source at the specified event
+     */
+    public static <T> Observable.Transformer<T, T> bindUntilActivityEvent(
+            final Observable<ActivityEvent> lifecycle, final ActivityEvent event, Observable.Transformer<T, T> customTransformer) {
+        return bindUntilEvent(lifecycle, event, customTransformer);
     }
 
     private static <T, R> Observable.Transformer<T, T> bindUntilEvent(final Observable<R> lifecycle,
-                                                                      final R event) {
+                                                                      final R event,
+                                                                      final Observable.Transformer<T, T> customTransformer) {
         if (lifecycle == null) {
             throw new IllegalArgumentException("Lifecycle must be given");
-        }
-        else if (event == null) {
+        } else if (event == null) {
             throw new IllegalArgumentException("Event must be given");
         }
 
         return new Observable.Transformer<T, T>() {
             @Override
             public Observable<T> call(Observable<T> source) {
-                return source.takeUntil(
-                    lifecycle.takeFirst(new Func1<R, Boolean>() {
-                        @Override
-                        public Boolean call(R lifecycleEvent) {
-                            return lifecycleEvent == event;
-                        }
-                    })
+                Observable<T> observable = source.takeUntil(
+                        lifecycle.takeFirst(new Func1<R, Boolean>() {
+                            @Override
+                            public Boolean call(R lifecycleEvent) {
+                                return lifecycleEvent == event;
+                            }
+                        })
                 );
+                if (customTransformer != null) {
+                    return observable.compose(customTransformer);
+                } else {
+                    return observable;
+                }
             }
         };
     }
 
     /**
      * Binds the given source to an Activity lifecycle.
-     * <p>
+     * <p/>
      * Use with {@link Observable#compose(Observable.Transformer)}:
      * {@code source.compose(RxLifecycle.bindActivity(lifecycle)).subscribe()}
-     * <p>
+     * <p/>
      * This helper automatically determines (based on the lifecycle sequence itself) when the source
      * should stop emitting items. In the case that the lifecycle sequence is in the
      * creation phase (CREATE, START, etc) it will choose the equivalent destructive phase (DESTROY,
      * STOP, etc). If used in the destructive phase, the notifications will cease at the next event;
      * for example, if used in PAUSE, it will unsubscribe in STOP.
-     * <p>
+     * <p/>
      * Due to the differences between the Activity and Fragment lifecycles, this method should only
      * be used for an Activity lifecycle.
      *
      * @param lifecycle the lifecycle sequence of an Activity
-     * * @return a reusable {@link Observable.Transformer} that unsubscribes the source during the Activity lifecycle
+     * @return a reusable {@link Observable.Transformer} that unsubscribes the source during the Activity lifecycle
      */
     public static <T> Observable.Transformer<T, T> bindActivity(Observable<ActivityEvent> lifecycle) {
-        return bind(lifecycle, ACTIVITY_LIFECYCLE);
+        return bind(lifecycle, ACTIVITY_LIFECYCLE, null);
     }
 
     /**
-     * Binds the given source to a Fragment lifecycle.
-     * <p>
+     * Binds the given source to an Activity lifecycle.
+     * <p/>
      * Use with {@link Observable#compose(Observable.Transformer)}:
-     * {@code source.compose(RxLifecycle.bindFragment(lifecycle)).subscribe()}
-     * <p>
+     * {@code source.compose(RxLifecycle.bindActivity(lifecycle)).subscribe()}
+     * <p/>
      * This helper automatically determines (based on the lifecycle sequence itself) when the source
      * should stop emitting items. In the case that the lifecycle sequence is in the
      * creation phase (CREATE, START, etc) it will choose the equivalent destructive phase (DESTROY,
      * STOP, etc). If used in the destructive phase, the notifications will cease at the next event;
      * for example, if used in PAUSE, it will unsubscribe in STOP.
-     * <p>
+     * <p/>
+     * Due to the differences between the Activity and Fragment lifecycles, this method should only
+     * be used for an Activity lifecycle.
+     *
+     * @param lifecycle         the lifecycle sequence of an Activity
+     * @param customTransformer the Transformer for customer input
+     * @return a reusable {@link Observable.Transformer} that unsubscribes the source during the Activity lifecycle
+     */
+    public static <T> Observable.Transformer<T, T> bindActivity(Observable<ActivityEvent> lifecycle, Observable.Transformer<T, T> customTransformer) {
+        return bind(lifecycle, ACTIVITY_LIFECYCLE, customTransformer);
+    }
+
+    /**
+     * Binds the given source to a Fragment lifecycle.
+     * <p/>
+     * Use with {@link Observable#compose(Observable.Transformer)}:
+     * {@code source.compose(RxLifecycle.bindFragment(lifecycle)).subscribe()}
+     * <p/>
+     * This helper automatically determines (based on the lifecycle sequence itself) when the source
+     * should stop emitting items. In the case that the lifecycle sequence is in the
+     * creation phase (CREATE, START, etc) it will choose the equivalent destructive phase (DESTROY,
+     * STOP, etc). If used in the destructive phase, the notifications will cease at the next event;
+     * for example, if used in PAUSE, it will unsubscribe in STOP.
+     * <p/>
      * Due to the differences between the Activity and Fragment lifecycles, this method should only
      * be used for a Fragment lifecycle.
      *
@@ -127,19 +191,42 @@ public class RxLifecycle {
      * @return a reusable {@link Observable.Transformer} that unsubscribes the source during the Fragment lifecycle
      */
     public static <T> Observable.Transformer<T, T> bindFragment(Observable<FragmentEvent> lifecycle) {
-        return bind(lifecycle, FRAGMENT_LIFECYCLE);
+        return bind(lifecycle, FRAGMENT_LIFECYCLE, null);
+    }
+
+    /**
+     * Binds the given source to a Fragment lifecycle.
+     * <p/>
+     * Use with {@link Observable#compose(Observable.Transformer)}:
+     * {@code source.compose(RxLifecycle.bindFragment(lifecycle)).subscribe()}
+     * <p/>
+     * This helper automatically determines (based on the lifecycle sequence itself) when the source
+     * should stop emitting items. In the case that the lifecycle sequence is in the
+     * creation phase (CREATE, START, etc) it will choose the equivalent destructive phase (DESTROY,
+     * STOP, etc). If used in the destructive phase, the notifications will cease at the next event;
+     * for example, if used in PAUSE, it will unsubscribe in STOP.
+     * <p/>
+     * Due to the differences between the Activity and Fragment lifecycles, this method should only
+     * be used for a Fragment lifecycle.
+     *
+     * @param lifecycle         the lifecycle sequence of a Fragment
+     * @param customTransformer the Transformer for customer input
+     * @return a reusable {@link Observable.Transformer} that unsubscribes the source during the Fragment lifecycle
+     */
+    public static <T> Observable.Transformer<T, T> bindFragment(Observable<FragmentEvent> lifecycle, Observable.Transformer<T, T> customTransformer) {
+        return bind(lifecycle, FRAGMENT_LIFECYCLE, customTransformer);
     }
 
     /**
      * Binds the given source a View lifecycle.
-     * <p>
+     * <p/>
      * Use with {@link Observable#compose(Observable.Transformer)}:
      * {@code source.compose(RxLifecycle.bindView(lifecycle)).subscribe()}
-     * <p>
+     * <p/>
      * This helper automatically determines (based on the lifecycle sequence itself) when the source
      * should stop emitting items. For views, this effectively means watching for a detach event and
      * unsubscribing the sequence when one occurs.
-     * <p>
+     * <p/>
      * Note that this will unsubscribe after the first {@link ViewAttachEvent.Kind#DETACH} event is received,
      * and will not resume if the view is re-attached later.
      *
@@ -156,10 +243,10 @@ public class RxLifecycle {
 
     /**
      * Binds the given source a View lifecycle.
-     * <p>
+     * <p/>
      * Use with {@link Observable#compose(Observable.Transformer)}:
      * {@code source.compose(RxLifecycle.bindView(lifecycle)).subscribe()}
-     * <p>
+     * <p/>
      * This helper automatically determines (based on the lifecycle sequence itself) when the source
      * should stop emitting items. For views, this effectively means watching for a detach event and
      * unsubscribing the sequence when one occurs. Note that this assumes <em>any</em> event
@@ -182,7 +269,8 @@ public class RxLifecycle {
     }
 
     private static <T, R> Observable.Transformer<T, T> bind(Observable<R> lifecycle,
-                                                            final Func1<R, R> correspondingEvents) {
+                                                            final Func1<R, R> correspondingEvents,
+                                                            final Observable.Transformer<T, T> customTransformer) {
         if (lifecycle == null) {
             throw new IllegalArgumentException("Lifecycle must be given");
         }
@@ -194,19 +282,25 @@ public class RxLifecycle {
         return new Observable.Transformer<T, T>() {
             @Override
             public Observable<T> call(Observable<T> source) {
-                return source.takeUntil(
-                    Observable.combineLatest(
-                        sharedLifecycle.take(1).map(correspondingEvents),
-                        sharedLifecycle.skip(1),
-                        new Func2<R, R, Boolean>() {
-                            @Override
-                            public Boolean call(R bindUntilEvent, R lifecycleEvent) {
-                                return lifecycleEvent == bindUntilEvent;
-                            }
-                        })
-                        .onErrorReturn(RESUME_FUNCTION)
-                        .takeFirst(SHOULD_COMPLETE)
+                Observable<T> observable = source.takeUntil(
+                        Observable.combineLatest(
+                                sharedLifecycle.take(1).map(correspondingEvents),
+                                sharedLifecycle.skip(1),
+                                new Func2<R, R, Boolean>() {
+                                    @Override
+                                    public Boolean call(R bindUntilEvent, R lifecycleEvent) {
+                                        return lifecycleEvent == bindUntilEvent;
+                                    }
+                                })
+                                .onErrorReturn(RESUME_FUNCTION)
+                                .takeFirst(SHOULD_COMPLETE)
                 );
+                if (customTransformer != null) {
+                    return observable.compose(customTransformer);
+                } else {
+                    return observable;
+                }
+
             }
         };
     }
@@ -232,59 +326,59 @@ public class RxLifecycle {
 
     // Figures out which corresponding next lifecycle event in which to unsubscribe, for Activities
     private static final Func1<ActivityEvent, ActivityEvent> ACTIVITY_LIFECYCLE =
-        new Func1<ActivityEvent, ActivityEvent>() {
-            @Override
-            public ActivityEvent call(ActivityEvent lastEvent) {
-                switch (lastEvent) {
-                    case CREATE:
-                        return ActivityEvent.DESTROY;
-                    case START:
-                        return ActivityEvent.STOP;
-                    case RESUME:
-                        return ActivityEvent.PAUSE;
-                    case PAUSE:
-                        return ActivityEvent.STOP;
-                    case STOP:
-                        return ActivityEvent.DESTROY;
-                    case DESTROY:
-                        throw new OutsideLifecycleException("Cannot bind to Activity lifecycle when outside of it.");
-                    default:
-                        throw new UnsupportedOperationException("Binding to " + lastEvent + " not yet implemented");
+            new Func1<ActivityEvent, ActivityEvent>() {
+                @Override
+                public ActivityEvent call(ActivityEvent lastEvent) {
+                    switch (lastEvent) {
+                        case CREATE:
+                            return ActivityEvent.DESTROY;
+                        case START:
+                            return ActivityEvent.STOP;
+                        case RESUME:
+                            return ActivityEvent.PAUSE;
+                        case PAUSE:
+                            return ActivityEvent.STOP;
+                        case STOP:
+                            return ActivityEvent.DESTROY;
+                        case DESTROY:
+                            throw new OutsideLifecycleException("Cannot bind to Activity lifecycle when outside of it.");
+                        default:
+                            throw new UnsupportedOperationException("Binding to " + lastEvent + " not yet implemented");
+                    }
                 }
-            }
-        };
+            };
 
     // Figures out which corresponding next lifecycle event in which to unsubscribe, for Fragments
     private static final Func1<FragmentEvent, FragmentEvent> FRAGMENT_LIFECYCLE =
-        new Func1<FragmentEvent, FragmentEvent>() {
-            @Override
-            public FragmentEvent call(FragmentEvent lastEvent) {
-                switch (lastEvent) {
-                    case ATTACH:
-                        return FragmentEvent.DETACH;
-                    case CREATE:
-                        return FragmentEvent.DESTROY;
-                    case CREATE_VIEW:
-                        return FragmentEvent.DESTROY_VIEW;
-                    case START:
-                        return FragmentEvent.STOP;
-                    case RESUME:
-                        return FragmentEvent.PAUSE;
-                    case PAUSE:
-                        return FragmentEvent.STOP;
-                    case STOP:
-                        return FragmentEvent.DESTROY_VIEW;
-                    case DESTROY_VIEW:
-                        return FragmentEvent.DESTROY;
-                    case DESTROY:
-                        return FragmentEvent.DETACH;
-                    case DETACH:
-                        throw new OutsideLifecycleException("Cannot bind to Fragment lifecycle when outside of it.");
-                    default:
-                        throw new UnsupportedOperationException("Binding to " + lastEvent + " not yet implemented");
+            new Func1<FragmentEvent, FragmentEvent>() {
+                @Override
+                public FragmentEvent call(FragmentEvent lastEvent) {
+                    switch (lastEvent) {
+                        case ATTACH:
+                            return FragmentEvent.DETACH;
+                        case CREATE:
+                            return FragmentEvent.DESTROY;
+                        case CREATE_VIEW:
+                            return FragmentEvent.DESTROY_VIEW;
+                        case START:
+                            return FragmentEvent.STOP;
+                        case RESUME:
+                            return FragmentEvent.PAUSE;
+                        case PAUSE:
+                            return FragmentEvent.STOP;
+                        case STOP:
+                            return FragmentEvent.DESTROY_VIEW;
+                        case DESTROY_VIEW:
+                            return FragmentEvent.DESTROY;
+                        case DESTROY:
+                            return FragmentEvent.DETACH;
+                        case DETACH:
+                            throw new OutsideLifecycleException("Cannot bind to Fragment lifecycle when outside of it.");
+                        default:
+                            throw new UnsupportedOperationException("Binding to " + lastEvent + " not yet implemented");
+                    }
                 }
-            }
-        };
+            };
 
     private static class OutsideLifecycleException extends IllegalStateException {
         public OutsideLifecycleException(String detailMessage) {
