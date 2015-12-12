@@ -18,9 +18,9 @@ final class ActivityLifecycleProviderImpl implements ActivityLifecycleProvider {
         }
 
         RxNavi.observe(activity, Event.ALL)
-            .map(NaviLifecycleMaps.ACTIVITY_EVENT_MAP)
-            .filter(RxUtils.notNull())
-            .subscribe(lifecycleSubject);
+                .map(NaviLifecycleMaps.ACTIVITY_EVENT_MAP)
+                .filter(RxUtils.notNull())
+                .subscribe(lifecycleSubject);
     }
 
     @Override
@@ -34,7 +34,17 @@ final class ActivityLifecycleProviderImpl implements ActivityLifecycleProvider {
     }
 
     @Override
+    public <T> Observable.Transformer<T, T> bindUntilEvent(ActivityEvent event, Observable.Transformer<T, T> customTransformer) {
+        return RxLifecycle.bindUntilActivityEvent(lifecycleSubject, event, customTransformer);
+    }
+
+    @Override
     public <T> Observable.Transformer<T, T> bindToLifecycle() {
         return RxLifecycle.bindActivity(lifecycleSubject);
+    }
+
+    @Override
+    public <T> Observable.Transformer<T, T> bindToLifecycle(Observable.Transformer<T, T> customTransformer) {
+        return RxLifecycle.bindActivity(lifecycleSubject, customTransformer);
     }
 }
