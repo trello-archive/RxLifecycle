@@ -26,8 +26,18 @@ public class RxActivity extends Activity implements ActivityLifecycleProvider {
     }
 
     @Override
+    public final <T> Observable.Transformer<T, T> bindUntilEvent(ActivityEvent event, Observable.Transformer<T, T> customerTransformer) {
+        return RxLifecycle.bindUntilActivityEvent(lifecycleSubject, event, customerTransformer);
+    }
+
+    @Override
     public final <T> Observable.Transformer<T, T> bindToLifecycle() {
         return RxLifecycle.bindActivity(lifecycleSubject);
+    }
+
+    @Override
+    public final <T> Observable.Transformer<T, T> bindToLifecycle(Observable.Transformer<T, T> customTransformer) {
+        return RxLifecycle.bindActivity(lifecycleSubject, customTransformer);
     }
 
     @Override

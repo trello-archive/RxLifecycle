@@ -26,12 +26,33 @@ public interface ActivityLifecycleProvider {
     <T> Observable.Transformer<T, T> bindUntilEvent(ActivityEvent event);
 
     /**
-     * Binds a source until the next reasonable {@link ActivityEvent} occurs.
+     * Binds a source until a specific {@link ActivityEvent} occurs.
      * <p>
+     * Intended for use with {@link Observable#compose(Observable.Transformer)}
+     *
+     * @param event the {@link ActivityEvent} that triggers unsubscription
+     * @param customTransformer the Transformer for customer input
+     * @return a reusable {@link rx.Observable.Transformer} which unsubscribes when the event triggers.
+     */
+    <T> Observable.Transformer<T, T> bindUntilEvent(ActivityEvent event, Observable.Transformer<T, T> customTransformer);
+
+
+    /**
+     * Binds a source until the next reasonable {@link ActivityEvent} occurs.
+     * <p/>
      * Intended for use with {@link Observable#compose(Observable.Transformer)}
      *
      * @return a reusable {@link rx.Observable.Transformer} which unsubscribes at the correct time.
      */
     <T> Observable.Transformer<T, T> bindToLifecycle();
+
+    /**
+     * Binds a source until the next reasonable {@link ActivityEvent} occurs.
+     * <p/>
+     * Intended for use with {@link Observable#compose(Observable.Transformer)}
+     * @param customTransformer the Transformer for customer input
+     * @return a reusable {@link rx.Observable.Transformer} which unsubscribes at the correct time.
+     */
+    <T> Observable.Transformer<T, T> bindToLifecycle(Observable.Transformer<T, T> customTransformer);
 
 }

@@ -14,14 +14,14 @@ final class FragmentLifecycleProviderImpl implements FragmentLifecycleProvider {
 
     public FragmentLifecycleProviderImpl(final NaviComponent fragment) {
         if (!fragment.handlesEvents(Event.ATTACH, Event.CREATE, Event.CREATE_VIEW, Event.START, Event.RESUME,
-            Event.PAUSE, Event.STOP, Event.DESTROY_VIEW, Event.DESTROY, Event.DETACH)) {
+                Event.PAUSE, Event.STOP, Event.DESTROY_VIEW, Event.DESTROY, Event.DETACH)) {
             throw new IllegalArgumentException("NaviComponent does not handle all required events");
         }
 
         RxNavi.observe(fragment, Event.ALL)
-            .map(NaviLifecycleMaps.FRAGMENT_EVENT_MAP)
-            .filter(RxUtils.notNull())
-            .subscribe(lifecycleSubject);
+                .map(NaviLifecycleMaps.FRAGMENT_EVENT_MAP)
+                .filter(RxUtils.notNull())
+                .subscribe(lifecycleSubject);
     }
 
     @Override
@@ -35,7 +35,17 @@ final class FragmentLifecycleProviderImpl implements FragmentLifecycleProvider {
     }
 
     @Override
+    public <T> Observable.Transformer<T, T> bindUntilEvent(FragmentEvent event, Observable.Transformer<T, T> customTransformer) {
+        return RxLifecycle.bindUntilFragmentEvent(lifecycleSubject, event, customTransformer);
+    }
+
+    @Override
     public <T> Observable.Transformer<T, T> bindToLifecycle() {
         return RxLifecycle.bindFragment(lifecycleSubject);
+    }
+
+    @Override
+    public <T> Observable.Transformer<T, T> bindToLifecycle(Observable.Transformer<T, T> customTransformer) {
+        return RxLifecycle.bindFragment(lifecycleSubject, customTransformer);
     }
 }

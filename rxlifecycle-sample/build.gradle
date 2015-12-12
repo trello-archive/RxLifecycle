@@ -20,6 +20,6 @@ repositories {
 
 dependencies {
     compile project(':rxlifecycle-components')
-
+    compile rootProject.ext.rxAndroid
     compile rootProject.ext.appCompat
 }
