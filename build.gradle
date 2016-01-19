@@ -3,7 +3,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.5.0'
+        classpath 'com.android.tools.build:gradle:2.0.0-alpha6'
     }
 }
 
@@ -19,7 +19,7 @@ ext {
     buildToolsVersion = '23.0.2'
 
     // Define all dependencies in the base project, to unify & make it easy to update
-    rxJava = 'io.reactivex:rxjava:1.0.16'
+    rxJava = 'io.reactivex:rxjava:1.1.0'
     rxBinding = 'com.jakewharton.rxbinding:rxbinding:0.3.0'
     navi = 'com.trello:navi:0.1.3'
     appCompat = 'com.android.support:appcompat-v7:23.1.1'
