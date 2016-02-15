@@ -1,4 +1,4 @@
-include ':rxlifecycle'
+include ':rxlifecycle', ':rxlifecycle-kotlin'
 include ':rxlifecycle-components'
 include ':rxlifecycle-navi'
 include ':rxlifecycle-sample'
