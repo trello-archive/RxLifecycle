@@ -17,14 +17,6 @@ repositories {
 dependencies {
     compile kotlinStdlib
     compile project(':rxlifecycle')
-
-    compile rootProject.ext.rxJava
-
-    compile rootProject.ext.appCompat
-
-    testCompile rootProject.ext.junit
-    testCompile rootProject.ext.mockito
-    testCompile rootProject.ext.robolectric
 }
 
 apply from: "$rootDir/gradle/artifacts.gradle"

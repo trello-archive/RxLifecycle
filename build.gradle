@@ -2,7 +2,7 @@ buildscript {
     ext {
         //version here to share between build script and projects
         //todo https://github.com/JetBrains/kotlin/pull/775 : remove if it will be merged
-        verKotlin = '1.0.0-rc-1036'
+        verKotlin = '1.0.0'
     }
     repositories {
         jcenter()

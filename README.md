@@ -74,8 +74,15 @@ If you want some kotlin goodness, you can use bind() syntax
 
 ```java
 myObservable
-    .bind(myView) //bind(myRxActivity or myRxFragment)
-    .subscribe()
+    .bindToLifecycle(myView)
+    .subscribe { }
+
+```
+
+```java
+myObservable
+    .bindUntilEvent(myRxActivity, STOP)
+    .subscribe { }
 
 ```
 
