@@ -1,0 +1,23 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdkVersion
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile kotlinStdlib
+    compile project(':rxlifecycle')
+}
+
+apply from: "$rootDir/gradle/artifacts.gradle"
+apply from: "$rootDir/gradle/gradle-mvn-push.gradle"

@@ -70,6 +70,22 @@ public class MyActivity extends NaviActivity {
 }
 ```
 
+If you want some kotlin goodness, you can use bind() syntax
+
+```java
+myObservable
+    .bindToLifecycle(myView)
+    .subscribe { }
+
+```
+
+```java
+myObservable
+    .bindUntilEvent(myRxActivity, STOP)
+    .subscribe { }
+
+```
+
 ## Unsubscription
 
 RxLifecycle does not actually unsubscribe the sequence. It terminates it by emitting `onCompleted()`, which ends the
@@ -91,6 +107,9 @@ compile 'com.trello:rxlifecycle-components:0.4.0'
 
 // If you want to use Navi for providers
 compile 'com.trello:rxlifecycle-navi:0.4.0'
+
+// If you wat to use Kotlin syntax
+compile 'com.trello:rxlifecycle-kotlin:0.4.0'
 ```
 
 ## License
