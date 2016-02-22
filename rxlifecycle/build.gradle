@@ -16,6 +16,7 @@ repositories {
 dependencies {
     compile rootProject.ext.rxJava
     compile rootProject.ext.rxBinding
+    compile rootProject.ext.supportAnnotations
 
     testCompile rootProject.ext.junit
     testCompile rootProject.ext.mockito
