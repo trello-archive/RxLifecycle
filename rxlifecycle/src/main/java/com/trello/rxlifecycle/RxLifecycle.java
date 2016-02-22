@@ -23,6 +23,8 @@ import rx.exceptions.Exceptions;
 import rx.functions.Func1;
 import rx.functions.Func2;
 
+import static com.trello.rxlifecycle.internal.Preconditions.checkNotNull;
+
 public class RxLifecycle {
 
     private RxLifecycle() {
@@ -71,12 +73,8 @@ public class RxLifecycle {
     @CheckResult
     public static <T, R> Observable.Transformer<T, T> bindUntilEvent(@NonNull final Observable<R> lifecycle,
                                                                      @NonNull final R event) {
-        if (lifecycle == null) {
-            throw new IllegalArgumentException("Lifecycle must be given");
-        }
-        else if (event == null) {
-            throw new IllegalArgumentException("Event must be given");
-        }
+        checkNotNull(lifecycle, "lifecycle == null");
+        checkNotNull(event, "event == null");
 
         return new Observable.Transformer<T, T>() {
             @Override
@@ -155,9 +153,7 @@ public class RxLifecycle {
     @NonNull
     @CheckResult
     public static <T> Observable.Transformer<T, T> bindView(@NonNull final View view) {
-        if (view == null) {
-            throw new IllegalArgumentException("View must be given");
-        }
+        checkNotNull(view, "view == null");
 
         return bind(RxView.detaches(view));
     }
@@ -190,9 +186,7 @@ public class RxLifecycle {
     @NonNull
     @CheckResult
     public static <T, R> Observable.Transformer<T, T> bind(@NonNull final Observable<R> lifecycle) {
-        if (lifecycle == null) {
-            throw new IllegalArgumentException("Lifecycle must be given");
-        }
+        checkNotNull(lifecycle, "lifecycle == null");
 
         return new Observable.Transformer<T, T>() {
             @Override
@@ -220,9 +214,8 @@ public class RxLifecycle {
     @CheckResult
     public static <T, R> Observable.Transformer<T, T> bind(@NonNull Observable<R> lifecycle,
                                                            @NonNull final Func1<R, R> correspondingEvents) {
-        if (lifecycle == null) {
-            throw new IllegalArgumentException("Lifecycle must be given");
-        }
+        checkNotNull(lifecycle, "lifecycle == null");
+        checkNotNull(correspondingEvents, "correspondingEvents == null");
 
         // Make sure we're truly comparing a single stream to itself
         final Observable<R> sharedLifecycle = lifecycle.share();
