@@ -288,43 +288,51 @@ public class RxLifecycleTest {
 
     @Test(expected=IllegalArgumentException.class)
     public void testBindUntilFragmentEventThrowsOnNullLifecycle() {
+        //noinspection ResourceType
         RxLifecycle.bindUntilEvent(null, FragmentEvent.CREATE);
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void testBindUntilFragmentEventThrowsOnNullEvent() {
         BehaviorSubject<FragmentEvent> lifecycle = BehaviorSubject.create();
+        //noinspection ResourceType
         RxLifecycle.bindUntilEvent(lifecycle, null);
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void testBindFragmentThrowsOnNull() {
+        //noinspection ResourceType
         RxLifecycle.bindFragment(null);
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void testBindUntilActivityThrowsOnNullLifecycle() {
+        //noinspection ResourceType
         RxLifecycle.bindUntilEvent(null, ActivityEvent.CREATE);
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void testBindUntilActivityEventThrowsOnNullEvent() {
         BehaviorSubject<ActivityEvent> lifecycle = BehaviorSubject.create();
+        //noinspection ResourceType
         RxLifecycle.bindUntilEvent(lifecycle, null);
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void testBindActivityThrowsOnNull() {
+        //noinspection ResourceType
         RxLifecycle.bindActivity(null);
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void testBindViewThrowsOnNullView() {
+        //noinspection ResourceType
         RxLifecycle.bindView((View) null);
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void testBindThrowsOnNullLifecycle() {
+        //noinspection ResourceType
         RxLifecycle.bind((Observable) null);
     }
 }

@@ -1,5 +1,6 @@
 package com.trello.rxlifecycle;
 
+import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 import rx.Observable;
 
@@ -15,6 +16,7 @@ public interface FragmentLifecycleProvider {
      * @return a sequence of {@link android.app.Fragment} lifecycle events
      */
     @NonNull
+    @CheckResult
     Observable<FragmentEvent> lifecycle();
 
     /**
@@ -26,6 +28,7 @@ public interface FragmentLifecycleProvider {
      * @return a reusable {@link rx.Observable.Transformer} which unsubscribes when the event triggers.
      */
     @NonNull
+    @CheckResult
     <T> Observable.Transformer<T, T> bindUntilEvent(@NonNull FragmentEvent event);
 
     /**
@@ -36,6 +39,7 @@ public interface FragmentLifecycleProvider {
      * @return a reusable {@link rx.Observable.Transformer} which unsubscribes at the correct time.
      */
     @NonNull
+    @CheckResult
     <T> Observable.Transformer<T, T> bindToLifecycle();
 
 }

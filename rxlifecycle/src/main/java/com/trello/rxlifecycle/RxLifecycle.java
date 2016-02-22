@@ -14,6 +14,7 @@
 
 package com.trello.rxlifecycle;
 
+import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 import android.view.View;
 import com.jakewharton.rxbinding.view.RxView;
@@ -35,6 +36,7 @@ public class RxLifecycle {
      */
     @Deprecated
     @NonNull
+    @CheckResult
     public static <T> Observable.Transformer<T, T> bindUntilFragmentEvent(
         @NonNull final Observable<FragmentEvent> lifecycle, @NonNull final FragmentEvent event) {
         return bindUntilEvent(lifecycle, event);
@@ -47,6 +49,7 @@ public class RxLifecycle {
      */
     @Deprecated
     @NonNull
+    @CheckResult
     public static <T> Observable.Transformer<T, T> bindUntilActivityEvent(
         @NonNull final Observable<ActivityEvent> lifecycle, @NonNull final ActivityEvent event) {
         return bindUntilEvent(lifecycle, event);
@@ -65,6 +68,7 @@ public class RxLifecycle {
      * @return a reusable {@link Observable.Transformer} that unsubscribes the source at the specified event
      */
     @NonNull
+    @CheckResult
     public static <T, R> Observable.Transformer<T, T> bindUntilEvent(@NonNull final Observable<R> lifecycle,
                                                                      @NonNull final R event) {
         if (lifecycle == null) {
@@ -108,6 +112,7 @@ public class RxLifecycle {
      * * @return a reusable {@link Observable.Transformer} that unsubscribes the source during the Activity lifecycle
      */
     @NonNull
+    @CheckResult
     public static <T> Observable.Transformer<T, T> bindActivity(@NonNull final Observable<ActivityEvent> lifecycle) {
         return bind(lifecycle, ACTIVITY_LIFECYCLE);
     }
@@ -131,6 +136,7 @@ public class RxLifecycle {
      * @return a reusable {@link Observable.Transformer} that unsubscribes the source during the Fragment lifecycle
      */
     @NonNull
+    @CheckResult
     public static <T> Observable.Transformer<T, T> bindFragment(@NonNull final Observable<FragmentEvent> lifecycle) {
         return bind(lifecycle, FRAGMENT_LIFECYCLE);
     }
@@ -147,6 +153,7 @@ public class RxLifecycle {
      * @return a reusable {@link Observable.Transformer} that unsubscribes the source during the View lifecycle
      */
     @NonNull
+    @CheckResult
     public static <T> Observable.Transformer<T, T> bindView(@NonNull final View view) {
         if (view == null) {
             throw new IllegalArgumentException("View must be given");
@@ -162,6 +169,7 @@ public class RxLifecycle {
      */
     @Deprecated
     @NonNull
+    @CheckResult
     public static <T, E> Observable.Transformer<T, T> bindView(@NonNull final Observable<? extends E> lifecycle) {
         return bind(lifecycle);
     }
@@ -180,6 +188,7 @@ public class RxLifecycle {
      * @return a reusable {@link Observable.Transformer} that unsubscribes the source whenever the lifecycle emits
      */
     @NonNull
+    @CheckResult
     public static <T, R> Observable.Transformer<T, T> bind(@NonNull final Observable<R> lifecycle) {
         if (lifecycle == null) {
             throw new IllegalArgumentException("Lifecycle must be given");
@@ -208,6 +217,7 @@ public class RxLifecycle {
      * @return a reusable {@link Observable.Transformer} that unsubscribes the source during the Fragment lifecycle
      */
     @NonNull
+    @CheckResult
     public static <T, R> Observable.Transformer<T, T> bind(@NonNull Observable<R> lifecycle,
                                                            @NonNull final Func1<R, R> correspondingEvents) {
         if (lifecycle == null) {

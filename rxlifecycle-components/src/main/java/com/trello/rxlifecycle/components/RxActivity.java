@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 
+import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 import com.trello.rxlifecycle.ActivityEvent;
 import com.trello.rxlifecycle.ActivityLifecycleProvider;
@@ -18,18 +19,21 @@ public class RxActivity extends Activity implements ActivityLifecycleProvider {
 
     @Override
     @NonNull
+    @CheckResult
     public final Observable<ActivityEvent> lifecycle() {
         return lifecycleSubject.asObservable();
     }
 
     @Override
     @NonNull
+    @CheckResult
     public final <T> Observable.Transformer<T, T> bindUntilEvent(@NonNull ActivityEvent event) {
         return RxLifecycle.bindUntilEvent(lifecycleSubject, event);
     }
 
     @Override
     @NonNull
+    @CheckResult
     public final <T> Observable.Transformer<T, T> bindToLifecycle() {
         return RxLifecycle.bindActivity(lifecycleSubject);
     }

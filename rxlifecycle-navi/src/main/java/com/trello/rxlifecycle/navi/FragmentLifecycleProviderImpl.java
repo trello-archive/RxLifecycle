@@ -1,5 +1,6 @@
 package com.trello.rxlifecycle.navi;
 
+import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 import com.trello.navi.Event;
 import com.trello.navi.NaviComponent;
@@ -27,18 +28,21 @@ final class FragmentLifecycleProviderImpl implements FragmentLifecycleProvider {
 
     @Override
     @NonNull
+    @CheckResult
     public Observable<FragmentEvent> lifecycle() {
         return lifecycleSubject.asObservable();
     }
 
     @Override
     @NonNull
+    @CheckResult
     public <T> Observable.Transformer<T, T> bindUntilEvent(@NonNull FragmentEvent event) {
         return RxLifecycle.bindUntilEvent(lifecycleSubject, event);
     }
 
     @Override
     @NonNull
+    @CheckResult
     public <T> Observable.Transformer<T, T> bindToLifecycle() {
         return RxLifecycle.bindFragment(lifecycleSubject);
     }

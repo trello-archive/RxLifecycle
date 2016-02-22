@@ -2,6 +2,7 @@ package com.trello.rxlifecycle.components.support;
 
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
+import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 
@@ -18,18 +19,21 @@ public class RxAppCompatActivity extends AppCompatActivity implements ActivityLi
 
     @Override
     @NonNull
+    @CheckResult
     public final Observable<ActivityEvent> lifecycle() {
         return lifecycleSubject.asObservable();
     }
 
     @Override
     @NonNull
+    @CheckResult
     public final <T> Observable.Transformer<T, T> bindUntilEvent(@NonNull ActivityEvent event) {
         return RxLifecycle.bindUntilEvent(lifecycleSubject, event);
     }
 
     @Override
     @NonNull
+    @CheckResult
     public final <T> Observable.Transformer<T, T> bindToLifecycle() {
         return RxLifecycle.bindActivity(lifecycleSubject);
     }

@@ -3,6 +3,7 @@ package com.trello.rxlifecycle.components;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
+import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 import android.view.View;
 
@@ -19,18 +20,21 @@ public class RxDialogFragment extends DialogFragment implements FragmentLifecycl
 
     @Override
     @NonNull
+    @CheckResult
     public final Observable<FragmentEvent> lifecycle() {
         return lifecycleSubject.asObservable();
     }
 
     @Override
     @NonNull
+    @CheckResult
     public final <T> Observable.Transformer<T, T> bindUntilEvent(@NonNull FragmentEvent event) {
         return RxLifecycle.bindUntilEvent(lifecycleSubject, event);
     }
 
     @Override
     @NonNull
+    @CheckResult
     public final <T> Observable.Transformer<T, T> bindToLifecycle() {
         return RxLifecycle.bindFragment(lifecycleSubject);
     }
