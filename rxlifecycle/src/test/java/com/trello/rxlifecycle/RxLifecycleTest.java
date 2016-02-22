@@ -51,7 +51,7 @@ public class RxLifecycleTest {
         BehaviorSubject<FragmentEvent> lifecycle = BehaviorSubject.create();
         TestSubscriber<Object> testSubscriber = new TestSubscriber<>();
 
-        observable.compose(RxLifecycle.bindUntilFragmentEvent(lifecycle, FragmentEvent.STOP))
+        observable.compose(RxLifecycle.bindUntilEvent(lifecycle, FragmentEvent.STOP))
             .subscribe(testSubscriber);
 
         lifecycle.onNext(FragmentEvent.ATTACH);
@@ -76,7 +76,7 @@ public class RxLifecycleTest {
         BehaviorSubject<ActivityEvent> lifecycle = BehaviorSubject.create();
         TestSubscriber<Object> testSubscriber = new TestSubscriber<>();
 
-        observable.compose(RxLifecycle.bindUntilActivityEvent(lifecycle, ActivityEvent.STOP))
+        observable.compose(RxLifecycle.bindUntilEvent(lifecycle, ActivityEvent.STOP))
             .subscribe(testSubscriber);
 
         lifecycle.onNext(ActivityEvent.CREATE);
@@ -288,13 +288,13 @@ public class RxLifecycleTest {
 
     @Test(expected=IllegalArgumentException.class)
     public void testBindUntilFragmentEventThrowsOnNullLifecycle() {
-        RxLifecycle.bindUntilFragmentEvent(null, FragmentEvent.CREATE);
+        RxLifecycle.bindUntilEvent(null, FragmentEvent.CREATE);
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void testBindUntilFragmentEventThrowsOnNullEvent() {
         BehaviorSubject<FragmentEvent> lifecycle = BehaviorSubject.create();
-        RxLifecycle.bindUntilFragmentEvent(lifecycle, null);
+        RxLifecycle.bindUntilEvent(lifecycle, null);
     }
 
     @Test(expected=IllegalArgumentException.class)
@@ -304,13 +304,13 @@ public class RxLifecycleTest {
 
     @Test(expected=IllegalArgumentException.class)
     public void testBindUntilActivityThrowsOnNullLifecycle() {
-        RxLifecycle.bindUntilActivityEvent(null, ActivityEvent.CREATE);
+        RxLifecycle.bindUntilEvent(null, ActivityEvent.CREATE);
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void testBindUntilActivityEventThrowsOnNullEvent() {
         BehaviorSubject<ActivityEvent> lifecycle = BehaviorSubject.create();
-        RxLifecycle.bindUntilActivityEvent(lifecycle, null);
+        RxLifecycle.bindUntilEvent(lifecycle, null);
     }
 
     @Test(expected=IllegalArgumentException.class)
