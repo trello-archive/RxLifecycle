@@ -10,6 +10,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:1.5.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$verKotlin"
+        classpath 'com.github.ben-manes:gradle-versions-plugin:0.12.0'
     }
 }
 
@@ -18,6 +19,8 @@ subprojects {
     version = VERSION_NAME
 }
 
+apply plugin: 'com.github.ben-manes.versions'
+
 ext {
     minSdkVersion = 14
     compileSdkVersion = 23
@@ -25,8 +28,8 @@ ext {
     buildToolsVersion = '23.0.2'
 
     // Define all dependencies in the base project, to unify & make it easy to update
-    rxJava = 'io.reactivex:rxjava:1.0.16'
-    rxBinding = 'com.jakewharton.rxbinding:rxbinding:0.3.0'
+    rxJava = 'io.reactivex:rxjava:1.1.1'
+    rxBinding = 'com.jakewharton.rxbinding:rxbinding:0.4.0'
     navi = 'com.trello:navi:0.1.3'
     kotlinStdlib = "org.jetbrains.kotlin:kotlin-stdlib:$verKotlin"
     appCompat = 'com.android.support:appcompat-v7:23.1.1'
