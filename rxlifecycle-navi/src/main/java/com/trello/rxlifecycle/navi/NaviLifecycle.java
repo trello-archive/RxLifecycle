@@ -1,16 +1,26 @@
 package com.trello.rxlifecycle.navi;
 
+import android.support.annotation.CheckResult;
+import android.support.annotation.NonNull;
 import com.trello.navi.NaviComponent;
 import com.trello.rxlifecycle.ActivityLifecycleProvider;
 import com.trello.rxlifecycle.FragmentLifecycleProvider;
 
+import static com.trello.rxlifecycle.internal.Preconditions.checkNotNull;
+
 public final class NaviLifecycle {
 
-    public static ActivityLifecycleProvider createActivityLifecycleProvider(NaviComponent activity) {
+    @NonNull
+    @CheckResult
+    public static ActivityLifecycleProvider createActivityLifecycleProvider(@NonNull NaviComponent activity) {
+        checkNotNull(activity, "activity == null");
         return new ActivityLifecycleProviderImpl(activity);
     }
 
-    public static FragmentLifecycleProvider createFragmentLifecycleProvider(NaviComponent fragment) {
+    @NonNull
+    @CheckResult
+    public static FragmentLifecycleProvider createFragmentLifecycleProvider(@NonNull NaviComponent fragment) {
+        checkNotNull(fragment, "fragment == null");
         return new FragmentLifecycleProviderImpl(fragment);
     }
 
