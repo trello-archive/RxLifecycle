@@ -145,24 +145,33 @@ public class RxLifecycle {
             throw new IllegalArgumentException("View must be given");
         }
 
-        return bindView(RxView.detaches(view));
+        return bind(RxView.detaches(view));
     }
 
     /**
-     * Binds the given source a View lifecycle.
+     * Deprecated and will be removed in a future release.
+     *
+     * Use {@link RxLifecycle#bind(Observable)} instead, which does exactly the same thing.
+     */
+    @Deprecated
+    public static <T, E> Observable.Transformer<T, T> bindView(final Observable<? extends E> lifecycle) {
+        return bind(lifecycle);
+    }
+
+    /**
+     * Binds the given source to a lifecycle.
      * <p>
      * Use with {@link Observable#compose(Observable.Transformer)}:
-     * {@code source.compose(RxLifecycle.bindView(lifecycle)).subscribe()}
+     * {@code source.compose(RxLifecycle.bind(lifecycle)).subscribe()}
      * <p>
      * This helper automatically determines (based on the lifecycle sequence itself) when the source
-     * should stop emitting items. For views, this effectively means watching for a detach event and
-     * unsubscribing the sequence when one occurs. Note that this assumes <em>any</em> event
-     * emitted by the given lifecycle indicates a detach event.
+     * should stop emitting items. Note that for this method, it assumes <em>any</em> event
+     * emitted by the given lifecycle indicates that the lifecycle is over.
      *
-     * @param lifecycle the lifecycle sequence of a View
-     * @return a reusable {@link Observable.Transformer} that unsubscribes the source during the View lifecycle
+     * @param lifecycle the lifecycle sequence
+     * @return a reusable {@link Observable.Transformer} that unsubscribes the source whenever the lifecycle emits
      */
-    public static <T, E> Observable.Transformer<T, T> bindView(final Observable<? extends E> lifecycle) {
+    public static <T, R> Observable.Transformer<T, T> bind(final Observable<R> lifecycle) {
         if (lifecycle == null) {
             throw new IllegalArgumentException("Lifecycle must be given");
         }
@@ -175,8 +184,22 @@ public class RxLifecycle {
         };
     }
 
-    private static <T, R> Observable.Transformer<T, T> bind(Observable<R> lifecycle,
-                                                            final Func1<R, R> correspondingEvents) {
+    /**
+     * Binds the given source to a lifecycle.
+     * <p>
+     * This method determines (based on the lifecycle sequence itself) when the source
+     * should stop emitting items. It uses the provided correspondingEvents function to determine
+     * when to unsubscribe.
+     * <p>
+     * Note that this is an advanced usage of the library and should generally be used only if you
+     * really know what you're doing with a given lifecycle.
+     *
+     * @param lifecycle the lifecycle sequence
+     * @param correspondingEvents a function which tells the source when to unsubscribe
+     * @return a reusable {@link Observable.Transformer} that unsubscribes the source during the Fragment lifecycle
+     */
+    public static <T, R> Observable.Transformer<T, T> bind(Observable<R> lifecycle,
+                                                           final Func1<R, R> correspondingEvents) {
         if (lifecycle == null) {
             throw new IllegalArgumentException("Lifecycle must be given");
         }

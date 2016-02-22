@@ -239,19 +239,19 @@ public class RxLifecycleTest {
     }
 
     @Test
-    public void testBindViewLifecycle() {
+    public void testBindLifecycle() {
         BehaviorSubject<Object> lifecycle = BehaviorSubject.create();
-        Subscription attachSub = observable.compose(RxLifecycle.bindView(lifecycle)).subscribe();
+        Subscription attachSub = observable.compose(RxLifecycle.bind(lifecycle)).subscribe();
         assertFalse(attachSub.isUnsubscribed());
         lifecycle.onNext(new Object());
         assertTrue(attachSub.isUnsubscribed());
     }
 
     @Test
-    public void testBindViewLifecycleOtherObject() {
+    public void testBindLifecycleOtherObject() {
         // Ensures it works with other types as well, and not just "Object"
         BehaviorSubject<String> lifecycle = BehaviorSubject.create();
-        Subscription attachSub = observable.compose(RxLifecycle.bindView(lifecycle)).subscribe();
+        Subscription attachSub = observable.compose(RxLifecycle.bind(lifecycle)).subscribe();
         assertFalse(attachSub.isUnsubscribed());
         lifecycle.onNext("");
         assertTrue(attachSub.isUnsubscribed());
@@ -324,7 +324,7 @@ public class RxLifecycleTest {
     }
 
     @Test(expected=IllegalArgumentException.class)
-    public void testBindViewThrowsOnNullLifecycle() {
-        RxLifecycle.bindView((Observable) null);
+    public void testBindThrowsOnNullLifecycle() {
+        RxLifecycle.bind((Observable) null);
     }
 }
