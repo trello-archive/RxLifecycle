@@ -1,5 +1,7 @@
 package com.trello.rxlifecycle.navi;
 
+import android.support.annotation.CheckResult;
+import android.support.annotation.NonNull;
 import com.trello.navi.Event;
 import com.trello.navi.NaviComponent;
 import com.trello.navi.rx.RxNavi;
@@ -24,16 +26,22 @@ final class ActivityLifecycleProviderImpl implements ActivityLifecycleProvider {
     }
 
     @Override
+    @NonNull
+    @CheckResult
     public Observable<ActivityEvent> lifecycle() {
         return lifecycleSubject.asObservable();
     }
 
     @Override
-    public <T> Observable.Transformer<T, T> bindUntilEvent(ActivityEvent event) {
+    @NonNull
+    @CheckResult
+    public <T> Observable.Transformer<T, T> bindUntilEvent(@NonNull ActivityEvent event) {
         return RxLifecycle.bindUntilEvent(lifecycleSubject, event);
     }
 
     @Override
+    @NonNull
+    @CheckResult
     public <T> Observable.Transformer<T, T> bindToLifecycle() {
         return RxLifecycle.bindActivity(lifecycleSubject);
     }

@@ -30,6 +30,7 @@ ext {
     navi = 'com.trello:navi:0.1.3'
     kotlinStdlib = "org.jetbrains.kotlin:kotlin-stdlib:$verKotlin"
     appCompat = 'com.android.support:appcompat-v7:23.1.1'
+    supportAnnotations = 'com.android.support:support-annotations:23.1.1'
     junit = 'junit:junit:4.12'
     mockito = 'org.mockito:mockito-core:1.10.19'
     robolectric = 'org.robolectric:robolectric:3.0'

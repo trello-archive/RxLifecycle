@@ -14,12 +14,16 @@
 
 package com.trello.rxlifecycle;
 
+import android.support.annotation.CheckResult;
+import android.support.annotation.NonNull;
 import android.view.View;
 import com.jakewharton.rxbinding.view.RxView;
 import rx.Observable;
 import rx.exceptions.Exceptions;
 import rx.functions.Func1;
 import rx.functions.Func2;
+
+import static com.trello.rxlifecycle.internal.Preconditions.checkNotNull;
 
 public class RxLifecycle {
 
@@ -33,8 +37,10 @@ public class RxLifecycle {
      * Use {@link RxLifecycle#bindUntilEvent(Observable, Object)} instead, which does exactly the same thing.
      */
     @Deprecated
+    @NonNull
+    @CheckResult
     public static <T> Observable.Transformer<T, T> bindUntilFragmentEvent(
-        final Observable<FragmentEvent> lifecycle, final FragmentEvent event) {
+        @NonNull final Observable<FragmentEvent> lifecycle, @NonNull final FragmentEvent event) {
         return bindUntilEvent(lifecycle, event);
     }
 
@@ -44,8 +50,10 @@ public class RxLifecycle {
      * Use {@link RxLifecycle#bindUntilEvent(Observable, Object)} instead, which does exactly the same thing.
      */
     @Deprecated
+    @NonNull
+    @CheckResult
     public static <T> Observable.Transformer<T, T> bindUntilActivityEvent(
-        final Observable<ActivityEvent> lifecycle, final ActivityEvent event) {
+        @NonNull final Observable<ActivityEvent> lifecycle, @NonNull final ActivityEvent event) {
         return bindUntilEvent(lifecycle, event);
     }
 
@@ -61,14 +69,12 @@ public class RxLifecycle {
      * @param event the event which should conclude notifications from the source
      * @return a reusable {@link Observable.Transformer} that unsubscribes the source at the specified event
      */
-    public static <T, R> Observable.Transformer<T, T> bindUntilEvent(final Observable<R> lifecycle,
-                                                                     final R event) {
-        if (lifecycle == null) {
-            throw new IllegalArgumentException("Lifecycle must be given");
-        }
-        else if (event == null) {
-            throw new IllegalArgumentException("Event must be given");
-        }
+    @NonNull
+    @CheckResult
+    public static <T, R> Observable.Transformer<T, T> bindUntilEvent(@NonNull final Observable<R> lifecycle,
+                                                                     @NonNull final R event) {
+        checkNotNull(lifecycle, "lifecycle == null");
+        checkNotNull(event, "event == null");
 
         return new Observable.Transformer<T, T>() {
             @Override
@@ -103,7 +109,9 @@ public class RxLifecycle {
      * @param lifecycle the lifecycle sequence of an Activity
      * * @return a reusable {@link Observable.Transformer} that unsubscribes the source during the Activity lifecycle
      */
-    public static <T> Observable.Transformer<T, T> bindActivity(Observable<ActivityEvent> lifecycle) {
+    @NonNull
+    @CheckResult
+    public static <T> Observable.Transformer<T, T> bindActivity(@NonNull final Observable<ActivityEvent> lifecycle) {
         return bind(lifecycle, ACTIVITY_LIFECYCLE);
     }
 
@@ -125,7 +133,9 @@ public class RxLifecycle {
      * @param lifecycle the lifecycle sequence of a Fragment
      * @return a reusable {@link Observable.Transformer} that unsubscribes the source during the Fragment lifecycle
      */
-    public static <T> Observable.Transformer<T, T> bindFragment(Observable<FragmentEvent> lifecycle) {
+    @NonNull
+    @CheckResult
+    public static <T> Observable.Transformer<T, T> bindFragment(@NonNull final Observable<FragmentEvent> lifecycle) {
         return bind(lifecycle, FRAGMENT_LIFECYCLE);
     }
 
@@ -140,10 +150,10 @@ public class RxLifecycle {
      * @param view the view to bind the source sequence to
      * @return a reusable {@link Observable.Transformer} that unsubscribes the source during the View lifecycle
      */
-    public static <T> Observable.Transformer<T, T> bindView(final View view) {
-        if (view == null) {
-            throw new IllegalArgumentException("View must be given");
-        }
+    @NonNull
+    @CheckResult
+    public static <T> Observable.Transformer<T, T> bindView(@NonNull final View view) {
+        checkNotNull(view, "view == null");
 
         return bind(RxView.detaches(view));
     }
@@ -154,7 +164,9 @@ public class RxLifecycle {
      * Use {@link RxLifecycle#bind(Observable)} instead, which does exactly the same thing.
      */
     @Deprecated
-    public static <T, E> Observable.Transformer<T, T> bindView(final Observable<? extends E> lifecycle) {
+    @NonNull
+    @CheckResult
+    public static <T, E> Observable.Transformer<T, T> bindView(@NonNull final Observable<? extends E> lifecycle) {
         return bind(lifecycle);
     }
 
@@ -171,10 +183,10 @@ public class RxLifecycle {
      * @param lifecycle the lifecycle sequence
      * @return a reusable {@link Observable.Transformer} that unsubscribes the source whenever the lifecycle emits
      */
-    public static <T, R> Observable.Transformer<T, T> bind(final Observable<R> lifecycle) {
-        if (lifecycle == null) {
-            throw new IllegalArgumentException("Lifecycle must be given");
-        }
+    @NonNull
+    @CheckResult
+    public static <T, R> Observable.Transformer<T, T> bind(@NonNull final Observable<R> lifecycle) {
+        checkNotNull(lifecycle, "lifecycle == null");
 
         return new Observable.Transformer<T, T>() {
             @Override
@@ -198,11 +210,12 @@ public class RxLifecycle {
      * @param correspondingEvents a function which tells the source when to unsubscribe
      * @return a reusable {@link Observable.Transformer} that unsubscribes the source during the Fragment lifecycle
      */
-    public static <T, R> Observable.Transformer<T, T> bind(Observable<R> lifecycle,
-                                                           final Func1<R, R> correspondingEvents) {
-        if (lifecycle == null) {
-            throw new IllegalArgumentException("Lifecycle must be given");
-        }
+    @NonNull
+    @CheckResult
+    public static <T, R> Observable.Transformer<T, T> bind(@NonNull Observable<R> lifecycle,
+                                                           @NonNull final Func1<R, R> correspondingEvents) {
+        checkNotNull(lifecycle, "lifecycle == null");
+        checkNotNull(correspondingEvents, "correspondingEvents == null");
 
         // Make sure we're truly comparing a single stream to itself
         final Observable<R> sharedLifecycle = lifecycle.share();
