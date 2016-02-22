@@ -12,7 +12,7 @@ You can then end the sequence explicitly when an event occurs:
 
 ```java
 myObservable
-    .compose(RxLifecycle.bindUntilActivityEvent(lifecycle, ActivityEvent.DESTROY))
+    .compose(RxLifecycle.bindUntilEvent(lifecycle, ActivityEvent.DESTROY))
     .subscribe();
 ```
 

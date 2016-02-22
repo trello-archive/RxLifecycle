@@ -30,7 +30,7 @@ final class ActivityLifecycleProviderImpl implements ActivityLifecycleProvider {
 
     @Override
     public <T> Observable.Transformer<T, T> bindUntilEvent(ActivityEvent event) {
-        return RxLifecycle.bindUntilActivityEvent(lifecycleSubject, event);
+        return RxLifecycle.bindUntilEvent(lifecycleSubject, event);
     }
 
     @Override

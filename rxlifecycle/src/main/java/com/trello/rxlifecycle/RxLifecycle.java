@@ -29,41 +29,41 @@ public class RxLifecycle {
     }
 
     /**
-     * Binds the given source to a Fragment lifecycle.
-     * <p>
-     * When the lifecycle event occurs, the source will cease to emit any notifications.
-     * <p>
-     * Use with {@link Observable#compose(Observable.Transformer)}:
-     * {@code source.compose(RxLifecycle.bindUntilEvent(lifecycle, FragmentEvent.STOP)).subscribe()}
+     * Deprecated and will be removed in a future release.
      *
-     * @param lifecycle the Fragment lifecycle sequence
-     * @param event the event which should conclude notifications from the source
-     * @return a reusable {@link Observable.Transformer} that unsubscribes the source at the specified event
+     * Use {@link RxLifecycle#bindUntilEvent(Observable, Object)} instead, which does exactly the same thing.
      */
+    @Deprecated
     public static <T> Observable.Transformer<T, T> bindUntilFragmentEvent(
         final Observable<FragmentEvent> lifecycle, final FragmentEvent event) {
         return bindUntilEvent(lifecycle, event);
     }
 
     /**
-     * Binds the given source to an Activity lifecycle.
+     * Deprecated and will be removed in a future release.
+     *
+     * Use {@link RxLifecycle#bindUntilEvent(Observable, Object)} instead, which does exactly the same thing.
+     */
+    @Deprecated
+    public static <T> Observable.Transformer<T, T> bindUntilActivityEvent(
+        final Observable<ActivityEvent> lifecycle, final ActivityEvent event) {
+        return bindUntilEvent(lifecycle, event);
+    }
+
+    /**
+     * Binds the given source to a lifecycle.
      * <p>
      * When the lifecycle event occurs, the source will cease to emit any notifications.
      * <p>
      * Use with {@link Observable#compose(Observable.Transformer)}:
      * {@code source.compose(RxLifecycle.bindUntilEvent(lifecycle, ActivityEvent.STOP)).subscribe()}
      *
-     * @param lifecycle the Activity lifecycle sequence
+     * @param lifecycle the lifecycle sequence
      * @param event the event which should conclude notifications from the source
      * @return a reusable {@link Observable.Transformer} that unsubscribes the source at the specified event
      */
-    public static <T> Observable.Transformer<T, T> bindUntilActivityEvent(
-        final Observable<ActivityEvent> lifecycle, final ActivityEvent event) {
-        return bindUntilEvent(lifecycle, event);
-    }
-
-    private static <T, R> Observable.Transformer<T, T> bindUntilEvent(final Observable<R> lifecycle,
-                                                                      final R event) {
+    public static <T, R> Observable.Transformer<T, T> bindUntilEvent(final Observable<R> lifecycle,
+                                                                     final R event) {
         if (lifecycle == null) {
             throw new IllegalArgumentException("Lifecycle must be given");
         }

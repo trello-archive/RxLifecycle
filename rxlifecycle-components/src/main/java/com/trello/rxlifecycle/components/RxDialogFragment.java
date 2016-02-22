@@ -23,7 +23,7 @@ public class RxDialogFragment extends DialogFragment implements FragmentLifecycl
 
     @Override
     public final <T> Observable.Transformer<T, T> bindUntilEvent(FragmentEvent event) {
-        return RxLifecycle.bindUntilFragmentEvent(lifecycleSubject, event);
+        return RxLifecycle.bindUntilEvent(lifecycleSubject, event);
     }
 
     @Override

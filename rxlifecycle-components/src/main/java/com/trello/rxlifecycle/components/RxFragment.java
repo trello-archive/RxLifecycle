@@ -23,7 +23,7 @@ public class RxFragment extends Fragment implements FragmentLifecycleProvider {
 
     @Override
     public final <T> Observable.Transformer<T, T> bindUntilEvent(FragmentEvent event) {
-        return RxLifecycle.bindUntilFragmentEvent(lifecycleSubject, event);
+        return RxLifecycle.bindUntilEvent(lifecycleSubject, event);
     }
 
     @Override
