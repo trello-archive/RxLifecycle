@@ -1,5 +1,6 @@
 package com.trello.rxlifecycle;
 
+import android.support.annotation.NonNull;
 import rx.Observable;
 
 /**
@@ -13,6 +14,7 @@ public interface ActivityLifecycleProvider {
     /**
      * @return a sequence of {@link android.app.Activity} lifecycle events
      */
+    @NonNull
     Observable<ActivityEvent> lifecycle();
 
     /**
@@ -23,7 +25,8 @@ public interface ActivityLifecycleProvider {
      * @param event the {@link ActivityEvent} that triggers unsubscription
      * @return a reusable {@link rx.Observable.Transformer} which unsubscribes when the event triggers.
      */
-    <T> Observable.Transformer<T, T> bindUntilEvent(ActivityEvent event);
+    @NonNull
+    <T> Observable.Transformer<T, T> bindUntilEvent(@NonNull ActivityEvent event);
 
     /**
      * Binds a source until the next reasonable {@link ActivityEvent} occurs.
@@ -32,6 +35,7 @@ public interface ActivityLifecycleProvider {
      *
      * @return a reusable {@link rx.Observable.Transformer} which unsubscribes at the correct time.
      */
+    @NonNull
     <T> Observable.Transformer<T, T> bindToLifecycle();
 
 }
