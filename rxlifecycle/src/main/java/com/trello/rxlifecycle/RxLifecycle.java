@@ -316,10 +316,4 @@ public class RxLifecycle {
             }
         };
 
-    private static class OutsideLifecycleException extends IllegalStateException {
-        public OutsideLifecycleException(String detailMessage) {
-            super(detailMessage);
-        }
-    }
-
 }
