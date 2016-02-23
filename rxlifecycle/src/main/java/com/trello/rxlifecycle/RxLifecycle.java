@@ -83,7 +83,7 @@ public class RxLifecycle {
                     lifecycle.takeFirst(new Func1<R, Boolean>() {
                         @Override
                         public Boolean call(R lifecycleEvent) {
-                            return lifecycleEvent == event;
+                            return lifecycleEvent.equals(event);
                         }
                     })
                 );
@@ -231,7 +231,7 @@ public class RxLifecycle {
                         new Func2<R, R, Boolean>() {
                             @Override
                             public Boolean call(R bindUntilEvent, R lifecycleEvent) {
-                                return lifecycleEvent == bindUntilEvent;
+                                return lifecycleEvent.equals(bindUntilEvent);
                             }
                         })
                         .onErrorReturn(RESUME_FUNCTION)
