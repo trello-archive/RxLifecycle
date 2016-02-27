@@ -70,20 +70,16 @@ public class MyActivity extends NaviActivity {
 }
 ```
 
-If you want some kotlin goodness, you can use bind() syntax
+If you want some Kotlin goodness, you can use built-in extensions:
 
 ```java
 myObservable
     .bindToLifecycle(myView)
     .subscribe { }
 
-```
-
-```java
 myObservable
     .bindUntilEvent(myRxActivity, STOP)
     .subscribe { }
-
 ```
 
 ## Unsubscription
@@ -100,16 +96,16 @@ yourself and call `unsubscribe()` when appropriate.
 ## Installation
 
 ```gradle
-compile 'com.trello:rxlifecycle:0.4.0'
+compile 'com.trello:rxlifecycle:0.5.0'
 
 // If you want pre-written Activities and Fragments you can subclass as providers
-compile 'com.trello:rxlifecycle-components:0.4.0'
+compile 'com.trello:rxlifecycle-components:0.5.0'
 
 // If you want to use Navi for providers
-compile 'com.trello:rxlifecycle-navi:0.4.0'
+compile 'com.trello:rxlifecycle-navi:0.5.0'
 
 // If you wat to use Kotlin syntax
-compile 'com.trello:rxlifecycle-kotlin:0.4.0'
+compile 'com.trello:rxlifecycle-kotlin:0.5.0'
 ```
 
 ## License

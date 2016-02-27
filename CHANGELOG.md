@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.5.0 (2016-02-27)
+
+There are a few methods which have been **deprecated** and will be removed in a future release. Each one has a drop-in
+replacement (and currently calling the deprecated version just routes to the new one):
+
+* `bindUntilActivityEvent()` and `bindUntilFragmentEvent()` -> `bindUntilEvent()`
+* `bindView()` -> `bind()`
+
+The other changes mostly involve opening up the API for more customization:
+
+* [#78](https://github.com/trello/RxLifecycle/pull/78): Added rxlifecycle-kotlin (adds some extensions)
+* [#79](https://github.com/trello/RxLifecycle/pull/79): Made bindUntilEvent() public, deprecated more specific calls
+* [#82](https://github.com/trello/RxLifecycle/pull/82): Opened up bind() methods for public consumption
+* [#83](https://github.com/trello/RxLifecycle/pull/83), [#85](https://github.com/trello/RxLifecycle/pull/85): Added
+annotations for better lint checking
+* [#88](https://github.com/trello/RxLifecycle/pull/88): Use `.equals()` instead of == for event comparison (for
+custom event support with the newly opened-up `bind()`)
+* [#89](https://github.com/trello/RxLifecycle/pull/89): Make OutsideLifecycleException public (for anyone who wants
+to write their own `bind()` implementations)
+
 ## 0.4.0 (2015-12-10)
 
 * [#62](https://github.com/trello/RxLifecycle/pull/62), [#67](https://github.com/trello/RxLifecycle/pull/67): Added
