@@ -30,7 +30,7 @@ ext {
     // Define all dependencies in the base project, to unify & make it easy to update
     rxJava = 'io.reactivex:rxjava:1.1.1'
     rxBinding = 'com.jakewharton.rxbinding:rxbinding:0.4.0'
-    navi = 'com.trello:navi:0.1.3'
+    navi = 'com.trello:navi:0.2.0'
     kotlinStdlib = "org.jetbrains.kotlin:kotlin-stdlib:$verKotlin"
     appCompat = 'com.android.support:appcompat-v7:23.1.1'
     supportAnnotations = 'com.android.support:support-annotations:23.1.1'
