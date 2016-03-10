@@ -104,7 +104,7 @@ compile 'com.trello:rxlifecycle-components:0.5.0'
 // If you want to use Navi for providers
 compile 'com.trello:rxlifecycle-navi:0.5.0'
 
-// If you wat to use Kotlin syntax
+// If you want to use Kotlin syntax
 compile 'com.trello:rxlifecycle-kotlin:0.5.0'
 ```
 
