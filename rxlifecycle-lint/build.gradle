@@ -1,0 +1,42 @@
+apply plugin: 'java'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile 'com.android.tools.lint:lint:24.3.1'
+    compile 'com.android.tools.lint:lint-api:24.3.1'
+    compile 'com.android.tools.lint:lint-checks:24.3.1'
+
+    testCompile 'junit:junit:4.11'
+    testCompile 'org.assertj:assertj-core:3.0.0'
+    testCompile 'com.android.tools.lint:lint:24.3.1'
+    testCompile 'com.android.tools.lint:lint-tests:24.3.1'
+    testCompile 'com.android.tools:testutils:24.3.1'
+}
+
+jar {
+    baseName 'com.trello.rxlifecycle.lint'
+    version '1.0'
+
+    manifest {
+        attributes 'Manifest-Version': 1.0
+        attributes('Lint-Registry': 'com.trello.rxlifecycle.lint.registry.CustomIssueRegistry')
+    }
+}
+
+configurations {
+    lintChecks
+}
+
+dependencies {
+    lintChecks files(jar)
+}
+
+defaultTasks 'assemble'
+
+task install(type: Copy) {
+    from configurations.lintChecks
+    into System.getProperty('user.home') + '/.android/lint/'
+}
