@@ -108,6 +108,10 @@ compile 'com.trello:rxlifecycle-navi:0.5.0'
 compile 'com.trello:rxlifecycle-kotlin:0.5.0'
 ```
 
+## Related Libraries
+
+- [Android-Lint-Checks](https://github.com/vokal/Android-Lint-Checks) - Contains an RxLifecycle Lint check.
+
 ## License
 
     Copyright (C) 2015 Trello
