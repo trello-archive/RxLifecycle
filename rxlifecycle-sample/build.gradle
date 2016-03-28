@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -12,6 +14,10 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
 }
 
 repositories {
@@ -20,6 +26,9 @@ repositories {
 
 dependencies {
     compile project(':rxlifecycle-components')
+    compile project(':rxlifecycle-kotlin')
 
     compile rootProject.ext.appCompat
+
+    compile rootProject.ext.kotlinStdlib
 }

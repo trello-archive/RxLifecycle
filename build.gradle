@@ -2,7 +2,7 @@ buildscript {
     ext {
         //version here to share between build script and projects
         //todo https://github.com/JetBrains/kotlin/pull/775 : remove if it will be merged
-        verKotlin = '1.0.0'
+        verKotlin = '1.0.1-2'
     }
     repositories {
         jcenter()
@@ -10,6 +10,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:1.5.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$verKotlin"
+        classpath "org.jetbrains.kotlin:kotlin-android-extensions:$verKotlin"
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.12.0'
     }
 }

@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">RxLifecycle</string>
+    <string name="app_name_kotlin">RxLifecycle (Kotlin)</string>
 
     <string name="message">Check logcat tag "RxLifecycle" to see this sample in action. You\'ll need to finish
         the Activity (or recreate it) to see the automatic unsubscription in action.</string>
