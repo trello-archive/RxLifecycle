@@ -14,12 +14,15 @@
 
 package com.trello.rxlifecycle;
 
+import android.os.Looper;
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 import android.view.View;
 import com.jakewharton.rxbinding.view.RxView;
 import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.exceptions.Exceptions;
+import rx.functions.Func0;
 import rx.functions.Func1;
 import rx.functions.Func2;
 
@@ -155,7 +158,21 @@ public class RxLifecycle {
     public static <T> Observable.Transformer<T, T> bindView(@NonNull final View view) {
         checkNotNull(view, "view == null");
 
-        return bind(RxView.detaches(view));
+        // This mechanism allows us to ensure that `RxView.detaches()` is always subscribed
+        // on the main thread, but doesn't do scheduling work if unnecessary.
+        Observable<Void> lifecycle =
+            Observable.defer(new Func0<Observable<Void>>() {
+                @Override
+                public Observable<Void> call() {
+                    Observable<Void> detaches = RxView.detaches(view);
+                    if (Looper.myLooper() != Looper.getMainLooper()) {
+                        detaches = detaches.subscribeOn(AndroidSchedulers.mainThread());
+                    }
+                    return detaches;
+                }
+            });
+
+        return bind(lifecycle);
     }
 
     /**

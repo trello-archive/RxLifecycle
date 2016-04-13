@@ -25,14 +25,14 @@ import org.robolectric.annotation.Config;
 import rx.Observable;
 import rx.Subscription;
 import rx.observers.TestSubscriber;
+import rx.schedulers.Schedulers;
 import rx.subjects.BehaviorSubject;
 import rx.subjects.PublishSubject;
 
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(manifest = Config.NONE)
@@ -261,19 +261,11 @@ public class RxLifecycleTest {
     public void testBindView() {
         Activity activity = Robolectric.buildActivity(Activity.class).create().get();
         View view = new View(activity);
-        CopyOnWriteArrayList<View.OnAttachStateChangeListener> listeners = TestUtil.getAttachStateChangeListeners(view);
-
-        // Do the attach notification
-        if (listeners != null) {
-            for (View.OnAttachStateChangeListener listener : listeners) {
-                listener.onViewAttachedToWindow(view);
-            }
-        }
 
         // Subscribe
         Subscription viewAttachSub = observable.compose(RxLifecycle.bindView(view)).subscribe();
         assertFalse(viewAttachSub.isUnsubscribed());
-        listeners = TestUtil.getAttachStateChangeListeners(view);
+        List<View.OnAttachStateChangeListener> listeners = TestUtil.getAttachStateChangeListeners(view);
         assertNotNull(listeners);
         assertFalse(listeners.isEmpty());
 
@@ -282,6 +274,22 @@ public class RxLifecycleTest {
             listener.onViewDetachedFromWindow(view);
         }
         assertTrue(viewAttachSub.isUnsubscribed());
+    }
+
+    @Test
+    public void testBindViewThread() {
+        Activity activity = Robolectric.buildActivity(Activity.class).create().get();
+        View view = new View(activity);
+
+        // Subscribe using the io() thread
+        TestSubscriber<Object> testSubscriber = new TestSubscriber<>();
+        observable.compose(RxLifecycle.bindView(view))
+            .subscribeOn(Schedulers.io())
+            .subscribe(testSubscriber);
+
+        // Give it a bit of time to subscribe, then fail if we ended with an error
+        testSubscriber.awaitTerminalEvent(10, TimeUnit.MILLISECONDS);
+        testSubscriber.assertNoErrors();
     }
 
     // Null checks
