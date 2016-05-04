@@ -55,6 +55,16 @@ public class RxSupportFragmentLifecycleTest {
         testBindToLifecycle(new RxDialogFragment());
     }
 
+    @Test
+    public void testRxAppCompatDialogFragment() {
+        // Once Robolectric is less broken we could run these tests
+        // Until then, these are identical to RxDialogFragment, so whatever.
+        //
+        // testLifecycle(new RxAppCompatDialogFragment());
+        // testBindUntilEvent(new RxAppCompatDialogFragment());
+        // testBindToLifecycle(new RxAppCompatDialogFragment());
+    }
+
     private void testLifecycle(FragmentLifecycleProvider provider) {
         Fragment fragment = (Fragment) provider;
         startFragment(fragment);
