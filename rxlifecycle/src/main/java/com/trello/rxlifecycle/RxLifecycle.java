@@ -146,6 +146,9 @@ public class RxLifecycle {
      * <p>
      * Use with {@link Observable#compose(Observable.Transformer)}:
      * {@code source.compose(RxLifecycle.bindView(lifecycle)).subscribe()}
+     * <p>
+     * Warning: you should make sure to use the returned Transformer on the main thread,
+     * since we're binding to a View (which only allows binding on the main thread).
      *
      * @param view the view to bind the source sequence to
      * @return a reusable {@link Observable.Transformer} that unsubscribes the source during the View lifecycle
