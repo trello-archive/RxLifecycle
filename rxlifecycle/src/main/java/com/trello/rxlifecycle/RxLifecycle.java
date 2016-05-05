@@ -19,9 +19,7 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import com.jakewharton.rxbinding.view.RxView;
 import rx.Observable;
-import rx.exceptions.Exceptions;
 import rx.functions.Func1;
-import rx.functions.Func2;
 
 import static com.trello.rxlifecycle.internal.Preconditions.checkNotNull;
 
@@ -76,19 +74,7 @@ public class RxLifecycle {
         checkNotNull(lifecycle, "lifecycle == null");
         checkNotNull(event, "event == null");
 
-        return new Observable.Transformer<T, T>() {
-            @Override
-            public Observable<T> call(Observable<T> source) {
-                return source.takeUntil(
-                    lifecycle.takeFirst(new Func1<R, Boolean>() {
-                        @Override
-                        public Boolean call(R lifecycleEvent) {
-                            return lifecycleEvent.equals(event);
-                        }
-                    })
-                );
-            }
-        };
+        return new UntilEventObservableTransformer<>(lifecycle, event);
     }
 
     /**
@@ -191,12 +177,7 @@ public class RxLifecycle {
     public static <T, R> Observable.Transformer<T, T> bind(@NonNull final Observable<R> lifecycle) {
         checkNotNull(lifecycle, "lifecycle == null");
 
-        return new Observable.Transformer<T, T>() {
-            @Override
-            public Observable<T> call(Observable<T> source) {
-                return source.takeUntil(lifecycle);
-            }
-        };
+        return new UntilLifecycleObservableTransformer<>(lifecycle);
     }
 
     /**
@@ -220,48 +201,9 @@ public class RxLifecycle {
         checkNotNull(lifecycle, "lifecycle == null");
         checkNotNull(correspondingEvents, "correspondingEvents == null");
 
-        // Make sure we're truly comparing a single stream to itself
-        final Observable<R> sharedLifecycle = lifecycle.share();
-
         // Keep emitting from source until the corresponding event occurs in the lifecycle
-        return new Observable.Transformer<T, T>() {
-            @Override
-            public Observable<T> call(Observable<T> source) {
-                return source.takeUntil(
-                    Observable.combineLatest(
-                        sharedLifecycle.take(1).map(correspondingEvents),
-                        sharedLifecycle.skip(1),
-                        new Func2<R, R, Boolean>() {
-                            @Override
-                            public Boolean call(R bindUntilEvent, R lifecycleEvent) {
-                                return lifecycleEvent.equals(bindUntilEvent);
-                            }
-                        })
-                        .onErrorReturn(RESUME_FUNCTION)
-                        .takeFirst(SHOULD_COMPLETE)
-                );
-            }
-        };
+        return new UntilCorrespondingEventObservableTransformer<>(lifecycle, correspondingEvents);
     }
-
-    private static final Func1<Throwable, Boolean> RESUME_FUNCTION = new Func1<Throwable, Boolean>() {
-        @Override
-        public Boolean call(Throwable throwable) {
-            if (throwable instanceof OutsideLifecycleException) {
-                return true;
-            }
-
-            Exceptions.propagate(throwable);
-            return false;
-        }
-    };
-
-    private static final Func1<Boolean, Boolean> SHOULD_COMPLETE = new Func1<Boolean, Boolean>() {
-        @Override
-        public Boolean call(Boolean shouldComplete) {
-            return shouldComplete;
-        }
-    };
 
     // Figures out which corresponding next lifecycle event in which to unsubscribe, for Activities
     private static final Func1<ActivityEvent, ActivityEvent> ACTIVITY_LIFECYCLE =
