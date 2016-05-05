@@ -1,7 +1,8 @@
 package com.trello.rxlifecycle;
 
 import rx.Observable;
-import rx.functions.Func1;
+
+import static com.trello.rxlifecycle.TakeUntilGenerator.takeUntilEvent;
 
 /**
  * Continues a subscription until it sees a particular lifecycle event.
@@ -18,13 +19,6 @@ class UntilEventObservableTransformer<T, R> implements Observable.Transformer<T,
 
     @Override
     public Observable<T> call(Observable<T> source) {
-        return source.takeUntil(
-            lifecycle.takeFirst(new Func1<R, Boolean>() {
-                @Override
-                public Boolean call(R lifecycleEvent) {
-                    return lifecycleEvent.equals(event);
-                }
-            })
-        );
+        return source.takeUntil(takeUntilEvent(lifecycle, event));
     }
 }
