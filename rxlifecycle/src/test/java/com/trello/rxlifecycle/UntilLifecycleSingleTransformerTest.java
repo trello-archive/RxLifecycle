@@ -2,11 +2,13 @@ package com.trello.rxlifecycle;
 
 import org.junit.Before;
 import org.junit.Test;
-import rx.Observable;
+import rx.Single;
 import rx.observers.TestSubscriber;
 import rx.subjects.PublishSubject;
 
-public class UntilLifecycleObservableTransformerTest {
+import java.util.concurrent.CancellationException;
+
+public class UntilLifecycleSingleTransformerTest {
 
     PublishSubject<String> lifecycle;
     TestSubscriber<String> testSubscriber;
@@ -19,26 +21,25 @@ public class UntilLifecycleObservableTransformerTest {
 
     @Test
     public void noEvent() {
-        Observable.just("1", "2", "3")
-            .compose(new UntilLifecycleObservableTransformer<String, String>(lifecycle))
+        Single.just("1")
+            .compose(new UntilLifecycleSingleTransformer<String, String>(lifecycle))
             .subscribe(testSubscriber);
 
-        testSubscriber.requestMore(2);
-        testSubscriber.assertValues("1", "2");
-        testSubscriber.assertNoTerminalEvent();
+        testSubscriber.requestMore(1);
+        testSubscriber.assertValue("1");
+        testSubscriber.assertCompleted();
     }
 
     @Test
     public void oneEvent() {
-        Observable.just("1", "2", "3")
-            .compose(new UntilLifecycleObservableTransformer<String, String>(lifecycle))
+        Single.just("1")
+            .compose(new UntilLifecycleSingleTransformer<String, String>(lifecycle))
             .subscribe(testSubscriber);
 
-        testSubscriber.requestMore(1);
         lifecycle.onNext("stop");
         testSubscriber.requestMore(1);
 
-        testSubscriber.assertValues("1");
-        testSubscriber.assertCompleted();
+        testSubscriber.assertNoValues();
+        testSubscriber.assertError(CancellationException.class);
     }
 }

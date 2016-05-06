@@ -7,22 +7,17 @@ import rx.Single;
 /**
  * Continues a subscription until it sees *any* lifecycle event.
  */
-final class UntilLifecycleObservableTransformer<T, R> implements LifecycleTransformer<T> {
+final class UntilLifecycleSingleTransformer<T, R> implements Single.Transformer<T, T> {
 
     final Observable<R> lifecycle;
 
-    public UntilLifecycleObservableTransformer(@NonNull Observable<R> lifecycle) {
+    public UntilLifecycleSingleTransformer(@NonNull Observable<R> lifecycle) {
         this.lifecycle = lifecycle;
     }
 
     @Override
-    public Observable<T> call(Observable<T> source) {
+    public Single<T> call(Single<T> source) {
         return source.takeUntil(lifecycle);
-    }
-
-    @Override
-    public Single.Transformer<T, T> forSingle() {
-        return new UntilLifecycleSingleTransformer<>(lifecycle);
     }
 
     @Override
@@ -30,7 +25,7 @@ final class UntilLifecycleObservableTransformer<T, R> implements LifecycleTransf
         if (this == o) { return true; }
         if (o == null || getClass() != o.getClass()) { return false; }
 
-        UntilLifecycleObservableTransformer<?, ?> that = (UntilLifecycleObservableTransformer<?, ?>) o;
+        UntilLifecycleSingleTransformer<?, ?> that = (UntilLifecycleSingleTransformer<?, ?>) o;
 
         return lifecycle.equals(that.lifecycle);
     }
@@ -42,7 +37,7 @@ final class UntilLifecycleObservableTransformer<T, R> implements LifecycleTransf
 
     @Override
     public String toString() {
-        return "UntilLifecycleObservableTransformer{" +
+        return "UntilLifecycleSingleTransformer{" +
             "lifecycle=" + lifecycle +
             '}';
     }

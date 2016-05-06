@@ -9,24 +9,19 @@ import static com.trello.rxlifecycle.TakeUntilGenerator.takeUntilEvent;
 /**
  * Continues a subscription until it sees a particular lifecycle event.
  */
-final class UntilEventObservableTransformer<T, R> implements LifecycleTransformer<T> {
+final class UntilEventSingleTransformer<T, R> implements Single.Transformer<T, T> {
 
     final Observable<R> lifecycle;
     final R event;
 
-    public UntilEventObservableTransformer(@NonNull Observable<R> lifecycle, @NonNull R event) {
+    public UntilEventSingleTransformer(@NonNull Observable<R> lifecycle, @NonNull R event) {
         this.lifecycle = lifecycle;
         this.event = event;
     }
 
     @Override
-    public Observable<T> call(Observable<T> source) {
+    public Single<T> call(Single<T> source) {
         return source.takeUntil(takeUntilEvent(lifecycle, event));
-    }
-
-    @Override
-    public Single.Transformer<T, T> forSingle() {
-        return new UntilEventSingleTransformer<>(lifecycle, event);
     }
 
     @Override
@@ -34,7 +29,7 @@ final class UntilEventObservableTransformer<T, R> implements LifecycleTransforme
         if (this == o) { return true; }
         if (o == null || getClass() != o.getClass()) { return false; }
 
-        UntilEventObservableTransformer<?, ?> that = (UntilEventObservableTransformer<?, ?>) o;
+        UntilEventSingleTransformer<?, ?> that = (UntilEventSingleTransformer<?, ?>) o;
 
         if (!lifecycle.equals(that.lifecycle)) { return false; }
         return event.equals(that.event);
@@ -49,7 +44,7 @@ final class UntilEventObservableTransformer<T, R> implements LifecycleTransforme
 
     @Override
     public String toString() {
-        return "UntilEventObservableTransformer{" +
+        return "UntilEventSingleTransformer{" +
             "lifecycle=" + lifecycle +
             ", event=" + event +
             '}';

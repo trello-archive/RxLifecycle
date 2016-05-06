@@ -13,25 +13,20 @@ import static com.trello.rxlifecycle.TakeUntilGenerator.takeUntilCorrespondingEv
  * That lifecycle event is determined based on what stage we're at in
  * the current lifecycle.
  */
-final class UntilCorrespondingEventObservableTransformer<T, R> implements LifecycleTransformer<T> {
+final class UntilCorrespondingEventSingleTransformer<T, R> implements Single.Transformer<T, T> {
 
     final Observable<R> sharedLifecycle;
     final Func1<R, R> correspondingEvents;
 
-    public UntilCorrespondingEventObservableTransformer(@NonNull Observable<R> sharedLifecycle,
-                                                        @NonNull Func1<R, R> correspondingEvents) {
+    public UntilCorrespondingEventSingleTransformer(@NonNull Observable<R> sharedLifecycle,
+                                                    @NonNull Func1<R, R> correspondingEvents) {
         this.sharedLifecycle = sharedLifecycle;
         this.correspondingEvents = correspondingEvents;
     }
 
     @Override
-    public Observable<T> call(Observable<T> source) {
+    public Single<T> call(Single<T> source) {
         return source.takeUntil(takeUntilCorrespondingEvent(sharedLifecycle, correspondingEvents));
-    }
-
-    @Override
-    public Single.Transformer<T, T> forSingle() {
-        return new UntilCorrespondingEventSingleTransformer<>(sharedLifecycle, correspondingEvents);
     }
 
     @Override
@@ -39,8 +34,7 @@ final class UntilCorrespondingEventObservableTransformer<T, R> implements Lifecy
         if (this == o) { return true; }
         if (o == null || getClass() != o.getClass()) { return false; }
 
-        UntilCorrespondingEventObservableTransformer<?, ?> that
-            = (UntilCorrespondingEventObservableTransformer<?, ?>) o;
+        UntilCorrespondingEventSingleTransformer<?, ?> that = (UntilCorrespondingEventSingleTransformer<?, ?>) o;
 
         if (!sharedLifecycle.equals(that.sharedLifecycle)) { return false; }
         return correspondingEvents.equals(that.correspondingEvents);
@@ -55,7 +49,7 @@ final class UntilCorrespondingEventObservableTransformer<T, R> implements Lifecy
 
     @Override
     public String toString() {
-        return "UntilCorrespondingEventObservableTransformer{" +
+        return "UntilCorrespondingEventSingleTransformer{" +
             "sharedLifecycle=" + sharedLifecycle +
             ", correspondingEvents=" + correspondingEvents +
             '}';

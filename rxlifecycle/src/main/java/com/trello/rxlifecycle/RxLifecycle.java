@@ -37,7 +37,7 @@ public class RxLifecycle {
     @Deprecated
     @NonNull
     @CheckResult
-    public static <T> Observable.Transformer<T, T> bindUntilFragmentEvent(
+    public static <T> LifecycleTransformer<T> bindUntilFragmentEvent(
         @NonNull final Observable<FragmentEvent> lifecycle, @NonNull final FragmentEvent event) {
         return bindUntilEvent(lifecycle, event);
     }
@@ -50,7 +50,7 @@ public class RxLifecycle {
     @Deprecated
     @NonNull
     @CheckResult
-    public static <T> Observable.Transformer<T, T> bindUntilActivityEvent(
+    public static <T> LifecycleTransformer<T> bindUntilActivityEvent(
         @NonNull final Observable<ActivityEvent> lifecycle, @NonNull final ActivityEvent event) {
         return bindUntilEvent(lifecycle, event);
     }
@@ -69,8 +69,8 @@ public class RxLifecycle {
      */
     @NonNull
     @CheckResult
-    public static <T, R> Observable.Transformer<T, T> bindUntilEvent(@NonNull final Observable<R> lifecycle,
-                                                                     @NonNull final R event) {
+    public static <T, R> LifecycleTransformer<T> bindUntilEvent(@NonNull final Observable<R> lifecycle,
+                                                                @NonNull final R event) {
         checkNotNull(lifecycle, "lifecycle == null");
         checkNotNull(event, "event == null");
 
@@ -97,7 +97,7 @@ public class RxLifecycle {
      */
     @NonNull
     @CheckResult
-    public static <T> Observable.Transformer<T, T> bindActivity(@NonNull final Observable<ActivityEvent> lifecycle) {
+    public static <T> LifecycleTransformer<T> bindActivity(@NonNull final Observable<ActivityEvent> lifecycle) {
         return bind(lifecycle, ACTIVITY_LIFECYCLE);
     }
 
@@ -121,7 +121,7 @@ public class RxLifecycle {
      */
     @NonNull
     @CheckResult
-    public static <T> Observable.Transformer<T, T> bindFragment(@NonNull final Observable<FragmentEvent> lifecycle) {
+    public static <T> LifecycleTransformer<T> bindFragment(@NonNull final Observable<FragmentEvent> lifecycle) {
         return bind(lifecycle, FRAGMENT_LIFECYCLE);
     }
 
@@ -141,7 +141,7 @@ public class RxLifecycle {
      */
     @NonNull
     @CheckResult
-    public static <T> Observable.Transformer<T, T> bindView(@NonNull final View view) {
+    public static <T> LifecycleTransformer<T> bindView(@NonNull final View view) {
         checkNotNull(view, "view == null");
 
         return bind(RxView.detaches(view));
@@ -155,7 +155,7 @@ public class RxLifecycle {
     @Deprecated
     @NonNull
     @CheckResult
-    public static <T, E> Observable.Transformer<T, T> bindView(@NonNull final Observable<? extends E> lifecycle) {
+    public static <T, E> LifecycleTransformer<T> bindView(@NonNull final Observable<? extends E> lifecycle) {
         return bind(lifecycle);
     }
 
@@ -174,7 +174,7 @@ public class RxLifecycle {
      */
     @NonNull
     @CheckResult
-    public static <T, R> Observable.Transformer<T, T> bind(@NonNull final Observable<R> lifecycle) {
+    public static <T, R> LifecycleTransformer<T> bind(@NonNull final Observable<R> lifecycle) {
         checkNotNull(lifecycle, "lifecycle == null");
 
         return new UntilLifecycleObservableTransformer<>(lifecycle);
@@ -196,13 +196,13 @@ public class RxLifecycle {
      */
     @NonNull
     @CheckResult
-    public static <T, R> Observable.Transformer<T, T> bind(@NonNull Observable<R> lifecycle,
-                                                           @NonNull final Func1<R, R> correspondingEvents) {
+    public static <T, R> LifecycleTransformer<T> bind(@NonNull Observable<R> lifecycle,
+                                                      @NonNull final Func1<R, R> correspondingEvents) {
         checkNotNull(lifecycle, "lifecycle == null");
         checkNotNull(correspondingEvents, "correspondingEvents == null");
 
         // Keep emitting from source until the corresponding event occurs in the lifecycle
-        return new UntilCorrespondingEventObservableTransformer<>(lifecycle, correspondingEvents);
+        return new UntilCorrespondingEventObservableTransformer<>(lifecycle.share(), correspondingEvents);
     }
 
     // Figures out which corresponding next lifecycle event in which to unsubscribe, for Activities

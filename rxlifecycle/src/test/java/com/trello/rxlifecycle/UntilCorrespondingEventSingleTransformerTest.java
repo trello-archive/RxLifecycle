@@ -2,12 +2,14 @@ package com.trello.rxlifecycle;
 
 import org.junit.Before;
 import org.junit.Test;
-import rx.Observable;
+import rx.Single;
 import rx.functions.Func1;
 import rx.observers.TestSubscriber;
 import rx.subjects.PublishSubject;
 
-public class UntilCorrespondingEventObservableTransformerTest {
+import java.util.concurrent.CancellationException;
+
+public class UntilCorrespondingEventSingleTransformerTest {
 
     PublishSubject<String> lifecycle;
     TestSubscriber<String> testSubscriber;
@@ -20,56 +22,51 @@ public class UntilCorrespondingEventObservableTransformerTest {
 
     @Test
     public void noEvents() {
-        Observable.just("1", "2", "3")
-            .compose(new UntilCorrespondingEventObservableTransformer<String, String>(lifecycle, CORRESPONDING_EVENTS))
+        Single.just("1")
+            .compose(new UntilCorrespondingEventSingleTransformer<String, String>(lifecycle, CORRESPONDING_EVENTS))
             .subscribe(testSubscriber);
 
-        testSubscriber.requestMore(2);
-        testSubscriber.assertValues("1", "2");
-        testSubscriber.assertNoTerminalEvent();
+        testSubscriber.requestMore(1);
+        testSubscriber.assertValue("1");
+        testSubscriber.assertCompleted();
     }
 
     @Test
     public void oneStartEvent() {
-        Observable.just("1", "2", "3")
-            .compose(new UntilCorrespondingEventObservableTransformer<String, String>(lifecycle, CORRESPONDING_EVENTS))
+        Single.just("1")
+            .compose(new UntilCorrespondingEventSingleTransformer<String, String>(lifecycle, CORRESPONDING_EVENTS))
             .subscribe(testSubscriber);
 
         lifecycle.onNext("create");
-        testSubscriber.requestMore(2);
-
-        testSubscriber.assertValues("1", "2");
-        testSubscriber.assertNoTerminalEvent();
+        testSubscriber.requestMore(1);
+        testSubscriber.assertValue("1");
+        testSubscriber.assertCompleted();
     }
 
     @Test
     public void twoOpenEvents() {
-        Observable.just("1", "2", "3")
-            .compose(new UntilCorrespondingEventObservableTransformer<String, String>(lifecycle, CORRESPONDING_EVENTS))
+        Single.just("1")
+            .compose(new UntilCorrespondingEventSingleTransformer<String, String>(lifecycle, CORRESPONDING_EVENTS))
             .subscribe(testSubscriber);
 
         lifecycle.onNext("create");
-        testSubscriber.requestMore(1);
         lifecycle.onNext("start");
         testSubscriber.requestMore(1);
-
-        testSubscriber.assertValues("1", "2");
-        testSubscriber.assertNoTerminalEvent();
+        testSubscriber.assertValue("1");
+        testSubscriber.assertCompleted();
     }
 
     @Test
     public void openAndCloseEvent() {
-        Observable.just("1", "2", "3")
-            .compose(new UntilCorrespondingEventObservableTransformer<String, String>(lifecycle, CORRESPONDING_EVENTS))
+        Single.just("1")
+            .compose(new UntilCorrespondingEventSingleTransformer<String, String>(lifecycle, CORRESPONDING_EVENTS))
             .subscribe(testSubscriber);
 
         lifecycle.onNext("create");
-        testSubscriber.requestMore(1);
         lifecycle.onNext("destroy");
         testSubscriber.requestMore(1);
-
-        testSubscriber.assertValues("1");
-        testSubscriber.assertCompleted();
+        testSubscriber.assertNoValues();
+        testSubscriber.assertError(CancellationException.class);
     }
 
     private static final Func1<String, String> CORRESPONDING_EVENTS = new Func1<String, String>() {
