@@ -99,8 +99,8 @@ myObservable
 RxLifecycle does not actually unsubscribe the sequence. Instead it terminates the sequence. The way in which
 it does so varies based on the type:
 
-`Observable` - emits `onCompleted()`
-`Single` and `Completable` - emits `onError(CancellationException)`
+- `Observable` - emits `onCompleted()`
+- `Single` and `Completable` - emits `onError(CancellationException)`
 
 If a sequence requires the `Subscription.unsubscribe()` behavior, then it is suggested that you manually handle
 the `Subscription` yourself and call `unsubscribe()` when appropriate.
@@ -108,16 +108,16 @@ the `Subscription` yourself and call `unsubscribe()` when appropriate.
 ## Installation
 
 ```gradle
-compile 'com.trello:rxlifecycle:0.5.0'
+compile 'com.trello:rxlifecycle:0.6.0'
 
 // If you want pre-written Activities and Fragments you can subclass as providers
-compile 'com.trello:rxlifecycle-components:0.5.0'
+compile 'com.trello:rxlifecycle-components:0.6.0'
 
 // If you want to use Navi for providers
-compile 'com.trello:rxlifecycle-navi:0.5.0'
+compile 'com.trello:rxlifecycle-navi:0.6.0'
 
 // If you want to use Kotlin syntax
-compile 'com.trello:rxlifecycle-kotlin:0.5.0'
+compile 'com.trello:rxlifecycle-kotlin:0.6.0'
 ```
 
 ## Related Libraries

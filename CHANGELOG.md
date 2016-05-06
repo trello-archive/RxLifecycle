@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.6.0 (2016-05-06)
+
+- Added `LifecycleTransformer`, which provides `Single` and `Completable` support.
+- [#111](https://github.com/trello/RxLifecycle/pull/111): Added component support for `AppCompatDialogFragment`
+- [#107](https://github.com/trello/RxLifecycle/pull/107): Fixed navi component package
+
 ## 0.5.0 (2016-02-27)
 
 There are a few methods which have been **deprecated** and will be removed in a future release. Each one has a drop-in
