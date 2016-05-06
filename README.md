@@ -28,6 +28,18 @@ It assumes you want to end the sequence in the opposing lifecycle event - e.g., 
 terminate on `STOP`. If you subscribe after `PAUSE`, it will terminate at the next destruction event (e.g.,
 `PAUSE` will terminate in `STOP`).
 
+## Single and Completable
+
+RxLifecycle supports both `Single` and `Completable` via the `LifecycleTransformer`. You can
+convert any returned `LifecycleTransformer` into a `Single.Transformer` or `CompletableTransformer`
+via the `forSingle()` and `forCompletable()` methods:
+
+```java
+mySingle
+    .compose(RxLifecycle.bindActivity(lifecycle).forSingle())
+    .subscribe();
+```
+
 ## Providers
 
 Where do the sequences of `ActivityEvent` or `FragmentEvent` come from? Generally, they are provided by
@@ -84,14 +96,14 @@ myObservable
 
 ## Unsubscription
 
-RxLifecycle does not actually unsubscribe the sequence. It terminates it by emitting `onCompleted()`, which ends the
-sequence. This differs from `Subscription.unsubscribe()`, which causes the sequence to simply end.
+RxLifecycle does not actually unsubscribe the sequence. Instead it terminates the sequence. The way in which
+it does so varies based on the type:
 
-In most cases this works out fine (since `onCompleted()` is not often used). In cases where you do not want
-`onCompleted()` called during early termination, then it is suggested that you manually handle the `Subscription`
-yourself and call `unsubscribe()` when appropriate.
+`Observable` - emits `onCompleted()`
+`Single` and `Completable` - emits `onError(CancellationException)`
 
-(To understand why RxLifecycle has this behavior, [read this](https://github.com/trello/RxLifecycle/pull/14))
+If a sequence requires the `Subscription.unsubscribe()` behavior, then it is suggested that you manually handle
+the `Subscription` yourself and call `unsubscribe()` when appropriate.
 
 ## Installation
 
