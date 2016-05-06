@@ -22,6 +22,17 @@ public class LifecycleTransformerTest {
     }
 
     @Test
+    public void correspondingEventObservableConversionEqualsCompletable() {
+        UntilCorrespondingEventObservableTransformer<String, String> observableTransformer =
+            new UntilCorrespondingEventObservableTransformer<>(lifecycle, CORRESPONDING_EVENTS);
+
+        UntilCorrespondingEventCompletableTransformer<String> completableTransformer =
+            new UntilCorrespondingEventCompletableTransformer<>(lifecycle, CORRESPONDING_EVENTS);
+
+        assertEquals(completableTransformer, observableTransformer.forCompletable());
+    }
+
+    @Test
     public void untilEventObservableConversionEqualsSingle() {
         UntilEventObservableTransformer<String, String> observableTransformer =
             new UntilEventObservableTransformer<>(lifecycle, "stop");
@@ -33,6 +44,17 @@ public class LifecycleTransformerTest {
     }
 
     @Test
+    public void untilEventObservableConversionEqualsCompletable() {
+        UntilEventObservableTransformer<String, String> observableTransformer =
+            new UntilEventObservableTransformer<>(lifecycle, "stop");
+
+        UntilEventCompletableTransformer<String> completableTransformer =
+            new UntilEventCompletableTransformer<>(lifecycle, "stop");
+
+        assertEquals(completableTransformer, observableTransformer.forCompletable());
+    }
+
+    @Test
     public void untilLifecycleObservableConversionEqualsSingle() {
         UntilLifecycleObservableTransformer<String, String> observableTransformer =
             new UntilLifecycleObservableTransformer<>(lifecycle);
@@ -41,6 +63,17 @@ public class LifecycleTransformerTest {
             new UntilLifecycleSingleTransformer<>(lifecycle);
 
         assertEquals(singleTransformer, observableTransformer.forSingle());
+    }
+
+    @Test
+    public void untilLifecycleObservableConversionEqualsCompletable() {
+        UntilLifecycleObservableTransformer<String, String> observableTransformer =
+            new UntilLifecycleObservableTransformer<>(lifecycle);
+
+        UntilLifecycleCompletableTransformer<String> completableTransformer =
+            new UntilLifecycleCompletableTransformer<>(lifecycle);
+
+        assertEquals(completableTransformer, observableTransformer.forCompletable());
     }
 
     private static final Func1<String, String> CORRESPONDING_EVENTS = new Func1<String, String>() {
