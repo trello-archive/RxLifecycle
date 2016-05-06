@@ -1,6 +1,7 @@
 package com.trello.rxlifecycle;
 
 import android.support.annotation.NonNull;
+import rx.Completable;
 import rx.Observable;
 import rx.Single;
 import rx.functions.Func1;
@@ -32,6 +33,11 @@ final class UntilCorrespondingEventObservableTransformer<T, R> implements Lifecy
     @Override
     public Single.Transformer<T, T> forSingle() {
         return new UntilCorrespondingEventSingleTransformer<>(sharedLifecycle, correspondingEvents);
+    }
+
+    @Override
+    public Completable.CompletableTransformer forCompletable() {
+        return new UntilCorrespondingEventCompletableTransformer<>(sharedLifecycle, correspondingEvents);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.trello.rxlifecycle;
 
 import android.support.annotation.NonNull;
+import rx.Completable;
 import rx.Observable;
 import rx.Single;
 
@@ -23,6 +24,11 @@ final class UntilLifecycleObservableTransformer<T, R> implements LifecycleTransf
     @Override
     public Single.Transformer<T, T> forSingle() {
         return new UntilLifecycleSingleTransformer<>(lifecycle);
+    }
+
+    @Override
+    public Completable.CompletableTransformer forCompletable() {
+        return new UntilLifecycleCompletableTransformer<>(lifecycle);
     }
 
     @Override
