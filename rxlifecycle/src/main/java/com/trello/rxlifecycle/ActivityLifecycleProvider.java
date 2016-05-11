@@ -29,7 +29,7 @@ public interface ActivityLifecycleProvider {
      */
     @NonNull
     @CheckResult
-    <T> Observable.Transformer<T, T> bindUntilEvent(@NonNull ActivityEvent event);
+    <T> LifecycleTransformer<T> bindUntilEvent(@NonNull ActivityEvent event);
 
     /**
      * Binds a source until the next reasonable {@link ActivityEvent} occurs.
@@ -40,6 +40,6 @@ public interface ActivityLifecycleProvider {
      */
     @NonNull
     @CheckResult
-    <T> Observable.Transformer<T, T> bindToLifecycle();
+    <T> LifecycleTransformer<T> bindToLifecycle();
 
 }

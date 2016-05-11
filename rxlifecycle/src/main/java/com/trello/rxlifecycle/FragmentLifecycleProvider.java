@@ -29,7 +29,7 @@ public interface FragmentLifecycleProvider {
      */
     @NonNull
     @CheckResult
-    <T> Observable.Transformer<T, T> bindUntilEvent(@NonNull FragmentEvent event);
+    <T> LifecycleTransformer<T> bindUntilEvent(@NonNull FragmentEvent event);
 
     /**
      * Binds a source until the next reasonable {@link FragmentEvent} occurs.
@@ -40,6 +40,6 @@ public interface FragmentLifecycleProvider {
      */
     @NonNull
     @CheckResult
-    <T> Observable.Transformer<T, T> bindToLifecycle();
+    <T> LifecycleTransformer<T> bindToLifecycle();
 
 }
