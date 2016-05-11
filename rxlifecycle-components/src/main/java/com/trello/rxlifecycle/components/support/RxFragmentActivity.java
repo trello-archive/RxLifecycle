@@ -5,11 +5,10 @@ import android.support.annotation.CallSuper;
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
-
 import com.trello.rxlifecycle.ActivityEvent;
-import com.trello.rxlifecycle.RxLifecycle;
 import com.trello.rxlifecycle.ActivityLifecycleProvider;
-
+import com.trello.rxlifecycle.LifecycleTransformer;
+import com.trello.rxlifecycle.RxLifecycle;
 import rx.Observable;
 import rx.subjects.BehaviorSubject;
 
@@ -27,14 +26,14 @@ public class RxFragmentActivity extends FragmentActivity implements ActivityLife
     @Override
     @NonNull
     @CheckResult
-    public final <T> Observable.Transformer<T, T> bindUntilEvent(@NonNull ActivityEvent event) {
+    public final <T> LifecycleTransformer<T> bindUntilEvent(@NonNull ActivityEvent event) {
         return RxLifecycle.bindUntilEvent(lifecycleSubject, event);
     }
 
     @Override
     @NonNull
     @CheckResult
-    public final <T> Observable.Transformer<T, T> bindToLifecycle() {
+    public final <T> LifecycleTransformer<T> bindToLifecycle() {
         return RxLifecycle.bindActivity(lifecycleSubject);
     }
 

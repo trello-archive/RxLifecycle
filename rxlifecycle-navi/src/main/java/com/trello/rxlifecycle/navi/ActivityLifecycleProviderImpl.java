@@ -7,6 +7,7 @@ import com.trello.navi.NaviComponent;
 import com.trello.navi.rx.RxNavi;
 import com.trello.rxlifecycle.ActivityEvent;
 import com.trello.rxlifecycle.ActivityLifecycleProvider;
+import com.trello.rxlifecycle.LifecycleTransformer;
 import com.trello.rxlifecycle.RxLifecycle;
 import rx.Observable;
 import rx.subjects.BehaviorSubject;
@@ -35,14 +36,14 @@ final class ActivityLifecycleProviderImpl implements ActivityLifecycleProvider {
     @Override
     @NonNull
     @CheckResult
-    public <T> Observable.Transformer<T, T> bindUntilEvent(@NonNull ActivityEvent event) {
+    public <T> LifecycleTransformer<T> bindUntilEvent(@NonNull ActivityEvent event) {
         return RxLifecycle.bindUntilEvent(lifecycleSubject, event);
     }
 
     @Override
     @NonNull
     @CheckResult
-    public <T> Observable.Transformer<T, T> bindToLifecycle() {
+    public <T> LifecycleTransformer<T> bindToLifecycle() {
         return RxLifecycle.bindActivity(lifecycleSubject);
     }
 }

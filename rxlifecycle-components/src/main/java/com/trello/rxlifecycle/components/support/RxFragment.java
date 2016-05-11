@@ -6,8 +6,9 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import com.trello.rxlifecycle.FragmentEvent;
-import com.trello.rxlifecycle.RxLifecycle;
 import com.trello.rxlifecycle.FragmentLifecycleProvider;
+import com.trello.rxlifecycle.LifecycleTransformer;
+import com.trello.rxlifecycle.RxLifecycle;
 import rx.Observable;
 import rx.subjects.BehaviorSubject;
 
@@ -25,14 +26,14 @@ public class RxFragment extends Fragment implements FragmentLifecycleProvider {
     @Override
     @NonNull
     @CheckResult
-    public final <T> Observable.Transformer<T, T> bindUntilEvent(@NonNull FragmentEvent event) {
+    public final <T> LifecycleTransformer<T> bindUntilEvent(@NonNull FragmentEvent event) {
         return RxLifecycle.bindUntilEvent(lifecycleSubject, event);
     }
 
     @Override
     @NonNull
     @CheckResult
-    public final <T> Observable.Transformer<T, T> bindToLifecycle() {
+    public final <T> LifecycleTransformer<T> bindToLifecycle() {
         return RxLifecycle.bindFragment(lifecycleSubject);
     }
 
