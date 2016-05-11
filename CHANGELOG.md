@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.1 (2016-05-11)
+
+- [#118](https://github.com/trello/RxLifecycle/pull/118): Use `LifecycleTransformer` in the provider interfaces
+
 ## 0.6.0 (2016-05-06)
 
 - Added `LifecycleTransformer`, which provides `Single` and `Completable` support.
