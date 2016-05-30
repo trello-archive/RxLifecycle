@@ -2,24 +2,26 @@ package com.trello.rxlifecycle;
 
 import org.junit.Before;
 import org.junit.Test;
+
 import rx.Observable;
 import rx.functions.Func1;
 import rx.observers.TestSubscriber;
-import rx.subjects.PublishSubject;
+import rx.subjects.BehaviorSubject;
 
 public class UntilCorrespondingEventObservableTransformerTest {
 
-    PublishSubject<String> lifecycle;
+    BehaviorSubject<String> lifecycle;
     TestSubscriber<String> testSubscriber;
 
     @Before
     public void setup() {
-        lifecycle = PublishSubject.create();
+        lifecycle = BehaviorSubject.create();
         testSubscriber = new TestSubscriber<>(0);
     }
 
     @Test
     public void noEvents() {
+        lifecycle.onNext("create");
         Observable.just("1", "2", "3")
             .compose(new UntilCorrespondingEventObservableTransformer<String, String>(lifecycle, CORRESPONDING_EVENTS))
             .subscribe(testSubscriber);
@@ -31,11 +33,12 @@ public class UntilCorrespondingEventObservableTransformerTest {
 
     @Test
     public void oneStartEvent() {
+        lifecycle.onNext("create");
         Observable.just("1", "2", "3")
             .compose(new UntilCorrespondingEventObservableTransformer<String, String>(lifecycle, CORRESPONDING_EVENTS))
             .subscribe(testSubscriber);
 
-        lifecycle.onNext("create");
+        lifecycle.onNext("start");
         testSubscriber.requestMore(2);
 
         testSubscriber.assertValues("1", "2");
@@ -44,13 +47,14 @@ public class UntilCorrespondingEventObservableTransformerTest {
 
     @Test
     public void twoOpenEvents() {
+        lifecycle.onNext("create");
         Observable.just("1", "2", "3")
             .compose(new UntilCorrespondingEventObservableTransformer<String, String>(lifecycle, CORRESPONDING_EVENTS))
             .subscribe(testSubscriber);
 
-        lifecycle.onNext("create");
-        testSubscriber.requestMore(1);
         lifecycle.onNext("start");
+        testSubscriber.requestMore(1);
+        lifecycle.onNext("resume");
         testSubscriber.requestMore(1);
 
         testSubscriber.assertValues("1", "2");
@@ -59,11 +63,12 @@ public class UntilCorrespondingEventObservableTransformerTest {
 
     @Test
     public void openAndCloseEvent() {
+        lifecycle.onNext("create");
         Observable.just("1", "2", "3")
             .compose(new UntilCorrespondingEventObservableTransformer<String, String>(lifecycle, CORRESPONDING_EVENTS))
             .subscribe(testSubscriber);
 
-        lifecycle.onNext("create");
+        lifecycle.onNext("start");
         testSubscriber.requestMore(1);
         lifecycle.onNext("destroy");
         testSubscriber.requestMore(1);

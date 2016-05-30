@@ -2,30 +2,33 @@ package com.trello.rxlifecycle;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.concurrent.CancellationException;
+
 import rx.Completable;
 import rx.functions.Func1;
 import rx.observers.TestSubscriber;
+import rx.subjects.BehaviorSubject;
 import rx.subjects.PublishSubject;
-
-import java.util.concurrent.CancellationException;
 
 public class UntilCorrespondingEventCompletableTransformerTest {
 
     PublishSubject<Object> subject;
     Completable completable;
-    PublishSubject<String> lifecycle;
+    BehaviorSubject<String> lifecycle;
     TestSubscriber<String> testSubscriber;
 
     @Before
     public void setup() {
         subject =  PublishSubject.create();
         completable = Completable.fromObservable(subject);
-        lifecycle = PublishSubject.create();
+        lifecycle = BehaviorSubject.create();
         testSubscriber = new TestSubscriber<>();
     }
 
     @Test
     public void noEvents() {
+        lifecycle.onNext("create");
         completable
             .compose(new UntilCorrespondingEventCompletableTransformer<>(lifecycle, CORRESPONDING_EVENTS))
             .subscribe(testSubscriber);
@@ -36,34 +39,37 @@ public class UntilCorrespondingEventCompletableTransformerTest {
 
     @Test
     public void oneStartEvent() {
+        lifecycle.onNext("create");
         completable
             .compose(new UntilCorrespondingEventCompletableTransformer<>(lifecycle, CORRESPONDING_EVENTS))
             .subscribe(testSubscriber);
 
-        lifecycle.onNext("create");
-        subject.onCompleted();
-        testSubscriber.assertCompleted();
-    }
-
-    @Test
-    public void twoOpenEvents() {
-        completable
-            .compose(new UntilCorrespondingEventCompletableTransformer<>(lifecycle, CORRESPONDING_EVENTS))
-            .subscribe(testSubscriber);
-
-        lifecycle.onNext("create");
         lifecycle.onNext("start");
         subject.onCompleted();
         testSubscriber.assertCompleted();
     }
 
     @Test
-    public void openAndCloseEvent() {
+    public void twoOpenEvents() {
+        lifecycle.onNext("create");
         completable
             .compose(new UntilCorrespondingEventCompletableTransformer<>(lifecycle, CORRESPONDING_EVENTS))
             .subscribe(testSubscriber);
 
+        lifecycle.onNext("start");
+        lifecycle.onNext("resume");
+        subject.onCompleted();
+        testSubscriber.assertCompleted();
+    }
+
+    @Test
+    public void openAndCloseEvent() {
         lifecycle.onNext("create");
+        completable
+            .compose(new UntilCorrespondingEventCompletableTransformer<>(lifecycle, CORRESPONDING_EVENTS))
+            .subscribe(testSubscriber);
+
+        lifecycle.onNext("start");
         lifecycle.onNext("destroy");
         subject.onCompleted();
         testSubscriber.assertError(CancellationException.class);
