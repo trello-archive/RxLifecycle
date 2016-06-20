@@ -7,8 +7,8 @@ import rx.Observable;
 /**
  * Common interface for all RxFragment extensions.
  *
- * Useful if you are writing utilities on top of rxlifecycle-components,
- * or if you are implementing your own component which is not supported in this library.
+ * Useful if you are writing utilities on top of rxlifecycle-components
+ * or implementing your own component not supported by this library.
  */
 public interface FragmentLifecycleProvider {
 
