@@ -8,7 +8,7 @@ import rx.Observable;
  * Common interface for all RxFragment extensions.
  *
  * Useful if you are writing utilities on top of rxlifecycle-components,
- * or you are implementing your own component not supported in this library.
+ * or if you are implementing your own component which is not supported in this library.
  */
 public interface FragmentLifecycleProvider {
 
@@ -25,7 +25,7 @@ public interface FragmentLifecycleProvider {
      * Intended for use with {@link Observable#compose(Observable.Transformer)}
      *
      * @param event the {@link FragmentEvent} that triggers unsubscription
-     * @return a reusable {@link rx.Observable.Transformer} which unsubscribes when the event triggers.
+     * @return a reusable {@link Observable.Transformer} which unsubscribes when the event triggers.
      */
     @NonNull
     @CheckResult
@@ -36,7 +36,7 @@ public interface FragmentLifecycleProvider {
      * <p>
      * Intended for use with {@link Observable#compose(Observable.Transformer)}
      *
-     * @return a reusable {@link rx.Observable.Transformer} which unsubscribes at the correct time.
+     * @return a reusable {@link Observable.Transformer} which unsubscribes at the correct time.
      */
     @NonNull
     @CheckResult
