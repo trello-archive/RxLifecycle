@@ -7,8 +7,8 @@ import rx.Observable;
 /**
  * Common interface for all RxActivity extensions.
  *
- * Useful if you are writing utilities on top of rxlifecycle-components,
- * or you are implementing your own component not supported in this library.
+ * Useful if you are writing utilities on top of rxlifecycle-components
+ * or implementing your own component not supported by this library.
  */
 public interface ActivityLifecycleProvider {
 
@@ -25,7 +25,7 @@ public interface ActivityLifecycleProvider {
      * Intended for use with {@link Observable#compose(Observable.Transformer)}
      *
      * @param event the {@link ActivityEvent} that triggers unsubscription
-     * @return a reusable {@link rx.Observable.Transformer} which unsubscribes when the event triggers.
+     * @return a reusable {@link Observable.Transformer} which unsubscribes when the event triggers.
      */
     @NonNull
     @CheckResult
@@ -36,7 +36,7 @@ public interface ActivityLifecycleProvider {
      * <p>
      * Intended for use with {@link Observable#compose(Observable.Transformer)}
      *
-     * @return a reusable {@link rx.Observable.Transformer} which unsubscribes at the correct time.
+     * @return a reusable {@link Observable.Transformer} which unsubscribes at the correct time.
      */
     @NonNull
     @CheckResult
