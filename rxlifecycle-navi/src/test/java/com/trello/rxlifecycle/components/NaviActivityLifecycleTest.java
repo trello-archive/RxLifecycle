@@ -131,6 +131,7 @@ public class NaviActivityLifecycleTest {
         HashSet<Event<?>> notEnoughEvents = new HashSet<>();
         notEnoughEvents.add(Event.CREATE);
         NaviComponent badHandler = new NaviEmitter(notEnoughEvents);
+        //noinspection CheckResult
         NaviLifecycle.createActivityLifecycleProvider(badHandler);
     }
 

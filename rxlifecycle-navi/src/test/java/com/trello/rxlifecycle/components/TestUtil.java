@@ -5,7 +5,7 @@ final class TestUtil {
     /**
      * Used for testing whether references are cleared.
      */
-    static final void cleanGarbage() {
+    static void cleanGarbage() {
         System.gc();
         try {
             Thread.sleep(100);
