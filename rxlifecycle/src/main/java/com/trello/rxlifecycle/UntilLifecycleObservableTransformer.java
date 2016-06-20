@@ -21,11 +21,13 @@ final class UntilLifecycleObservableTransformer<T, R> implements LifecycleTransf
         return source.takeUntil(lifecycle);
     }
 
+    @NonNull
     @Override
     public Single.Transformer<T, T> forSingle() {
         return new UntilLifecycleSingleTransformer<>(lifecycle);
     }
 
+    @NonNull
     @Override
     public Completable.CompletableTransformer forCompletable() {
         return new UntilLifecycleCompletableTransformer<>(lifecycle);

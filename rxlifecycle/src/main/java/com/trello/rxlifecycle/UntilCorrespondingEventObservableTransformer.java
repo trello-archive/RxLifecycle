@@ -30,11 +30,13 @@ final class UntilCorrespondingEventObservableTransformer<T, R> implements Lifecy
         return source.takeUntil(takeUntilCorrespondingEvent(sharedLifecycle, correspondingEvents));
     }
 
+    @NonNull
     @Override
     public Single.Transformer<T, T> forSingle() {
         return new UntilCorrespondingEventSingleTransformer<>(sharedLifecycle, correspondingEvents);
     }
 
+    @NonNull
     @Override
     public Completable.CompletableTransformer forCompletable() {
         return new UntilCorrespondingEventCompletableTransformer<>(sharedLifecycle, correspondingEvents);

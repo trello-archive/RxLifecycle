@@ -25,11 +25,13 @@ final class UntilEventObservableTransformer<T, R> implements LifecycleTransforme
         return source.takeUntil(takeUntilEvent(lifecycle, event));
     }
 
+    @NonNull
     @Override
     public Single.Transformer<T, T> forSingle() {
         return new UntilEventSingleTransformer<>(lifecycle, event);
     }
 
+    @NonNull
     @Override
     public Completable.CompletableTransformer forCompletable() {
         return new UntilEventCompletableTransformer<>(lifecycle, event);

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.view.View;
 import com.trello.rxlifecycle.FragmentEvent;
@@ -47,14 +48,14 @@ public class RxDialogFragment extends DialogFragment implements FragmentLifecycl
 
     @Override
     @CallSuper
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         lifecycleSubject.onNext(FragmentEvent.CREATE);
     }
 
     @Override
     @CallSuper
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         lifecycleSubject.onNext(FragmentEvent.CREATE_VIEW);
     }
