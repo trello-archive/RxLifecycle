@@ -181,6 +181,7 @@ public class NaviFragmentLifecycleTest {
         HashSet<Event<?>> notEnoughEvents = new HashSet<>();
         notEnoughEvents.add(Event.ATTACH);
         NaviComponent badHandler = new NaviEmitter(notEnoughEvents);
+        //noinspection CheckResult
         NaviLifecycle.createFragmentLifecycleProvider(badHandler);
     }
 
