@@ -7,13 +7,13 @@ import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.trello.rxlifecycle.ActivityEvent;
-import com.trello.rxlifecycle.ActivityLifecycleProvider;
+import com.trello.rxlifecycle.LifecycleProvider;
 import com.trello.rxlifecycle.LifecycleTransformer;
 import com.trello.rxlifecycle.RxLifecycle;
 import rx.Observable;
 import rx.subjects.BehaviorSubject;
 
-public class RxActivity extends Activity implements ActivityLifecycleProvider {
+public class RxActivity extends Activity implements LifecycleProvider<ActivityEvent> {
 
     private final BehaviorSubject<ActivityEvent> lifecycleSubject = BehaviorSubject.create();
 

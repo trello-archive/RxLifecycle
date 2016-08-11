@@ -8,13 +8,13 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.view.View;
 import com.trello.rxlifecycle.FragmentEvent;
-import com.trello.rxlifecycle.FragmentLifecycleProvider;
+import com.trello.rxlifecycle.LifecycleProvider;
 import com.trello.rxlifecycle.LifecycleTransformer;
 import com.trello.rxlifecycle.RxLifecycle;
 import rx.Observable;
 import rx.subjects.BehaviorSubject;
 
-public class RxAppCompatDialogFragment extends AppCompatDialogFragment implements FragmentLifecycleProvider {
+public class RxAppCompatDialogFragment extends AppCompatDialogFragment implements LifecycleProvider<FragmentEvent> {
 
     private final BehaviorSubject<FragmentEvent> lifecycleSubject = BehaviorSubject.create();
 

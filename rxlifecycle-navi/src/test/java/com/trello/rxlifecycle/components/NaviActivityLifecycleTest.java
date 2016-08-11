@@ -18,7 +18,7 @@ import com.trello.navi.Event;
 import com.trello.navi.NaviComponent;
 import com.trello.navi.internal.NaviEmitter;
 import com.trello.rxlifecycle.ActivityEvent;
-import com.trello.rxlifecycle.ActivityLifecycleProvider;
+import com.trello.rxlifecycle.LifecycleProvider;
 import com.trello.rxlifecycle.navi.NaviLifecycle;
 import org.junit.Test;
 import rx.Observable;
@@ -36,7 +36,7 @@ public class NaviActivityLifecycleTest {
     @Test
     public void testLifecycle() {
         NaviEmitter activity = NaviEmitter.createActivityEmitter();
-        ActivityLifecycleProvider provider = NaviLifecycle.createActivityLifecycleProvider(activity);
+        LifecycleProvider<ActivityEvent> provider = NaviLifecycle.createActivityLifecycleProvider(activity);
 
         TestSubscriber<ActivityEvent> testSubscriber = new TestSubscriber<>();
         provider.lifecycle().subscribe(testSubscriber);
@@ -61,7 +61,7 @@ public class NaviActivityLifecycleTest {
     @Test
     public void testBindUntilEvent() {
         NaviEmitter activity = NaviEmitter.createActivityEmitter();
-        ActivityLifecycleProvider provider = NaviLifecycle.createActivityLifecycleProvider(activity);
+        LifecycleProvider<ActivityEvent> provider = NaviLifecycle.createActivityLifecycleProvider(activity);
 
         Observable<Object> observable = PublishSubject.create().asObservable();
         TestSubscriber<Object> testSubscriber = new TestSubscriber<>();
@@ -83,7 +83,7 @@ public class NaviActivityLifecycleTest {
     @Test
     public void testBindToLifecycle() {
         NaviEmitter activity = NaviEmitter.createActivityEmitter();
-        ActivityLifecycleProvider provider = NaviLifecycle.createActivityLifecycleProvider(activity);
+        LifecycleProvider<ActivityEvent> provider = NaviLifecycle.createActivityLifecycleProvider(activity);
 
         Observable<Object> observable = PublishSubject.create().asObservable();
 
@@ -138,7 +138,7 @@ public class NaviActivityLifecycleTest {
     @Test
     public void testPersistance() {
         NaviEmitter activity = NaviEmitter.createActivityEmitter();
-        ActivityLifecycleProvider provider = NaviLifecycle.createActivityLifecycleProvider(activity);
+        LifecycleProvider<ActivityEvent> provider = NaviLifecycle.createActivityLifecycleProvider(activity);
 
         TestSubscriber<ActivityEvent> testSubscriber = new TestSubscriber<>();
         provider.lifecycle().subscribe(testSubscriber);
@@ -167,9 +167,9 @@ public class NaviActivityLifecycleTest {
     @Test
     public void testLeakFree() {
         NaviEmitter activity = NaviEmitter.createActivityEmitter();
-        ActivityLifecycleProvider provider = NaviLifecycle.createActivityLifecycleProvider(activity);
+        LifecycleProvider<ActivityEvent> provider = NaviLifecycle.createActivityLifecycleProvider(activity);
         WeakReference<NaviEmitter> activityRef = new WeakReference<>(activity);
-        WeakReference<ActivityLifecycleProvider> providerRef = new WeakReference<>(provider);
+        WeakReference<LifecycleProvider<ActivityEvent>> providerRef = new WeakReference<>(provider);
 
         Observable<Object> observable = PublishSubject.create().asObservable();
         TestSubscriber<Object> testSubscriber = new TestSubscriber<>();

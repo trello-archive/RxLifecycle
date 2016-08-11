@@ -16,7 +16,7 @@ package com.trello.rxlifecycle.components;
 
 import android.app.Fragment;
 import com.trello.rxlifecycle.FragmentEvent;
-import com.trello.rxlifecycle.FragmentLifecycleProvider;
+import com.trello.rxlifecycle.LifecycleProvider;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -54,7 +54,7 @@ public class RxFragmentLifecycleTest {
         testBindToLifecycle(new RxDialogFragment());
     }
 
-    private void testLifecycle(FragmentLifecycleProvider provider) {
+    private void testLifecycle(LifecycleProvider<FragmentEvent> provider) {
         Fragment fragment = (Fragment) provider;
         FragmentTestUtil.startFragment(fragment);
 
@@ -86,8 +86,8 @@ public class RxFragmentLifecycleTest {
         );
     }
 
-    // Tests bindUntil for any given FragmentLifecycleProvider implementation
-    private void testBindUntilEvent(FragmentLifecycleProvider provider) {
+    // Tests bindUntil for any given LifecycleProvider<FragmentEvent> implementation
+    private void testBindUntilEvent(LifecycleProvider<FragmentEvent> provider) {
         Fragment fragment = (Fragment) provider;
         FragmentTestUtil.startFragment(fragment);
 
@@ -111,8 +111,8 @@ public class RxFragmentLifecycleTest {
         testSubscriber.assertUnsubscribed();
     }
 
-    // Tests bindToLifecycle for any given FragmentLifecycleProvider implementation
-    private void testBindToLifecycle(FragmentLifecycleProvider provider) {
+    // Tests bindToLifecycle for any given LifecycleProvider<FragmentEvent> implementation
+    private void testBindToLifecycle(LifecycleProvider<FragmentEvent> provider) {
         Fragment fragment = (Fragment) provider;
         FragmentTestUtil.startFragment(fragment);
 

@@ -7,13 +7,13 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import com.trello.rxlifecycle.ActivityEvent;
-import com.trello.rxlifecycle.ActivityLifecycleProvider;
+import com.trello.rxlifecycle.LifecycleProvider;
 import com.trello.rxlifecycle.LifecycleTransformer;
 import com.trello.rxlifecycle.RxLifecycle;
 import rx.Observable;
 import rx.subjects.BehaviorSubject;
 
-public class RxFragmentActivity extends FragmentActivity implements ActivityLifecycleProvider {
+public class RxFragmentActivity extends FragmentActivity implements LifecycleProvider<ActivityEvent> {
 
     private final BehaviorSubject<ActivityEvent> lifecycleSubject = BehaviorSubject.create();
 

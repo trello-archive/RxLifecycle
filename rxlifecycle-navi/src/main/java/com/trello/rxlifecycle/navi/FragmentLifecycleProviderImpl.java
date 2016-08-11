@@ -6,13 +6,13 @@ import com.trello.navi.Event;
 import com.trello.navi.NaviComponent;
 import com.trello.navi.rx.RxNavi;
 import com.trello.rxlifecycle.FragmentEvent;
-import com.trello.rxlifecycle.FragmentLifecycleProvider;
+import com.trello.rxlifecycle.LifecycleProvider;
 import com.trello.rxlifecycle.LifecycleTransformer;
 import com.trello.rxlifecycle.RxLifecycle;
 import rx.Observable;
 import rx.subjects.BehaviorSubject;
 
-final class FragmentLifecycleProviderImpl implements FragmentLifecycleProvider {
+final class FragmentLifecycleProviderImpl implements LifecycleProvider<FragmentEvent> {
     private final BehaviorSubject<FragmentEvent> lifecycleSubject = BehaviorSubject.create();
 
     public FragmentLifecycleProviderImpl(final NaviComponent fragment) {
