@@ -21,7 +21,9 @@ public interface LifecycleTransformer<T> extends Observable.Transformer<T, T> {
      */
     @CheckResult
     @NonNull
-    Single.Transformer<T, T> forSingle();
+    // Implementation note: We use a different generic to cover some insane case in Java 8 inference.
+    // See more here: https://github.com/trello/RxLifecycle/issues/126
+    <U> Single.Transformer<U, U> forSingle();
 
     /**
      * @return a version of this Transformer for {@link Completable} streams.
