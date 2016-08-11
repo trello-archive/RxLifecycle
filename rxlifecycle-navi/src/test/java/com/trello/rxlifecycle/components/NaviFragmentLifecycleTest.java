@@ -18,7 +18,7 @@ import com.trello.navi.Event;
 import com.trello.navi.NaviComponent;
 import com.trello.navi.internal.NaviEmitter;
 import com.trello.rxlifecycle.FragmentEvent;
-import com.trello.rxlifecycle.FragmentLifecycleProvider;
+import com.trello.rxlifecycle.LifecycleProvider;
 import com.trello.rxlifecycle.navi.NaviLifecycle;
 import org.junit.Test;
 import rx.Observable;
@@ -36,7 +36,7 @@ public class NaviFragmentLifecycleTest {
     @Test
     public void testLifecycle() {
         NaviEmitter fragment = NaviEmitter.createFragmentEmitter();
-        FragmentLifecycleProvider provider = NaviLifecycle.createFragmentLifecycleProvider(fragment);
+        LifecycleProvider<FragmentEvent> provider = NaviLifecycle.createFragmentLifecycleProvider(fragment);
 
         TestSubscriber<FragmentEvent> testSubscriber = new TestSubscriber<>();
         provider.lifecycle().subscribe(testSubscriber);
@@ -69,7 +69,7 @@ public class NaviFragmentLifecycleTest {
     @Test
     public void testBindUntilEvent() {
         NaviEmitter fragment = NaviEmitter.createFragmentEmitter();
-        FragmentLifecycleProvider provider = NaviLifecycle.createFragmentLifecycleProvider(fragment);
+        LifecycleProvider<FragmentEvent> provider = NaviLifecycle.createFragmentLifecycleProvider(fragment);
 
         Observable<Object> observable = PublishSubject.create().asObservable();
         TestSubscriber<Object> testSubscriber = new TestSubscriber<>();
@@ -95,7 +95,7 @@ public class NaviFragmentLifecycleTest {
     @Test
     public void testBindToLifecycle() {
         NaviEmitter fragment = NaviEmitter.createFragmentEmitter();
-        FragmentLifecycleProvider provider = NaviLifecycle.createFragmentLifecycleProvider(fragment);
+        LifecycleProvider<FragmentEvent> provider = NaviLifecycle.createFragmentLifecycleProvider(fragment);
 
         Observable<Object> observable = PublishSubject.create().asObservable();
 
@@ -188,7 +188,7 @@ public class NaviFragmentLifecycleTest {
     @Test
     public void testPersistance() {
         NaviEmitter fragment = NaviEmitter.createFragmentEmitter();
-        FragmentLifecycleProvider provider = NaviLifecycle.createFragmentLifecycleProvider(fragment);
+        LifecycleProvider<FragmentEvent> provider = NaviLifecycle.createFragmentLifecycleProvider(fragment);
 
         TestSubscriber<FragmentEvent> testSubscriber = new TestSubscriber<>();
         provider.lifecycle().subscribe(testSubscriber);
@@ -225,9 +225,9 @@ public class NaviFragmentLifecycleTest {
     @Test
     public void testLeakFree() {
         NaviEmitter fragment = NaviEmitter.createFragmentEmitter();
-        FragmentLifecycleProvider provider = NaviLifecycle.createFragmentLifecycleProvider(fragment);
+        LifecycleProvider<FragmentEvent> provider = NaviLifecycle.createFragmentLifecycleProvider(fragment);
         WeakReference<NaviEmitter> fragmentRef = new WeakReference<>(fragment);
-        WeakReference<FragmentLifecycleProvider> providerRef = new WeakReference<>(provider);
+        WeakReference<LifecycleProvider<FragmentEvent>> providerRef = new WeakReference<>(provider);
 
         Observable<Object> observable = PublishSubject.create().asObservable();
         TestSubscriber<Object> testSubscriber = new TestSubscriber<>();

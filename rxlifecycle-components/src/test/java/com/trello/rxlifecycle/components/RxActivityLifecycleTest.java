@@ -15,7 +15,7 @@
 package com.trello.rxlifecycle.components;
 
 import com.trello.rxlifecycle.ActivityEvent;
-import com.trello.rxlifecycle.ActivityLifecycleProvider;
+import com.trello.rxlifecycle.LifecycleProvider;
 import com.trello.rxlifecycle.components.support.RxFragmentActivity;
 import org.junit.Before;
 import org.junit.Test;
@@ -63,8 +63,8 @@ public class RxActivityLifecycleTest {
         // testBindToLifecycle(Robolectric.buildActivity(RxAppCompatActivity.class));
     }
 
-    private void testLifecycle(ActivityController<? extends ActivityLifecycleProvider> controller) {
-        ActivityLifecycleProvider activity = controller.get();
+    private void testLifecycle(ActivityController<? extends LifecycleProvider<ActivityEvent>> controller) {
+        LifecycleProvider<ActivityEvent> activity = controller.get();
 
         TestSubscriber<ActivityEvent> testSubscriber = new TestSubscriber<>();
         activity.lifecycle().subscribe(testSubscriber);
@@ -87,8 +87,8 @@ public class RxActivityLifecycleTest {
     }
 
     // Tests bindUntil for any given RxActivityLifecycle implementation
-    private void testBindUntilEvent(ActivityController<? extends ActivityLifecycleProvider> controller) {
-        ActivityLifecycleProvider activity = controller.get();
+    private void testBindUntilEvent(ActivityController<? extends LifecycleProvider<ActivityEvent>> controller) {
+        LifecycleProvider<ActivityEvent> activity = controller.get();
 
         TestSubscriber<Object> testSubscriber = new TestSubscriber<>();
         observable.compose(activity.bindUntilEvent(ActivityEvent.STOP)).subscribe(testSubscriber);
@@ -107,8 +107,8 @@ public class RxActivityLifecycleTest {
     }
 
     // Tests bindToLifecycle for any given RxActivityLifecycle implementation
-    private void testBindToLifecycle(ActivityController<? extends ActivityLifecycleProvider> controller) {
-        ActivityLifecycleProvider activity = controller.get();
+    private void testBindToLifecycle(ActivityController<? extends LifecycleProvider<ActivityEvent>> controller) {
+        LifecycleProvider<ActivityEvent> activity = controller.get();
 
         controller.create();
         TestSubscriber<Object> createTestSub = new TestSubscriber<>();

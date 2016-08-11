@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.0 (*Not yet released*)
+
+- Replace `ActivityLifecycleProvider` and `FragmentLifecycleProvider` with `LifecycleProvider<T>`.
+
 ## 0.6.1 (2016-05-11)
 
 - [#118](https://github.com/trello/RxLifecycle/pull/118): Use `LifecycleTransformer` in the provider interfaces

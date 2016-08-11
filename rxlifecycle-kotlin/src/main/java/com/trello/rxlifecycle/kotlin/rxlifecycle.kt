@@ -20,47 +20,29 @@ import rx.Completable
 import rx.Observable
 import rx.Single
 
-fun <T> Observable<T>.bindToLifecycle(activity: ActivityLifecycleProvider): Observable<T>
-        = this.compose<T>(activity.bindToLifecycle<T>())
+fun <T, E> Observable<T>.bindToLifecycle(provider: LifecycleProvider<E>): Observable<T>
+        = this.compose<T>(provider.bindToLifecycle<T>())
 
-fun <T> Observable<T>.bindUntilEvent(activity: ActivityLifecycleProvider, event: ActivityEvent): Observable<T>
-        = this.compose<T>(activity.bindUntilEvent(event))
-
-fun <T> Observable<T>.bindToLifecycle(fragment: FragmentLifecycleProvider): Observable<T>
-        = this.compose<T>(fragment.bindToLifecycle<T>())
-
-fun <T> Observable<T>.bindUntilEvent(fragment: FragmentLifecycleProvider, event: FragmentEvent): Observable<T>
-        = this.compose<T>(fragment.bindUntilEvent(event))
+fun <T, E> Observable<T>.bindUntilEvent(provider: LifecycleProvider<E>, event: E): Observable<T>
+        = this.compose<T>(provider.bindUntilEvent(event))
 
 fun <T> Observable<T>.bindToLifecycle(view: View): Observable<T>
         = this.compose<T>(RxLifecycle.bindView(view))
 
-fun Completable.bindToLifecycle(activity: ActivityLifecycleProvider): Completable
-        = this.compose(activity.bindToLifecycle<Completable>().forCompletable())
+fun <E> Completable.bindToLifecycle(provider: LifecycleProvider<E>): Completable
+        = this.compose(provider.bindToLifecycle<Completable>().forCompletable())
 
-fun Completable.bindUntilEvent(activity: ActivityLifecycleProvider, event: ActivityEvent): Completable
-        = this.compose(activity.bindUntilEvent<Completable>(event).forCompletable())
-
-fun Completable.bindToLifecycle(fragment: FragmentLifecycleProvider): Completable
-        = this.compose(fragment.bindToLifecycle<Completable>().forCompletable())
-
-fun Completable.bindUntilEvent(fragment: FragmentLifecycleProvider, event: FragmentEvent): Completable
-        = this.compose(fragment.bindUntilEvent<Completable>(event).forCompletable())
+fun <E> Completable.bindUntilEvent(provider: LifecycleProvider<E>, event: E): Completable
+        = this.compose(provider.bindUntilEvent<Completable>(event).forCompletable())
 
 fun Completable.bindToLifecycle(view: View): Completable
         = this.compose(RxLifecycle.bindView<Completable>(view).forCompletable())
 
-fun <T> Single<T>.bindToLifecycle(activity: ActivityLifecycleProvider): Single<T>
-        = this.compose(activity.bindToLifecycle<T>().forSingle())
+fun <T, E> Single<T>.bindToLifecycle(provider: LifecycleProvider<E>): Single<T>
+        = this.compose(provider.bindToLifecycle<T>().forSingle())
 
-fun <T> Single<T>.bindUntilEvent(activity: ActivityLifecycleProvider, event: ActivityEvent): Single<T>
-        = this.compose(activity.bindUntilEvent<T>(event).forSingle())
-
-fun <T> Single<T>.bindToLifecycle(fragment: FragmentLifecycleProvider): Single<T>
-        = this.compose(fragment.bindToLifecycle<T>().forSingle())
-
-fun <T> Single<T>.bindUntilEvent(fragment: FragmentLifecycleProvider, event: FragmentEvent): Single<T>
-        = this.compose(fragment.bindUntilEvent<T>(event).forSingle())
+fun <T, E> Single<T>.bindUntilEvent(provider: LifecycleProvider<E>, event: E): Single<T>
+        = this.compose(provider.bindUntilEvent<T>(event).forSingle())
 
 fun <T> Single<T>.bindToLifecycle(view: View): Single<T>
         = this.compose(RxLifecycle.bindView<T>(view).forSingle())

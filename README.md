@@ -43,7 +43,7 @@ mySingle
 ## Providers
 
 Where do the sequences of `ActivityEvent` or `FragmentEvent` come from? Generally, they are provided by
-`ActivityLifecycleProvider` and `FragmentLifecycleProvider`. But where are those implemented?
+an appropriate `LifecycleProvider<T>`. But where are those implemented?
 
 You have a few options for that:
 
