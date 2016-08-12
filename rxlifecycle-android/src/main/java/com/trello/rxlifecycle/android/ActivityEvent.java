@@ -12,22 +12,18 @@
  * limitations under the License.
  */
 
-package com.trello.rxlifecycle;
+package com.trello.rxlifecycle.android;
 
 /**
- * Lifecycle events that can be emitted by Fragments.
+ * Lifecycle events that can be emitted by Activities.
  */
-public enum FragmentEvent {
+public enum ActivityEvent {
 
-    ATTACH,
     CREATE,
-    CREATE_VIEW,
     START,
     RESUME,
     PAUSE,
     STOP,
-    DESTROY_VIEW,
-    DESTROY,
-    DETACH
+    DESTROY
 
 }

@@ -14,14 +14,9 @@ repositories {
 }
 
 dependencies {
-    compile project(':rxlifecycle-android')
-
-    compile rootProject.ext.rxJava
-
-    compile rootProject.ext.appCompat
+    compile project(':rxlifecycle')
 
     testCompile rootProject.ext.junit
-    testCompile rootProject.ext.mockito
     testCompile rootProject.ext.robolectric
 }
 

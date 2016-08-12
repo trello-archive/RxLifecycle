@@ -14,7 +14,7 @@ repositories {
 }
 
 dependencies {
-    compile project(':rxlifecycle')
+    compile project(':rxlifecycle-android')
 
     compile rootProject.ext.navi
 

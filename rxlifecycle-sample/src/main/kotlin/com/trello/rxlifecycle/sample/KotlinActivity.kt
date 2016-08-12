@@ -2,7 +2,7 @@ package com.trello.rxlifecycle.sample
 
 import android.os.Bundle
 import android.util.Log
-import com.trello.rxlifecycle.ActivityEvent
+import com.trello.rxlifecycle.android.ActivityEvent
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity
 import com.trello.rxlifecycle.kotlin.bindToLifecycle
 import com.trello.rxlifecycle.kotlin.bindUntilEvent
@@ -68,6 +68,6 @@ class KotlinActivity : RxAppCompatActivity() {
     }
 
     companion object {
-        private val TAG = "RxLifecycle-Kotlin"
+        private val TAG = "RxLifecycleAndroid-Kotlin"
     }
 }

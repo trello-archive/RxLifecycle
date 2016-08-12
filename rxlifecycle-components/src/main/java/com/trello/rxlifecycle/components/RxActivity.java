@@ -6,10 +6,11 @@ import android.support.annotation.CallSuper;
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import com.trello.rxlifecycle.ActivityEvent;
 import com.trello.rxlifecycle.LifecycleProvider;
 import com.trello.rxlifecycle.LifecycleTransformer;
 import com.trello.rxlifecycle.RxLifecycle;
+import com.trello.rxlifecycle.android.ActivityEvent;
+import com.trello.rxlifecycle.android.RxLifecycleAndroid;
 import rx.Observable;
 import rx.subjects.BehaviorSubject;
 
@@ -35,7 +36,7 @@ public class RxActivity extends Activity implements LifecycleProvider<ActivityEv
     @NonNull
     @CheckResult
     public final <T> LifecycleTransformer<T> bindToLifecycle() {
-        return RxLifecycle.bindActivity(lifecycleSubject);
+        return RxLifecycleAndroid.bindActivity(lifecycleSubject);
     }
 
     @Override

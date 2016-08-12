@@ -5,10 +5,11 @@ import android.support.annotation.NonNull;
 import com.trello.navi.Event;
 import com.trello.navi.NaviComponent;
 import com.trello.navi.rx.RxNavi;
-import com.trello.rxlifecycle.FragmentEvent;
 import com.trello.rxlifecycle.LifecycleProvider;
 import com.trello.rxlifecycle.LifecycleTransformer;
 import com.trello.rxlifecycle.RxLifecycle;
+import com.trello.rxlifecycle.android.FragmentEvent;
+import com.trello.rxlifecycle.android.RxLifecycleAndroid;
 import rx.Observable;
 import rx.subjects.BehaviorSubject;
 
@@ -45,6 +46,6 @@ final class FragmentLifecycleProviderImpl implements LifecycleProvider<FragmentE
     @NonNull
     @CheckResult
     public <T> LifecycleTransformer<T> bindToLifecycle() {
-        return RxLifecycle.bindFragment(lifecycleSubject);
+        return RxLifecycleAndroid.bindFragment(lifecycleSubject);
     }
 }
