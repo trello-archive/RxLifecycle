@@ -29,9 +29,9 @@ ext {
     buildToolsVersion = '23.0.3'
 
     // Define all dependencies in the base project, to unify & make it easy to update
-    rxJava = 'io.reactivex:rxjava:1.1.4'
+    rxJava = 'io.reactivex:rxjava:1.1.9'
     rxBinding = 'com.jakewharton.rxbinding:rxbinding:0.4.0'
-    navi = 'com.trello:navi:0.2.0'
+    navi = 'com.trello:navi:0.2.2'
     kotlinStdlib = "org.jetbrains.kotlin:kotlin-stdlib:$verKotlin"
     appCompat = 'com.android.support:appcompat-v7:23.3.0'
     supportAnnotations = 'com.android.support:support-annotations:23.3.0'
