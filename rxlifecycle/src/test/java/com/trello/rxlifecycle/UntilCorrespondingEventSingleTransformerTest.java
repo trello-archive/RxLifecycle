@@ -2,26 +2,28 @@ package com.trello.rxlifecycle;
 
 import org.junit.Before;
 import org.junit.Test;
-import rx.Single;
-import rx.functions.Func1;
-import rx.observers.TestSubscriber;
-import rx.subjects.PublishSubject;
 
 import java.util.concurrent.CancellationException;
 
+import rx.Single;
+import rx.functions.Func1;
+import rx.observers.TestSubscriber;
+import rx.subjects.BehaviorSubject;
+
 public class UntilCorrespondingEventSingleTransformerTest {
 
-    PublishSubject<String> lifecycle;
+    BehaviorSubject<String> lifecycle;
     TestSubscriber<String> testSubscriber;
 
     @Before
     public void setup() {
-        lifecycle = PublishSubject.create();
+        lifecycle = BehaviorSubject.create();
         testSubscriber = new TestSubscriber<>(0);
     }
 
     @Test
     public void noEvents() {
+        lifecycle.onNext("create");
         Single.just("1")
             .compose(new UntilCorrespondingEventSingleTransformer<String, String>(lifecycle, CORRESPONDING_EVENTS))
             .subscribe(testSubscriber);
@@ -33,11 +35,12 @@ public class UntilCorrespondingEventSingleTransformerTest {
 
     @Test
     public void oneStartEvent() {
+        lifecycle.onNext("create");
         Single.just("1")
             .compose(new UntilCorrespondingEventSingleTransformer<String, String>(lifecycle, CORRESPONDING_EVENTS))
             .subscribe(testSubscriber);
 
-        lifecycle.onNext("create");
+        lifecycle.onNext("resume");
         testSubscriber.requestMore(1);
         testSubscriber.assertValue("1");
         testSubscriber.assertCompleted();
@@ -45,12 +48,13 @@ public class UntilCorrespondingEventSingleTransformerTest {
 
     @Test
     public void twoOpenEvents() {
+        lifecycle.onNext("create");
         Single.just("1")
             .compose(new UntilCorrespondingEventSingleTransformer<String, String>(lifecycle, CORRESPONDING_EVENTS))
             .subscribe(testSubscriber);
 
-        lifecycle.onNext("create");
         lifecycle.onNext("start");
+        lifecycle.onNext("resume");
         testSubscriber.requestMore(1);
         testSubscriber.assertValue("1");
         testSubscriber.assertCompleted();
@@ -58,11 +62,12 @@ public class UntilCorrespondingEventSingleTransformerTest {
 
     @Test
     public void openAndCloseEvent() {
+        lifecycle.onNext("create");
         Single.just("1")
             .compose(new UntilCorrespondingEventSingleTransformer<String, String>(lifecycle, CORRESPONDING_EVENTS))
             .subscribe(testSubscriber);
 
-        lifecycle.onNext("create");
+        lifecycle.onNext("start");
         lifecycle.onNext("destroy");
         testSubscriber.requestMore(1);
         testSubscriber.assertNoValues();
