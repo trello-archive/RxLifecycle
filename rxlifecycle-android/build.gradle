@@ -16,6 +16,8 @@ repositories {
 dependencies {
     compile project(':rxlifecycle')
 
+    compile rootProject.ext.rxBinding
+
     testCompile rootProject.ext.junit
     testCompile rootProject.ext.robolectric
 }

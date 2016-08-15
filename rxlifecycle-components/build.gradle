@@ -21,7 +21,6 @@ dependencies {
     compile rootProject.ext.appCompat
 
     testCompile rootProject.ext.junit
-    testCompile rootProject.ext.mockito
     testCompile rootProject.ext.robolectric
 }
 

@@ -1,6 +1,6 @@
 package com.trello.rxlifecycle;
 
-import android.support.annotation.NonNull;
+import org.jetbrains.annotations.NotNull;
 import rx.Completable;
 import rx.Observable;
 import rx.Single;
@@ -15,7 +15,7 @@ final class UntilEventObservableTransformer<T, R> implements LifecycleTransforme
     final Observable<R> lifecycle;
     final R event;
 
-    public UntilEventObservableTransformer(@NonNull Observable<R> lifecycle, @NonNull R event) {
+    public UntilEventObservableTransformer(@NotNull Observable<R> lifecycle, @NotNull R event) {
         this.lifecycle = lifecycle;
         this.event = event;
     }
@@ -25,13 +25,13 @@ final class UntilEventObservableTransformer<T, R> implements LifecycleTransforme
         return source.takeUntil(takeUntilEvent(lifecycle, event));
     }
 
-    @NonNull
+    @NotNull
     @Override
     public Single.Transformer<T, T> forSingle() {
         return new UntilEventSingleTransformer<>(lifecycle, event);
     }
 
-    @NonNull
+    @NotNull
     @Override
     public Completable.CompletableTransformer forCompletable() {
         return new UntilEventCompletableTransformer<>(lifecycle, event);

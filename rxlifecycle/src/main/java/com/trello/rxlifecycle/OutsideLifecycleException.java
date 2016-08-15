@@ -1,6 +1,6 @@
 package com.trello.rxlifecycle;
 
-import android.support.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * This is an exception that can be thrown to indicate that the caller has attempted to bind to a lifecycle outside

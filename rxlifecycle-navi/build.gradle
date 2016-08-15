@@ -19,7 +19,6 @@ dependencies {
     compile rootProject.ext.navi
 
     testCompile rootProject.ext.junit
-    testCompile rootProject.ext.mockito
 }
 
 apply from: "$rootDir/gradle/artifacts.gradle"

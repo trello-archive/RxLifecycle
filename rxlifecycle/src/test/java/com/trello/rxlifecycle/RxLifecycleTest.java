@@ -16,9 +16,6 @@ package com.trello.rxlifecycle;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.annotation.Config;
 import rx.Observable;
 import rx.Subscription;
 import rx.subjects.BehaviorSubject;
@@ -27,8 +24,6 @@ import rx.subjects.PublishSubject;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-@RunWith(RobolectricTestRunner.class)
-@Config(manifest = Config.NONE)
 public class RxLifecycleTest {
 
     private Observable<Object> observable;
