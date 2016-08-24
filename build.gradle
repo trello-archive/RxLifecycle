@@ -12,6 +12,7 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$verKotlin"
         classpath "org.jetbrains.kotlin:kotlin-android-extensions:$verKotlin"
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.12.0'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
     }
 }
 
@@ -28,14 +29,16 @@ ext {
     targetSdkVersion = compileSdkVersion
     buildToolsVersion = '23.0.3'
 
+    sourceCompatibilityVersion = JavaVersion.VERSION_1_7
+    targetCompatibilityVersion = JavaVersion.VERSION_1_7
+
     // Define all dependencies in the base project, to unify & make it easy to update
     rxJava = 'io.reactivex:rxjava:1.1.9'
     rxBinding = 'com.jakewharton.rxbinding:rxbinding:0.4.0'
     navi = 'com.trello:navi:0.2.2'
     kotlinStdlib = "org.jetbrains.kotlin:kotlin-stdlib:$verKotlin"
     appCompat = 'com.android.support:appcompat-v7:23.3.0'
-    supportAnnotations = 'com.android.support:support-annotations:23.3.0'
+    jsr305Annotations = 'com.google.code.findbugs:jsr305:3.0.1'
     junit = 'junit:junit:4.12'
-    mockito = 'org.mockito:mockito-core:1.10.19'
     robolectric = 'org.robolectric:robolectric:3.0'
 }

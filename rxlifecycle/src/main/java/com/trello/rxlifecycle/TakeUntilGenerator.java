@@ -1,16 +1,15 @@
 package com.trello.rxlifecycle;
 
-import android.support.annotation.CheckResult;
-import android.support.annotation.NonNull;
 import rx.Observable;
 import rx.functions.Func1;
 import rx.functions.Func2;
 
+import javax.annotation.Nonnull;
+
 final class TakeUntilGenerator {
 
-    @NonNull
-    @CheckResult
-    static <T> Observable<T> takeUntilEvent(@NonNull final Observable<T> lifecycle, @NonNull final T event) {
+    @Nonnull
+    static <T> Observable<T> takeUntilEvent(@Nonnull final Observable<T> lifecycle, @Nonnull final T event) {
         return lifecycle.takeFirst(new Func1<T, Boolean>() {
             @Override
             public Boolean call(T lifecycleEvent) {
@@ -19,10 +18,9 @@ final class TakeUntilGenerator {
         });
     }
 
-    @NonNull
-    @CheckResult
-    static <T> Observable<Boolean> takeUntilCorrespondingEvent(@NonNull final Observable<T> lifecycle,
-                                                               @NonNull final Func1<T, T> correspondingEvents) {
+    @Nonnull
+    static <T> Observable<Boolean> takeUntilCorrespondingEvent(@Nonnull final Observable<T> lifecycle,
+                                                               @Nonnull final Func1<T, T> correspondingEvents) {
         return Observable.combineLatest(
             lifecycle.take(1).map(correspondingEvents),
             lifecycle.skip(1),

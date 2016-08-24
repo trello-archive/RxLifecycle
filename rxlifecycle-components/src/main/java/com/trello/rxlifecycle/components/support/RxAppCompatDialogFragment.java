@@ -7,10 +7,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.view.View;
-import com.trello.rxlifecycle.FragmentEvent;
 import com.trello.rxlifecycle.LifecycleProvider;
 import com.trello.rxlifecycle.LifecycleTransformer;
 import com.trello.rxlifecycle.RxLifecycle;
+import com.trello.rxlifecycle.android.FragmentEvent;
+import com.trello.rxlifecycle.android.RxLifecycleAndroid;
 import rx.Observable;
 import rx.subjects.BehaviorSubject;
 
@@ -36,7 +37,7 @@ public class RxAppCompatDialogFragment extends AppCompatDialogFragment implement
     @NonNull
     @CheckResult
     public final <T> LifecycleTransformer<T> bindToLifecycle() {
-        return RxLifecycle.bindFragment(lifecycleSubject);
+        return RxLifecycleAndroid.bindFragment(lifecycleSubject);
     }
 
     @Override

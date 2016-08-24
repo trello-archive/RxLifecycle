@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -14,14 +15,13 @@ repositories {
 }
 
 dependencies {
-    compile project(':rxlifecycle')
+    compile project(':rxlifecycle-android')
 
     compile rootProject.ext.rxJava
 
     compile rootProject.ext.appCompat
 
     testCompile rootProject.ext.junit
-    testCompile rootProject.ext.mockito
     testCompile rootProject.ext.robolectric
 }
 

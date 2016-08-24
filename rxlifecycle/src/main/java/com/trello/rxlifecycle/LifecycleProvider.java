@@ -1,9 +1,9 @@
 package com.trello.rxlifecycle;
 
-import android.support.annotation.CheckResult;
-import android.support.annotation.NonNull;
-
 import rx.Observable;
+
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
 
 /**
  * Common base interface for activity and fragment lifecycle providers.
@@ -15,8 +15,8 @@ public interface LifecycleProvider<E> {
     /**
      * @return a sequence of lifecycle events
      */
-    @NonNull
-    @CheckResult
+    @Nonnull
+    @CheckReturnValue
     Observable<E> lifecycle();
 
     /**
@@ -27,9 +27,9 @@ public interface LifecycleProvider<E> {
      * @param event the event that triggers unsubscription
      * @return a reusable {@link Observable.Transformer} which unsubscribes when the event triggers.
      */
-    @NonNull
-    @CheckResult
-    <T> LifecycleTransformer<T> bindUntilEvent(@NonNull E event);
+    @Nonnull
+    @CheckReturnValue
+    <T> LifecycleTransformer<T> bindUntilEvent(@Nonnull E event);
 
     /**
      * Binds a source until the next reasonable event occurs.
@@ -38,7 +38,7 @@ public interface LifecycleProvider<E> {
      *
      * @return a reusable {@link Observable.Transformer} which unsubscribes at the correct time.
      */
-    @NonNull
-    @CheckResult
+    @Nonnull
+    @CheckReturnValue
     <T> LifecycleTransformer<T> bindToLifecycle();
 }

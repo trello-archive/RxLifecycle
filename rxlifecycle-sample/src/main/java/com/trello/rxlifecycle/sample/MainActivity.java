@@ -2,7 +2,7 @@ package com.trello.rxlifecycle.sample;
 
 import android.os.Bundle;
 import android.util.Log;
-import com.trello.rxlifecycle.ActivityEvent;
+import com.trello.rxlifecycle.android.ActivityEvent;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 import rx.Observable;
 import rx.functions.Action0;
@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends RxAppCompatActivity {
 
-    private static final String TAG = "RxLifecycle";
+    private static final String TAG = "RxLifecycleAndroid";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

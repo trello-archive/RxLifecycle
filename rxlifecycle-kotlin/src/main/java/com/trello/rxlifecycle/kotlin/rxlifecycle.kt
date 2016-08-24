@@ -16,7 +16,7 @@ package com.trello.rxlifecycle.kotlin
 
 import android.view.View
 import com.trello.rxlifecycle.LifecycleProvider
-import com.trello.rxlifecycle.RxLifecycle
+import com.trello.rxlifecycle.android.RxLifecycleAndroid
 import rx.Completable
 import rx.Observable
 import rx.Single
@@ -28,7 +28,7 @@ fun <T, E> Observable<T>.bindUntilEvent(provider: LifecycleProvider<E>, event: E
         = this.compose<T>(provider.bindUntilEvent(event))
 
 fun <T> Observable<T>.bindToLifecycle(view: View): Observable<T>
-        = this.compose<T>(RxLifecycle.bindView(view))
+        = this.compose<T>(RxLifecycleAndroid.bindView(view))
 
 fun <E> Completable.bindToLifecycle(provider: LifecycleProvider<E>): Completable
         = this.compose(provider.bindToLifecycle<Completable>().forCompletable())
@@ -37,7 +37,7 @@ fun <E> Completable.bindUntilEvent(provider: LifecycleProvider<E>, event: E): Co
         = this.compose(provider.bindUntilEvent<Completable>(event).forCompletable())
 
 fun Completable.bindToLifecycle(view: View): Completable
-        = this.compose(RxLifecycle.bindView<Completable>(view).forCompletable())
+        = this.compose(RxLifecycleAndroid.bindView<Completable>(view).forCompletable())
 
 fun <T, E> Single<T>.bindToLifecycle(provider: LifecycleProvider<E>): Single<T>
         = this.compose(provider.bindToLifecycle<T>().forSingle<T>())
@@ -46,4 +46,4 @@ fun <T, E> Single<T>.bindUntilEvent(provider: LifecycleProvider<E>, event: E): S
         = this.compose(provider.bindUntilEvent<T>(event).forSingle<T>())
 
 fun <T> Single<T>.bindToLifecycle(view: View): Single<T>
-        = this.compose(RxLifecycle.bindView<T>(view).forSingle<T>())
+        = this.compose(RxLifecycleAndroid.bindView<T>(view).forSingle<T>())

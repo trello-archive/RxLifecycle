@@ -1,8 +1,9 @@
 package com.trello.rxlifecycle;
 
-import android.support.annotation.NonNull;
 import rx.Completable;
 import rx.Observable;
+
+import javax.annotation.Nonnull;
 
 /**
  * Continues a subscription until it sees *any* lifecycle event.
@@ -11,7 +12,7 @@ final class UntilLifecycleCompletableTransformer<T> implements Completable.Compl
 
     final Observable<T> lifecycle;
 
-    public UntilLifecycleCompletableTransformer(@NonNull Observable<T> lifecycle) {
+    public UntilLifecycleCompletableTransformer(@Nonnull Observable<T> lifecycle) {
         this.lifecycle = lifecycle;
     }
 

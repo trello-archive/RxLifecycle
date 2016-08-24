@@ -1,9 +1,10 @@
 package com.trello.rxlifecycle;
 
-import android.support.annotation.NonNull;
 import rx.Completable;
 import rx.Observable;
 import rx.functions.Func1;
+
+import javax.annotation.Nonnull;
 
 import static com.trello.rxlifecycle.TakeUntilGenerator.takeUntilCorrespondingEvent;
 
@@ -18,8 +19,8 @@ final class UntilCorrespondingEventCompletableTransformer<T> implements Completa
     final Observable<T> sharedLifecycle;
     final Func1<T, T> correspondingEvents;
 
-    public UntilCorrespondingEventCompletableTransformer(@NonNull Observable<T> sharedLifecycle,
-                                                         @NonNull Func1<T, T> correspondingEvents) {
+    public UntilCorrespondingEventCompletableTransformer(@Nonnull Observable<T> sharedLifecycle,
+                                                         @Nonnull Func1<T, T> correspondingEvents) {
         this.sharedLifecycle = sharedLifecycle;
         this.correspondingEvents = correspondingEvents;
     }

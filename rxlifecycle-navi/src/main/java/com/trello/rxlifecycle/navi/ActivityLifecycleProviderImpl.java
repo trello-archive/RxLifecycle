@@ -5,10 +5,11 @@ import android.support.annotation.NonNull;
 import com.trello.navi.Event;
 import com.trello.navi.NaviComponent;
 import com.trello.navi.rx.RxNavi;
-import com.trello.rxlifecycle.ActivityEvent;
 import com.trello.rxlifecycle.LifecycleProvider;
 import com.trello.rxlifecycle.LifecycleTransformer;
 import com.trello.rxlifecycle.RxLifecycle;
+import com.trello.rxlifecycle.android.ActivityEvent;
+import com.trello.rxlifecycle.android.RxLifecycleAndroid;
 import rx.Observable;
 import rx.subjects.BehaviorSubject;
 
@@ -44,6 +45,6 @@ final class ActivityLifecycleProviderImpl implements LifecycleProvider<ActivityE
     @NonNull
     @CheckResult
     public <T> LifecycleTransformer<T> bindToLifecycle() {
-        return RxLifecycle.bindActivity(lifecycleSubject);
+        return RxLifecycleAndroid.bindActivity(lifecycleSubject);
     }
 }

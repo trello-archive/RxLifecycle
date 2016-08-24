@@ -1,12 +1,12 @@
 package com.trello.rxlifecycle.navi;
 
 import com.trello.navi.Event;
-import com.trello.rxlifecycle.ActivityEvent;
-import com.trello.rxlifecycle.FragmentEvent;
+import com.trello.rxlifecycle.android.ActivityEvent;
+import com.trello.rxlifecycle.android.FragmentEvent;
 import rx.functions.Func1;
 
 /**
- * Maps from Navi events to RxLifecycle events
+ * Maps from Navi events to RxLifecycleAndroid events
  */
 final class NaviLifecycleMaps {
 
