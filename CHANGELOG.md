@@ -1,8 +1,29 @@
 # Changelog
 
-## 0.7.0 (*Not yet released*)
+## 0.7.0 (2016-08-24)
 
-- Replace `ActivityLifecycleProvider` and `FragmentLifecycleProvider` with `LifecycleProvider<T>`.
+There are a couple major breaking changes in this release, so read carefully.
+
+- [#143](https://github.com/trello/RxLifecycle/pull/143): Split Android parts of rxlifecycle into rxlifecycle-android
+
+  Now the `rxlifecycle` dependency is a pure Java core. To use RxLifecycle with Android, you should also include
+  `rxlifecycle-android` as well now.
+
+  `RxLifecycle` methods that are for Android (`bindActivity()`, `bindFragment()` and `bindView()`) are now in
+  `RxLifecycleAndroid` (found in the `rxlifecycle-android` artifact).
+
+   Deprecated methods in `RxLifecycle` were removed as well.
+
+- [#138](https://github.com/trello/RxLifecycle/pull/138) / [#139](https://github.com/trello/RxLifecycle/pull/139):
+Replace `ActivityLifecycleProvider` and `FragmentLifecycleProvider` with `LifecycleProvider<T>`.
+
+  This means that you need to replace `ActivityLifecycleProvider` with `LifecycleProvider<ActivityEvent>` and
+  `FragmentLifecycleProvider` with `LifecycleProvider<FragmentEvent>`.
+
+Other changes:
+
+- [#140](https://github.com/trello/RxLifecycle/pull/140): Fixed type inference for LifecycleTransformer.forSingle()
+- [#135](https://github.com/trello/RxLifecycle/pull/135): Add Kotlin extensions for Singles and Completables
 
 ## 0.6.1 (2016-05-11)
 

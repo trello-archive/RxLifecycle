@@ -20,7 +20,7 @@ Alternatively, you can let RxLifecycle determine the appropriate time to end the
 
 ```java
 myObservable
-    .compose(RxLifecycle.bindActivity(lifecycle))
+    .compose(RxLifecycleAndroid.bindActivity(lifecycle))
     .subscribe();
 ```
 
@@ -36,7 +36,7 @@ via the `forSingle()` and `forCompletable()` methods:
 
 ```java
 mySingle
-    .compose(RxLifecycle.bindActivity(lifecycle).forSingle())
+    .compose(RxLifecycleAndroid.bindActivity(lifecycle).forSingle())
     .subscribe();
 ```
 
@@ -69,7 +69,7 @@ If you use rxlifecycle-navi, then you just pass your `NaviComponent` to `NaviLif
 
 ```java
 public class MyActivity extends NaviActivity {
-    private final ActivityLifecycleProvider provider
+    private final LifecycleProvider<ActivityEvent> provider
         = NaviLifecycle.createActivityLifecycleProvider(this);
 
     @Override
@@ -108,16 +108,19 @@ the `Subscription` yourself and call `unsubscribe()` when appropriate.
 ## Installation
 
 ```gradle
-compile 'com.trello:rxlifecycle:0.6.1'
+compile 'com.trello:rxlifecycle:0.7.0'
+
+// If you want to bind to Android-specific lifecycles
+compile 'com.trello:rxlifecycle-android:0.7.0'
 
 // If you want pre-written Activities and Fragments you can subclass as providers
-compile 'com.trello:rxlifecycle-components:0.6.1'
+compile 'com.trello:rxlifecycle-components:0.7.0'
 
 // If you want to use Navi for providers
-compile 'com.trello:rxlifecycle-navi:0.6.1'
+compile 'com.trello:rxlifecycle-navi:0.7.0'
 
 // If you want to use Kotlin syntax
-compile 'com.trello:rxlifecycle-kotlin:0.6.1'
+compile 'com.trello:rxlifecycle-kotlin:0.7.0'
 ```
 
 ## Related Libraries
@@ -126,7 +129,7 @@ compile 'com.trello:rxlifecycle-kotlin:0.6.1'
 
 ## License
 
-    Copyright (C) 2015 Trello
+    Copyright (C) 2016 Trello
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
