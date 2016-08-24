@@ -38,7 +38,7 @@ ext {
     navi = 'com.trello:navi:0.2.0'
     kotlinStdlib = "org.jetbrains.kotlin:kotlin-stdlib:$verKotlin"
     appCompat = 'com.android.support:appcompat-v7:23.3.0'
-    jetbrainsAnnotations = 'org.jetbrains:annotations-java5:15.0'
+    jsr305Annotations = 'com.google.code.findbugs:jsr305:3.0.1'
     junit = 'junit:junit:4.12'
     robolectric = 'org.robolectric:robolectric:3.0'
 }

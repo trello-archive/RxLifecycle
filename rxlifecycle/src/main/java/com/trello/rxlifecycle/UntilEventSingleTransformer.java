@@ -1,8 +1,9 @@
 package com.trello.rxlifecycle;
 
-import org.jetbrains.annotations.NotNull;
 import rx.Observable;
 import rx.Single;
+
+import javax.annotation.Nonnull;
 
 import static com.trello.rxlifecycle.TakeUntilGenerator.takeUntilEvent;
 
@@ -14,7 +15,7 @@ final class UntilEventSingleTransformer<T, R> implements Single.Transformer<T, T
     final Observable<R> lifecycle;
     final R event;
 
-    public UntilEventSingleTransformer(@NotNull Observable<R> lifecycle, @NotNull R event) {
+    public UntilEventSingleTransformer(@Nonnull Observable<R> lifecycle, @Nonnull R event) {
         this.lifecycle = lifecycle;
         this.event = event;
     }

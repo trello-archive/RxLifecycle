@@ -1,9 +1,10 @@
 package com.trello.rxlifecycle;
 
-import org.jetbrains.annotations.NotNull;
 import rx.Completable;
 import rx.Observable;
 import rx.Single;
+
+import javax.annotation.Nonnull;
 
 /**
  * Continues a subscription until it sees *any* lifecycle event.
@@ -12,7 +13,7 @@ final class UntilLifecycleObservableTransformer<T, R> implements LifecycleTransf
 
     final Observable<R> lifecycle;
 
-    public UntilLifecycleObservableTransformer(@NotNull Observable<R> lifecycle) {
+    public UntilLifecycleObservableTransformer(@Nonnull Observable<R> lifecycle) {
         this.lifecycle = lifecycle;
     }
 
@@ -21,13 +22,13 @@ final class UntilLifecycleObservableTransformer<T, R> implements LifecycleTransf
         return source.takeUntil(lifecycle);
     }
 
-    @NotNull
+    @Nonnull
     @Override
     public Single.Transformer<T, T> forSingle() {
         return new UntilLifecycleSingleTransformer<>(lifecycle);
     }
 
-    @NotNull
+    @Nonnull
     @Override
     public Completable.CompletableTransformer forCompletable() {
         return new UntilLifecycleCompletableTransformer<>(lifecycle);

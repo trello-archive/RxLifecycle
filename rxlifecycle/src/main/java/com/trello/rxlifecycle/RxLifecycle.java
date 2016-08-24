@@ -14,9 +14,11 @@
 
 package com.trello.rxlifecycle;
 
-import org.jetbrains.annotations.NotNull;
 import rx.Observable;
 import rx.functions.Func1;
+
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
 
 import static com.trello.rxlifecycle.internal.Preconditions.checkNotNull;
 
@@ -38,9 +40,10 @@ public class RxLifecycle {
      * @param event the event which should conclude notifications from the source
      * @return a reusable {@link Observable.Transformer} that unsubscribes the source at the specified event
      */
-    @NotNull
-    public static <T, R> LifecycleTransformer<T> bindUntilEvent(@NotNull final Observable<R> lifecycle,
-                                                                @NotNull final R event) {
+    @Nonnull
+    @CheckReturnValue
+    public static <T, R> LifecycleTransformer<T> bindUntilEvent(@Nonnull final Observable<R> lifecycle,
+                                                                @Nonnull final R event) {
         checkNotNull(lifecycle, "lifecycle == null");
         checkNotNull(event, "event == null");
 
@@ -60,8 +63,9 @@ public class RxLifecycle {
      * @param lifecycle the lifecycle sequence
      * @return a reusable {@link Observable.Transformer} that unsubscribes the source whenever the lifecycle emits
      */
-    @NotNull
-    public static <T, R> LifecycleTransformer<T> bind(@NotNull final Observable<R> lifecycle) {
+    @Nonnull
+    @CheckReturnValue
+    public static <T, R> LifecycleTransformer<T> bind(@Nonnull final Observable<R> lifecycle) {
         checkNotNull(lifecycle, "lifecycle == null");
 
         return new UntilLifecycleObservableTransformer<>(lifecycle);
@@ -81,9 +85,10 @@ public class RxLifecycle {
      * @param correspondingEvents a function which tells the source when to unsubscribe
      * @return a reusable {@link Observable.Transformer} that unsubscribes the source during the Fragment lifecycle
      */
-    @NotNull
-    public static <T, R> LifecycleTransformer<T> bind(@NotNull Observable<R> lifecycle,
-                                                      @NotNull final Func1<R, R> correspondingEvents) {
+    @Nonnull
+    @CheckReturnValue
+    public static <T, R> LifecycleTransformer<T> bind(@Nonnull Observable<R> lifecycle,
+                                                      @Nonnull final Func1<R, R> correspondingEvents) {
         checkNotNull(lifecycle, "lifecycle == null");
         checkNotNull(correspondingEvents, "correspondingEvents == null");
 

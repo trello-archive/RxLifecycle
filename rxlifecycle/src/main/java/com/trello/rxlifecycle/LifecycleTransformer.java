@@ -1,9 +1,11 @@
 package com.trello.rxlifecycle;
 
-import org.jetbrains.annotations.NotNull;
 import rx.Completable;
 import rx.Observable;
 import rx.Single;
+
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
 
 /**
  * A Transformer that works for all RxJava types ({@link Observable}, {@link Single} and {@link Completable}).
@@ -18,7 +20,8 @@ public interface LifecycleTransformer<T> extends Observable.Transformer<T, T> {
      *
      * If interrupted by the lifecycle, this stream throws onError({@link java.util.concurrent.CancellationException}).
      */
-    @NotNull
+    @Nonnull
+    @CheckReturnValue
     // Implementation note: We use a different generic to cover some insane case in Java 8 inference.
     // See more here: https://github.com/trello/RxLifecycle/issues/126
     <U> Single.Transformer<U, U> forSingle();
@@ -28,7 +31,8 @@ public interface LifecycleTransformer<T> extends Observable.Transformer<T, T> {
      *
      * If interrupted by the lifecycle, this stream throws onError({@link java.util.concurrent.CancellationException}).
      */
-    @NotNull
+    @Nonnull
+    @CheckReturnValue
     Completable.CompletableTransformer forCompletable();
 
 }

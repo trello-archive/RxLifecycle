@@ -1,8 +1,9 @@
 package com.trello.rxlifecycle;
 
-import org.jetbrains.annotations.NotNull;
 import rx.Completable;
 import rx.Observable;
+
+import javax.annotation.Nonnull;
 
 import static com.trello.rxlifecycle.TakeUntilGenerator.takeUntilEvent;
 
@@ -14,7 +15,7 @@ final class UntilEventCompletableTransformer<T> implements Completable.Completab
     final Observable<T> lifecycle;
     final T event;
 
-    public UntilEventCompletableTransformer(@NotNull Observable<T> lifecycle, @NotNull T event) {
+    public UntilEventCompletableTransformer(@Nonnull Observable<T> lifecycle, @Nonnull T event) {
         this.lifecycle = lifecycle;
         this.event = event;
     }
