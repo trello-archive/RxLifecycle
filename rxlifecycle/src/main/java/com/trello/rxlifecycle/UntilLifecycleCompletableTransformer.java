@@ -8,7 +8,7 @@ import javax.annotation.Nonnull;
 /**
  * Continues a subscription until it sees *any* lifecycle event.
  */
-final class UntilLifecycleCompletableTransformer<T> implements Completable.CompletableTransformer {
+final class UntilLifecycleCompletableTransformer<T> implements Completable.Transformer {
 
     final Observable<T> lifecycle;
 

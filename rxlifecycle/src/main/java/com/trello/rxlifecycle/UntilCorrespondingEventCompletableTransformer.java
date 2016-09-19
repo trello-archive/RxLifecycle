@@ -14,7 +14,7 @@ import static com.trello.rxlifecycle.TakeUntilGenerator.takeUntilCorrespondingEv
  * That lifecycle event is determined based on what stage we're at in
  * the current lifecycle.
  */
-final class UntilCorrespondingEventCompletableTransformer<T> implements Completable.CompletableTransformer {
+final class UntilCorrespondingEventCompletableTransformer<T> implements Completable.Transformer {
 
     final Observable<T> sharedLifecycle;
     final Func1<T, T> correspondingEvents;

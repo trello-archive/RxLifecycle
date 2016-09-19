@@ -30,7 +30,7 @@ final class UntilLifecycleObservableTransformer<T, R> implements LifecycleTransf
 
     @Nonnull
     @Override
-    public Completable.CompletableTransformer forCompletable() {
+    public Completable.Transformer forCompletable() {
         return new UntilLifecycleCompletableTransformer<>(lifecycle);
     }
 
