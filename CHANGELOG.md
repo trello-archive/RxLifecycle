@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.8.0 (2016-09-19)
+
+- [#152](https://github.com/trello/RxLifecycle/pull/152): Support RxJava 1.2.0.
+
+  This change is not backwards compatible with RxJava 1.1.x, so if you want to continue
+  receiving updates for RxLifecycle you will eventually need to upgrade to RxJava 1.2.x.
+
 ## 0.7.0 (2016-08-24)
 
 There are a couple major breaking changes in this release, so read carefully.
