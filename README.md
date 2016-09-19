@@ -31,7 +31,7 @@ terminate on `STOP`. If you subscribe after `PAUSE`, it will terminate at the ne
 ## Single and Completable
 
 RxLifecycle supports both `Single` and `Completable` via the `LifecycleTransformer`. You can
-convert any returned `LifecycleTransformer` into a `Single.Transformer` or `CompletableTransformer`
+convert any returned `LifecycleTransformer` into a `Single.Transformer` or `Completable.Transformer`
 via the `forSingle()` and `forCompletable()` methods:
 
 ```java

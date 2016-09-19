@@ -39,7 +39,7 @@ final class UntilCorrespondingEventObservableTransformer<T, R> implements Lifecy
 
     @Nonnull
     @Override
-    public Completable.CompletableTransformer forCompletable() {
+    public Completable.Transformer forCompletable() {
         return new UntilCorrespondingEventCompletableTransformer<>(sharedLifecycle, correspondingEvents);
     }
 

@@ -33,6 +33,6 @@ public interface LifecycleTransformer<T> extends Observable.Transformer<T, T> {
      */
     @Nonnull
     @CheckReturnValue
-    Completable.CompletableTransformer forCompletable();
+    Completable.Transformer forCompletable();
 
 }

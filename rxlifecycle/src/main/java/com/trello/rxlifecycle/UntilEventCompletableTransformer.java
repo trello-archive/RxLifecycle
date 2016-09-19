@@ -10,7 +10,7 @@ import static com.trello.rxlifecycle.TakeUntilGenerator.takeUntilEvent;
 /**
  * Continues a subscription until it sees a particular lifecycle event.
  */
-final class UntilEventCompletableTransformer<T> implements Completable.CompletableTransformer {
+final class UntilEventCompletableTransformer<T> implements Completable.Transformer {
 
     final Observable<T> lifecycle;
     final T event;

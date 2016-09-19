@@ -34,7 +34,7 @@ final class UntilEventObservableTransformer<T, R> implements LifecycleTransforme
 
     @Nonnull
     @Override
-    public Completable.CompletableTransformer forCompletable() {
+    public Completable.Transformer forCompletable() {
         return new UntilEventCompletableTransformer<>(lifecycle, event);
     }
 
