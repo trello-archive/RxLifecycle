@@ -54,6 +54,13 @@ public class RxFragmentLifecycleTest {
         testBindToLifecycle(new RxDialogFragment());
     }
 
+    @Test
+    public void testRxPreferenceFragment() {
+        testLifecycle(new RxPreferenceFragment());
+        testBindUntilEvent(new RxPreferenceFragment());
+        testBindToLifecycle(new RxPreferenceFragment());
+    }
+
     private void testLifecycle(LifecycleProvider<FragmentEvent> provider) {
         Fragment fragment = (Fragment) provider;
         FragmentTestUtil.startFragment(fragment);
