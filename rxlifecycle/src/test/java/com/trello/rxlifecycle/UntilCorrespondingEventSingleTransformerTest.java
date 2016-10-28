@@ -31,6 +31,8 @@ public class UntilCorrespondingEventSingleTransformerTest {
             .compose(new UntilCorrespondingEventSingleTransformer<String, String>(lifecycle, CORRESPONDING_EVENTS))
             .subscribe(testSubscriber);
 
+        testSubscriber.assertNoValues();
+
         testScheduler.advanceTimeBy(1, TimeUnit.MILLISECONDS);
         testSubscriber.assertValue("1");
         testSubscriber.assertCompleted();
@@ -42,6 +44,8 @@ public class UntilCorrespondingEventSingleTransformerTest {
             .delay(1, TimeUnit.MILLISECONDS, testScheduler)
             .compose(new UntilCorrespondingEventSingleTransformer<String, String>(lifecycle, CORRESPONDING_EVENTS))
             .subscribe(testSubscriber);
+
+        testSubscriber.assertNoValues();
 
         lifecycle.onNext("create");
         testScheduler.advanceTimeBy(1, TimeUnit.MILLISECONDS);
@@ -55,6 +59,8 @@ public class UntilCorrespondingEventSingleTransformerTest {
             .delay(1, TimeUnit.MILLISECONDS, testScheduler)
             .compose(new UntilCorrespondingEventSingleTransformer<String, String>(lifecycle, CORRESPONDING_EVENTS))
             .subscribe(testSubscriber);
+
+        testSubscriber.assertNoValues();
 
         lifecycle.onNext("create");
         lifecycle.onNext("start");
@@ -71,6 +77,8 @@ public class UntilCorrespondingEventSingleTransformerTest {
             .subscribe(testSubscriber);
 
         lifecycle.onNext("create");
+        testSubscriber.assertNoErrors();
+
         lifecycle.onNext("destroy");
         testScheduler.advanceTimeBy(1, TimeUnit.MILLISECONDS);
         testSubscriber.assertNoValues();

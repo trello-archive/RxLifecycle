@@ -30,6 +30,8 @@ public class UntilLifecycleSingleTransformerTest {
             .compose(new UntilLifecycleSingleTransformer<String, String>(lifecycle))
             .subscribe(testSubscriber);
 
+        testSubscriber.assertNoValues();
+
         testScheduler.advanceTimeBy(1, TimeUnit.MILLISECONDS);
         testSubscriber.assertValue("1");
         testSubscriber.assertCompleted();
@@ -41,6 +43,8 @@ public class UntilLifecycleSingleTransformerTest {
             .delay(1, TimeUnit.MILLISECONDS, testScheduler)
             .compose(new UntilLifecycleSingleTransformer<String, String>(lifecycle))
             .subscribe(testSubscriber);
+
+        testSubscriber.assertNoErrors();
 
         lifecycle.onNext("stop");
         testScheduler.advanceTimeBy(1, TimeUnit.MILLISECONDS);

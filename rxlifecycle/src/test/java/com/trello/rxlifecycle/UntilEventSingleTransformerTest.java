@@ -30,6 +30,8 @@ public class UntilEventSingleTransformerTest {
             .compose(new UntilEventSingleTransformer<String, String>(lifecycle, "stop"))
             .subscribe(testSubscriber);
 
+        testSubscriber.assertNoValues();
+
         testScheduler.advanceTimeBy(1, TimeUnit.MILLISECONDS);
         testSubscriber.assertValue("1");
         testSubscriber.assertCompleted();
@@ -41,6 +43,8 @@ public class UntilEventSingleTransformerTest {
             .delay(1, TimeUnit.MILLISECONDS, testScheduler)
             .compose(new UntilEventSingleTransformer<String, String>(lifecycle, "stop"))
             .subscribe(testSubscriber);
+
+        testSubscriber.assertNoValues();
 
         lifecycle.onNext("keep going");
         testScheduler.advanceTimeBy(1, TimeUnit.MILLISECONDS);
@@ -57,6 +61,8 @@ public class UntilEventSingleTransformerTest {
             .subscribe(testSubscriber);
 
         lifecycle.onNext("keep going");
+        testSubscriber.assertNoErrors();
+
         lifecycle.onNext("stop");
         testScheduler.advanceTimeBy(1, TimeUnit.MILLISECONDS);
 
