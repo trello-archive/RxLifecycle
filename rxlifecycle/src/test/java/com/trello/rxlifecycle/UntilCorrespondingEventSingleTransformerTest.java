@@ -5,28 +5,35 @@ import org.junit.Test;
 import rx.Single;
 import rx.functions.Func1;
 import rx.observers.TestSubscriber;
+import rx.schedulers.TestScheduler;
 import rx.subjects.PublishSubject;
 
 import java.util.concurrent.CancellationException;
+import java.util.concurrent.TimeUnit;
 
 public class UntilCorrespondingEventSingleTransformerTest {
 
     PublishSubject<String> lifecycle;
     TestSubscriber<String> testSubscriber;
+    TestScheduler testScheduler; // Since Single is not backpressure aware, use this to simulate it taking time
 
     @Before
     public void setup() {
         lifecycle = PublishSubject.create();
-        testSubscriber = new TestSubscriber<>(0);
+        testSubscriber = new TestSubscriber<>();
+        testScheduler = new TestScheduler();
     }
 
     @Test
     public void noEvents() {
         Single.just("1")
+            .delay(1, TimeUnit.MILLISECONDS, testScheduler)
             .compose(new UntilCorrespondingEventSingleTransformer<String, String>(lifecycle, CORRESPONDING_EVENTS))
             .subscribe(testSubscriber);
 
-        testSubscriber.requestMore(1);
+        testSubscriber.assertNoValues();
+
+        testScheduler.advanceTimeBy(1, TimeUnit.MILLISECONDS);
         testSubscriber.assertValue("1");
         testSubscriber.assertCompleted();
     }
@@ -34,11 +41,14 @@ public class UntilCorrespondingEventSingleTransformerTest {
     @Test
     public void oneStartEvent() {
         Single.just("1")
+            .delay(1, TimeUnit.MILLISECONDS, testScheduler)
             .compose(new UntilCorrespondingEventSingleTransformer<String, String>(lifecycle, CORRESPONDING_EVENTS))
             .subscribe(testSubscriber);
 
+        testSubscriber.assertNoValues();
+
         lifecycle.onNext("create");
-        testSubscriber.requestMore(1);
+        testScheduler.advanceTimeBy(1, TimeUnit.MILLISECONDS);
         testSubscriber.assertValue("1");
         testSubscriber.assertCompleted();
     }
@@ -46,12 +56,15 @@ public class UntilCorrespondingEventSingleTransformerTest {
     @Test
     public void twoOpenEvents() {
         Single.just("1")
+            .delay(1, TimeUnit.MILLISECONDS, testScheduler)
             .compose(new UntilCorrespondingEventSingleTransformer<String, String>(lifecycle, CORRESPONDING_EVENTS))
             .subscribe(testSubscriber);
 
+        testSubscriber.assertNoValues();
+
         lifecycle.onNext("create");
         lifecycle.onNext("start");
-        testSubscriber.requestMore(1);
+        testScheduler.advanceTimeBy(1, TimeUnit.MILLISECONDS);
         testSubscriber.assertValue("1");
         testSubscriber.assertCompleted();
     }
@@ -59,12 +72,15 @@ public class UntilCorrespondingEventSingleTransformerTest {
     @Test
     public void openAndCloseEvent() {
         Single.just("1")
+            .delay(1, TimeUnit.MILLISECONDS, testScheduler)
             .compose(new UntilCorrespondingEventSingleTransformer<String, String>(lifecycle, CORRESPONDING_EVENTS))
             .subscribe(testSubscriber);
 
         lifecycle.onNext("create");
+        testSubscriber.assertNoErrors();
+
         lifecycle.onNext("destroy");
-        testSubscriber.requestMore(1);
+        testScheduler.advanceTimeBy(1, TimeUnit.MILLISECONDS);
         testSubscriber.assertNoValues();
         testSubscriber.assertError(CancellationException.class);
     }
