@@ -14,8 +14,9 @@
 
 package com.trello.rxlifecycle;
 
-import rx.Observable;
-import rx.functions.Func1;
+import io.reactivex.Observable;
+import io.reactivex.ObservableTransformer;
+import io.reactivex.functions.Function;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
@@ -33,12 +34,12 @@ public class RxLifecycle {
      * <p>
      * When the lifecycle event occurs, the source will cease to emit any notifications.
      * <p>
-     * Use with {@link Observable#compose(Observable.Transformer)}:
+     * Use with {@link Observable#compose(ObservableTransformer)}:
      * {@code source.compose(RxLifecycle.bindUntilEvent(lifecycle, ActivityEvent.STOP)).subscribe()}
      *
      * @param lifecycle the lifecycle sequence
      * @param event the event which should conclude notifications from the source
-     * @return a reusable {@link Observable.Transformer} that unsubscribes the source at the specified event
+     * @return a reusable {@link ObservableTransformer} that unsubscribes the source at the specified event
      */
     @Nonnull
     @CheckReturnValue
@@ -47,13 +48,13 @@ public class RxLifecycle {
         checkNotNull(lifecycle, "lifecycle == null");
         checkNotNull(event, "event == null");
 
-        return new UntilEventObservableTransformer<>(lifecycle, event);
+        return new UntilEventTransformer<>(lifecycle, event);
     }
 
     /**
      * Binds the given source to a lifecycle.
      * <p>
-     * Use with {@link Observable#compose(Observable.Transformer)}:
+     * Use with {@link Observable#compose(ObservableTransformer)}:
      * {@code source.compose(RxLifecycle.bind(lifecycle)).subscribe()}
      * <p>
      * This helper automatically determines (based on the lifecycle sequence itself) when the source
@@ -61,14 +62,14 @@ public class RxLifecycle {
      * emitted by the given lifecycle indicates that the lifecycle is over.
      *
      * @param lifecycle the lifecycle sequence
-     * @return a reusable {@link Observable.Transformer} that unsubscribes the source whenever the lifecycle emits
+     * @return a reusable {@link ObservableTransformer} that unsubscribes the source whenever the lifecycle emits
      */
     @Nonnull
     @CheckReturnValue
     public static <T, R> LifecycleTransformer<T> bind(@Nonnull final Observable<R> lifecycle) {
         checkNotNull(lifecycle, "lifecycle == null");
 
-        return new UntilLifecycleObservableTransformer<>(lifecycle);
+        return new UntilLifecycleTransformer<>(lifecycle);
     }
 
     /**
@@ -83,16 +84,16 @@ public class RxLifecycle {
      *
      * @param lifecycle the lifecycle sequence
      * @param correspondingEvents a function which tells the source when to unsubscribe
-     * @return a reusable {@link Observable.Transformer} that unsubscribes the source during the Fragment lifecycle
+     * @return a reusable {@link ObservableTransformer} that unsubscribes the source during the Fragment lifecycle
      */
     @Nonnull
     @CheckReturnValue
     public static <T, R> LifecycleTransformer<T> bind(@Nonnull Observable<R> lifecycle,
-                                                      @Nonnull final Func1<R, R> correspondingEvents) {
+                                                      @Nonnull final Function<R, R> correspondingEvents) {
         checkNotNull(lifecycle, "lifecycle == null");
         checkNotNull(correspondingEvents, "correspondingEvents == null");
 
         // Keep emitting from source until the corresponding event occurs in the lifecycle
-        return new UntilCorrespondingEventObservableTransformer<>(lifecycle.share(), correspondingEvents);
+        return new UntilCorrespondingEventTransformer<>(lifecycle.share(), correspondingEvents);
     }
 }

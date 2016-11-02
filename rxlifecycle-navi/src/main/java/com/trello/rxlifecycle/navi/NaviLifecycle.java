@@ -2,7 +2,7 @@ package com.trello.rxlifecycle.navi;
 
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
-import com.trello.navi.NaviComponent;
+import com.trello.navi2.NaviComponent;
 import com.trello.rxlifecycle.LifecycleProvider;
 import com.trello.rxlifecycle.android.ActivityEvent;
 import com.trello.rxlifecycle.android.FragmentEvent;

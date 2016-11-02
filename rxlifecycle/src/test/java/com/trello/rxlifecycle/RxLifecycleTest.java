@@ -14,12 +14,12 @@
 
 package com.trello.rxlifecycle;
 
+import io.reactivex.Observable;
+import io.reactivex.observers.TestObserver;
+import io.reactivex.subjects.BehaviorSubject;
+import io.reactivex.subjects.PublishSubject;
 import org.junit.Before;
 import org.junit.Test;
-import rx.Observable;
-import rx.Subscription;
-import rx.subjects.BehaviorSubject;
-import rx.subjects.PublishSubject;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -31,26 +31,26 @@ public class RxLifecycleTest {
     @Before
     public void setup() {
         // Simulate an actual lifecycle (hot Observable that does not end)
-        observable = PublishSubject.create().asObservable();
+        observable = PublishSubject.create().hide();
     }
 
     @Test
     public void testBindLifecycle() {
         BehaviorSubject<Object> lifecycle = BehaviorSubject.create();
-        Subscription attachSub = observable.compose(RxLifecycle.bind(lifecycle)).subscribe();
-        assertFalse(attachSub.isUnsubscribed());
+        TestObserver<Object> testObserver = observable.compose(RxLifecycle.bind(lifecycle)).test();
+        assertFalse(testObserver.isDisposed());
         lifecycle.onNext(new Object());
-        assertTrue(attachSub.isUnsubscribed());
+        assertTrue(testObserver.isDisposed());
     }
 
     @Test
     public void testBindLifecycleOtherObject() {
         // Ensures it works with other types as well, and not just "Object"
         BehaviorSubject<String> lifecycle = BehaviorSubject.create();
-        Subscription attachSub = observable.compose(RxLifecycle.bind(lifecycle)).subscribe();
-        assertFalse(attachSub.isUnsubscribed());
+        TestObserver<Object> testObserver = observable.compose(RxLifecycle.bind(lifecycle)).test();
+        assertFalse(testObserver.isDisposed());
         lifecycle.onNext("");
-        assertTrue(attachSub.isUnsubscribed());
+        assertTrue(testObserver.isDisposed());
     }
 
     // Null checks
@@ -59,5 +59,18 @@ public class RxLifecycleTest {
     public void testBindThrowsOnNullLifecycle() {
         //noinspection ResourceType
         RxLifecycle.bind((Observable) null);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testBindUntilThrowsOnNullLifecycle() {
+        //noinspection ResourceType
+        RxLifecycle.bindUntilEvent(null, new Object());
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testBindUntilThrowsOnNullEvent() {
+        BehaviorSubject<Object> lifecycle = BehaviorSubject.create();
+        //noinspection ResourceType
+        RxLifecycle.bindUntilEvent(lifecycle, null);
     }
 }
