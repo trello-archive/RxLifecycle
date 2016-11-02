@@ -33,11 +33,12 @@ ext {
     targetCompatibilityVersion = JavaVersion.VERSION_1_7
 
     // Define all dependencies in the base project, to unify & make it easy to update
-    rxJava = 'io.reactivex:rxjava:1.2.1'
-    rxBinding = 'com.jakewharton.rxbinding:rxbinding:0.4.0'
-    navi = 'com.trello:navi:1.0'
+    rxJava = 'io.reactivex.rxjava2:rxjava:2.0.0'
+    rxAndroid = 'io.reactivex.rxjava2:rxandroid:2.0.0'
+    navi = 'com.trello.navi2:navi:2.0-SNAPSHOT'
     kotlinStdlib = "org.jetbrains.kotlin:kotlin-stdlib:$verKotlin"
     appCompat = 'com.android.support:appcompat-v7:25.0.0'
+    supportAnnotations = 'com.android.support:support-annotations:25.0.0'
     jsr305Annotations = 'com.google.code.findbugs:jsr305:3.0.1'
     junit = 'junit:junit:4.12'
     robolectric = 'org.robolectric:robolectric:3.1.4'

@@ -1,16 +1,17 @@
 package com.trello.rxlifecycle;
 
-import rx.Observable;
-import rx.exceptions.Exceptions;
-import rx.functions.Func1;
+import io.reactivex.Observable;
+import io.reactivex.exceptions.Exceptions;
+import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 
 import java.util.concurrent.CancellationException;
 
 final class Functions {
 
-    static final Func1<Throwable, Boolean> RESUME_FUNCTION = new Func1<Throwable, Boolean>() {
+    static final Function<Throwable, Boolean> RESUME_FUNCTION = new Function<Throwable, Boolean>() {
         @Override
-        public Boolean call(Throwable throwable) {
+        public Boolean apply(Throwable throwable) throws Exception {
             if (throwable instanceof OutsideLifecycleException) {
                 return true;
             }
@@ -21,16 +22,16 @@ final class Functions {
         }
     };
 
-    static final Func1<Boolean, Boolean> SHOULD_COMPLETE = new Func1<Boolean, Boolean>() {
+    static final Predicate<Boolean> SHOULD_COMPLETE = new Predicate<Boolean>() {
         @Override
-        public Boolean call(Boolean shouldComplete) {
+        public boolean test(Boolean shouldComplete) throws Exception {
             return shouldComplete;
         }
     };
 
-    static final Func1<Object, Observable<Object>> CANCEL_COMPLETABLE = new Func1<Object, Observable<Object>>() {
+    static final Function<Object, Observable<Object>> CANCEL_COMPLETABLE = new Function<Object, Observable<Object>>() {
         @Override
-        public Observable<Object> call(Object ignore) {
+        public Observable<Object> apply(Object ignore) throws Exception {
             return Observable.error(new CancellationException());
         }
     };
