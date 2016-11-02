@@ -43,16 +43,16 @@ public class RxActivityLifecycleTest {
 
     @Test
     public void testRxActivity() {
-        testLifecycle(Robolectric.buildActivity(RxActivity.class));
-        testBindUntilEvent(Robolectric.buildActivity(RxActivity.class));
-        testBindToLifecycle(Robolectric.buildActivity(RxActivity.class));
+        testLifecycle(Robolectric.buildActivity(TestRxActivity.class));
+        testBindUntilEvent(Robolectric.buildActivity(TestRxActivity.class));
+        testBindToLifecycle(Robolectric.buildActivity(TestRxActivity.class));
     }
 
     @Test
     public void testRxFragmentActivity() {
-        testLifecycle(Robolectric.buildActivity(RxFragmentActivity.class));
-        testBindUntilEvent(Robolectric.buildActivity(RxFragmentActivity.class));
-        testBindToLifecycle(Robolectric.buildActivity(RxFragmentActivity.class));
+        testLifecycle(Robolectric.buildActivity(TestRxFragmentActivity.class));
+        testBindUntilEvent(Robolectric.buildActivity(TestRxFragmentActivity.class));
+        testBindToLifecycle(Robolectric.buildActivity(TestRxFragmentActivity.class));
     }
 
     @Test
@@ -147,5 +147,13 @@ public class RxActivityLifecycleTest {
         createTestSub.assertUnsubscribed();
         stopTestSub.assertCompleted();
         stopTestSub.assertUnsubscribed();
+    }
+
+    // These classes are just for testing since components are abstract
+
+    public static class TestRxActivity extends RxActivity {
+    }
+
+    public static class TestRxFragmentActivity extends RxFragmentActivity{
     }
 }

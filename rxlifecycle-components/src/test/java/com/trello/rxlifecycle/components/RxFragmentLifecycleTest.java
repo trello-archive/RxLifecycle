@@ -42,23 +42,23 @@ public class RxFragmentLifecycleTest {
 
     @Test
     public void testRxFragment() {
-        testLifecycle(new RxFragment());
-        testBindUntilEvent(new RxFragment());
-        testBindToLifecycle(new RxFragment());
+        testLifecycle(new TestRxFragment());
+        testBindUntilEvent(new TestRxFragment());
+        testBindToLifecycle(new TestRxFragment());
     }
 
     @Test
     public void testRxDialogFragment() {
-        testLifecycle(new RxDialogFragment());
-        testBindUntilEvent(new RxDialogFragment());
-        testBindToLifecycle(new RxDialogFragment());
+        testLifecycle(new TestRxDialogFragment());
+        testBindUntilEvent(new TestRxDialogFragment());
+        testBindToLifecycle(new TestRxDialogFragment());
     }
 
     @Test
     public void testRxPreferenceFragment() {
-        testLifecycle(new RxPreferenceFragment());
-        testBindUntilEvent(new RxPreferenceFragment());
-        testBindToLifecycle(new RxPreferenceFragment());
+        testLifecycle(new TestRxPreferenceFragment());
+        testBindUntilEvent(new TestRxPreferenceFragment());
+        testBindToLifecycle(new TestRxPreferenceFragment());
     }
 
     private void testLifecycle(LifecycleProvider<FragmentEvent> provider) {
@@ -198,5 +198,16 @@ public class RxFragmentLifecycleTest {
         attachTestSub.assertUnsubscribed();
         destroyTestSub.assertCompleted();
         destroyTestSub.assertUnsubscribed();
+    }
+
+    // These classes are just for testing since components are abstract
+
+    public static class TestRxFragment extends RxFragment {
+    }
+
+    public static class TestRxDialogFragment extends RxDialogFragment {
+    }
+
+    public static class TestRxPreferenceFragment extends RxPreferenceFragment {
     }
 }
