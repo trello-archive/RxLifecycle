@@ -68,6 +68,6 @@ class KotlinActivity : RxAppCompatActivity() {
     }
 
     companion object {
-        private val TAG = "RxLifecycleAndroid-Kotlin"
+        private val TAG = "RxLifecycle-Kotlin"
     }
 }
