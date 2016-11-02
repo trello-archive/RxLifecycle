@@ -17,7 +17,7 @@ import com.trello.rxlifecycle.android.RxLifecycleAndroid;
 import rx.Observable;
 import rx.subjects.BehaviorSubject;
 
-public class RxPreferenceFragment extends PreferenceFragment implements LifecycleProvider<FragmentEvent> {
+public abstract class RxPreferenceFragment extends PreferenceFragment implements LifecycleProvider<FragmentEvent> {
 
     private final BehaviorSubject<FragmentEvent> lifecycleSubject = BehaviorSubject.create();
 

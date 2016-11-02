@@ -43,16 +43,16 @@ public class RxSupportFragmentLifecycleTest {
 
     @Test
     public void testRxFragment() {
-        testLifecycle(new RxFragment());
-        testBindUntilEvent(new RxFragment());
-        testBindToLifecycle(new RxFragment());
+        testLifecycle(new TestRxFragment());
+        testBindUntilEvent(new TestRxFragment());
+        testBindToLifecycle(new TestRxFragment());
     }
 
     @Test
     public void testRxDialogFragment() {
-        testLifecycle(new RxDialogFragment());
-        testBindUntilEvent(new RxDialogFragment());
-        testBindToLifecycle(new RxDialogFragment());
+        testLifecycle(new TestRxDialogFragment());
+        testBindUntilEvent(new TestRxDialogFragment());
+        testBindToLifecycle(new TestRxDialogFragment());
     }
 
     @Test
@@ -210,5 +210,13 @@ public class RxSupportFragmentLifecycleTest {
             .beginTransaction()
             .add(fragment, null)
             .commit();
+    }
+
+    // These classes are just for testing since components are abstract
+
+    public static class TestRxFragment extends RxFragment {
+    }
+
+    public static class TestRxDialogFragment extends RxDialogFragment {
     }
 }
