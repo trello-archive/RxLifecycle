@@ -108,19 +108,19 @@ the `Subscription` yourself and call `unsubscribe()` when appropriate.
 ## Installation
 
 ```gradle
-compile 'com.trello:rxlifecycle:0.8.0'
+compile 'com.trello:rxlifecycle:1.0'
 
 // If you want to bind to Android-specific lifecycles
-compile 'com.trello:rxlifecycle-android:0.8.0'
+compile 'com.trello:rxlifecycle-android:1.0'
 
 // If you want pre-written Activities and Fragments you can subclass as providers
-compile 'com.trello:rxlifecycle-components:0.8.0'
+compile 'com.trello:rxlifecycle-components:1.0'
 
 // If you want to use Navi for providers
-compile 'com.trello:rxlifecycle-navi:0.8.0'
+compile 'com.trello:rxlifecycle-navi:1.0'
 
 // If you want to use Kotlin syntax
-compile 'com.trello:rxlifecycle-kotlin:0.8.0'
+compile 'com.trello:rxlifecycle-kotlin:1.0'
 ```
 
 ## Related Libraries
