@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.0 (2016-11-03)
+
+First and (hopefully) final release of 1.x branch!
+
+This release marks the start of maintenance mode for RxJava 1 support. Future work will be devoted to supporting
+RxJava 2. Important bugs may be squashed but new features will have to be extraordinarily compelling in order
+to be added.
+
+- [#162](https://github.com/trello/RxLifecycle/pull/162): Made all components abstract
+- [#157](https://github.com/trello/RxLifecycle/pull/157): Added RxPreferenceFragment
+
 ## 0.8.0 (2016-09-19)
 
 - [#152](https://github.com/trello/RxLifecycle/pull/152): Support RxJava 1.2.0.
