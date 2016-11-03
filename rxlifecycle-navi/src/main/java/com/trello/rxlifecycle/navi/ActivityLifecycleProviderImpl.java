@@ -2,16 +2,16 @@ package com.trello.rxlifecycle.navi;
 
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
-import com.trello.navi.Event;
-import com.trello.navi.NaviComponent;
-import com.trello.navi.rx.RxNavi;
+import com.trello.navi2.Event;
+import com.trello.navi2.NaviComponent;
+import com.trello.navi2.rx.RxNavi;
 import com.trello.rxlifecycle.LifecycleProvider;
 import com.trello.rxlifecycle.LifecycleTransformer;
 import com.trello.rxlifecycle.RxLifecycle;
 import com.trello.rxlifecycle.android.ActivityEvent;
 import com.trello.rxlifecycle.android.RxLifecycleAndroid;
-import rx.Observable;
-import rx.subjects.BehaviorSubject;
+import io.reactivex.Observable;
+import io.reactivex.subjects.BehaviorSubject;
 
 final class ActivityLifecycleProviderImpl implements LifecycleProvider<ActivityEvent> {
     private final BehaviorSubject<ActivityEvent> lifecycleSubject = BehaviorSubject.create();
@@ -31,7 +31,7 @@ final class ActivityLifecycleProviderImpl implements LifecycleProvider<ActivityE
     @NonNull
     @CheckResult
     public Observable<ActivityEvent> lifecycle() {
-        return lifecycleSubject.asObservable();
+        return lifecycleSubject.hide();
     }
 
     @Override
