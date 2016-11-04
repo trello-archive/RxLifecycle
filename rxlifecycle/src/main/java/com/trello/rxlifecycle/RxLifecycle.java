@@ -33,13 +33,10 @@ public class RxLifecycle {
      * Binds the given source to a lifecycle.
      * <p>
      * When the lifecycle event occurs, the source will cease to emit any notifications.
-     * <p>
-     * Use with {@link Observable#compose(ObservableTransformer)}:
-     * {@code source.compose(RxLifecycle.bindUntilEvent(lifecycle, ActivityEvent.STOP)).subscribe()}
      *
      * @param lifecycle the lifecycle sequence
      * @param event the event which should conclude notifications from the source
-     * @return a reusable {@link ObservableTransformer} that unsubscribes the source at the specified event
+     * @return a reusable {@link LifecycleTransformer} that unsubscribes the source at the specified event
      */
     @Nonnull
     @CheckReturnValue
@@ -54,15 +51,12 @@ public class RxLifecycle {
     /**
      * Binds the given source to a lifecycle.
      * <p>
-     * Use with {@link Observable#compose(ObservableTransformer)}:
-     * {@code source.compose(RxLifecycle.bind(lifecycle)).subscribe()}
-     * <p>
      * This helper automatically determines (based on the lifecycle sequence itself) when the source
      * should stop emitting items. Note that for this method, it assumes <em>any</em> event
      * emitted by the given lifecycle indicates that the lifecycle is over.
      *
      * @param lifecycle the lifecycle sequence
-     * @return a reusable {@link ObservableTransformer} that unsubscribes the source whenever the lifecycle emits
+     * @return a reusable {@link LifecycleTransformer} that unsubscribes the source whenever the lifecycle emits
      */
     @Nonnull
     @CheckReturnValue
@@ -84,7 +78,7 @@ public class RxLifecycle {
      *
      * @param lifecycle the lifecycle sequence
      * @param correspondingEvents a function which tells the source when to unsubscribe
-     * @return a reusable {@link ObservableTransformer} that unsubscribes the source during the Fragment lifecycle
+     * @return a reusable {@link LifecycleTransformer} that unsubscribes the source during the Fragment lifecycle
      */
     @Nonnull
     @CheckReturnValue

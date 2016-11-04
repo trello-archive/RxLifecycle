@@ -20,7 +20,6 @@ import android.view.View;
 import com.trello.rxlifecycle.LifecycleTransformer;
 import com.trello.rxlifecycle.OutsideLifecycleException;
 import io.reactivex.Observable;
-import io.reactivex.ObservableTransformer;
 import io.reactivex.functions.Function;
 
 import static com.trello.rxlifecycle.RxLifecycle.bind;
@@ -34,9 +33,6 @@ public class RxLifecycleAndroid {
 
     /**
      * Binds the given source to an Activity lifecycle.
-     * <p>
-     * Use with {@link Observable#compose(ObservableTransformer)}:
-     * {@code source.compose(RxLifecycleAndroid.bindActivity(lifecycle)).subscribe()}
      * <p>
      * This helper automatically determines (based on the lifecycle sequence itself) when the source
      * should stop emitting items. In the case that the lifecycle sequence is in the
@@ -58,9 +54,6 @@ public class RxLifecycleAndroid {
 
     /**
      * Binds the given source to a Fragment lifecycle.
-     * <p>
-     * Use with {@link Observable#compose(ObservableTransformer)}:
-     * {@code source.compose(RxLifecycleAndroid.bindFragment(lifecycle)).subscribe()}
      * <p>
      * This helper automatically determines (based on the lifecycle sequence itself) when the source
      * should stop emitting items. In the case that the lifecycle sequence is in the
@@ -85,9 +78,6 @@ public class RxLifecycleAndroid {
      * Binds the given source to a View lifecycle.
      * <p>
      * Specifically, when the View detaches from the window, the sequence will be completed.
-     * <p>
-     * Use with {@link Observable#compose(ObservableTransformer)}:
-     * {@code source.compose(RxLifecycleAndroid.bindView(lifecycle)).subscribe()}
      * <p>
      * Warning: you should make sure to use the returned Transformer on the main thread,
      * since we're binding to a View (which only allows binding on the main thread).
