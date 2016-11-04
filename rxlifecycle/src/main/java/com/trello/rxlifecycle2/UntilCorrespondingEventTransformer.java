@@ -8,12 +8,11 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.Single;
 import io.reactivex.SingleSource;
+import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Function;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-
-import static com.trello.rxlifecycle2.TakeUntilGenerator.takeUntilCorrespondingEvent;
 
 /**
  * Continues a subscription until it sees a particular lifecycle event.
@@ -55,6 +54,22 @@ final class UntilCorrespondingEventTransformer<T, R> implements LifecycleTransfo
             takeUntilCorrespondingEvent(sharedLifecycle, correspondingEvents)
                 .flatMapCompletable(Functions.CANCEL_COMPLETABLE)
         );
+    }
+
+    private static <T> Observable<Boolean> takeUntilCorrespondingEvent(final Observable<T> lifecycle,
+                                                                       final Function<T, T> correspondingEvents) {
+        return Observable.combineLatest(
+            lifecycle.take(1).map(correspondingEvents),
+            lifecycle.skip(1),
+            new BiFunction<T, T, Boolean>() {
+                @Override
+                public Boolean apply(T bindUntilEvent, T lifecycleEvent) throws Exception {
+                    return lifecycleEvent.equals(bindUntilEvent);
+                }
+            })
+            .onErrorReturn(Functions.RESUME_FUNCTION)
+            .filter(Functions.SHOULD_COMPLETE)
+            .take(1);
     }
 
     @Override
