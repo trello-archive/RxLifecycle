@@ -1,10 +1,9 @@
 package com.trello.rxlifecycle;
 
-import io.reactivex.Observable;
+import io.reactivex.Completable;
 import io.reactivex.exceptions.Exceptions;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
-
 import java.util.concurrent.CancellationException;
 
 final class Functions {
@@ -29,10 +28,10 @@ final class Functions {
         }
     };
 
-    static final Function<Object, Observable<Object>> CANCEL_COMPLETABLE = new Function<Object, Observable<Object>>() {
+    static final Function<Object, Completable> CANCEL_COMPLETABLE = new Function<Object, Completable>() {
         @Override
-        public Observable<Object> apply(Object ignore) throws Exception {
-            return Observable.error(new CancellationException());
+        public Completable apply(Object ignore) throws Exception {
+            return Completable.error(new CancellationException());
         }
     };
 
