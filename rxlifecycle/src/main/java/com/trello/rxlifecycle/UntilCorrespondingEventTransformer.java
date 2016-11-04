@@ -46,8 +46,7 @@ final class UntilCorrespondingEventTransformer<T, R> implements LifecycleTransfo
         return Completable.ambArray(
             upstream,
             takeUntilCorrespondingEvent(sharedLifecycle, correspondingEvents)
-                .flatMap(Functions.CANCEL_COMPLETABLE)
-                .ignoreElements()
+                .flatMapCompletable(Functions.CANCEL_COMPLETABLE)
         );
     }
 

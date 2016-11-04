@@ -37,8 +37,7 @@ final class UntilLifecycleTransformer<T, R> implements LifecycleTransformer<T> {
         return Completable.ambArray(
             upstream,
             lifecycle
-                .flatMap(Functions.CANCEL_COMPLETABLE)
-                .ignoreElements()
+                .flatMapCompletable(Functions.CANCEL_COMPLETABLE)
         );
     }
 
