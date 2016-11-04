@@ -14,22 +14,23 @@
 
 package com.trello.rxlifecycle.components;
 
-import com.trello.navi.Event;
-import com.trello.navi.NaviComponent;
-import com.trello.navi.internal.NaviEmitter;
+import com.trello.navi2.Event;
+import com.trello.navi2.NaviComponent;
+import com.trello.navi2.internal.NaviEmitter;
 import com.trello.rxlifecycle.LifecycleProvider;
 import com.trello.rxlifecycle.android.ActivityEvent;
 import com.trello.rxlifecycle.navi.NaviLifecycle;
+import io.reactivex.Observable;
+import io.reactivex.observers.TestObserver;
+import io.reactivex.subjects.PublishSubject;
 import org.junit.Test;
-import rx.Observable;
-import rx.observers.TestSubscriber;
-import rx.subjects.PublishSubject;
 
 import java.lang.ref.WeakReference;
 import java.util.HashSet;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public class NaviActivityLifecycleTest {
 
@@ -38,8 +39,7 @@ public class NaviActivityLifecycleTest {
         NaviEmitter activity = NaviEmitter.createActivityEmitter();
         LifecycleProvider<ActivityEvent> provider = NaviLifecycle.createActivityLifecycleProvider(activity);
 
-        TestSubscriber<ActivityEvent> testSubscriber = new TestSubscriber<>();
-        provider.lifecycle().subscribe(testSubscriber);
+        TestObserver<ActivityEvent> testObserver = provider.lifecycle().test();
 
         activity.onCreate(null);
         activity.onStart();
@@ -48,7 +48,7 @@ public class NaviActivityLifecycleTest {
         activity.onStop();
         activity.onDestroy();
 
-        testSubscriber.assertValues(
+        testObserver.assertValues(
             ActivityEvent.CREATE,
             ActivityEvent.START,
             ActivityEvent.RESUME,
@@ -63,21 +63,20 @@ public class NaviActivityLifecycleTest {
         NaviEmitter activity = NaviEmitter.createActivityEmitter();
         LifecycleProvider<ActivityEvent> provider = NaviLifecycle.createActivityLifecycleProvider(activity);
 
-        Observable<Object> observable = PublishSubject.create().asObservable();
-        TestSubscriber<Object> testSubscriber = new TestSubscriber<>();
-        observable.compose(provider.bindUntilEvent(ActivityEvent.STOP)).subscribe(testSubscriber);
+        Observable<Object> observable = PublishSubject.create().hide();
+        TestObserver<Object> testObserver = observable.compose(provider.bindUntilEvent(ActivityEvent.STOP)).test();
 
         activity.onCreate(null);
-        assertFalse(testSubscriber.isUnsubscribed());
+        assertFalse(testObserver.isDisposed());
         activity.onStart();
-        assertFalse(testSubscriber.isUnsubscribed());
+        assertFalse(testObserver.isDisposed());
         activity.onResume();
-        assertFalse(testSubscriber.isUnsubscribed());
+        assertFalse(testObserver.isDisposed());
         activity.onPause();
-        assertFalse(testSubscriber.isUnsubscribed());
+        assertFalse(testObserver.isDisposed());
         activity.onStop();
-        testSubscriber.assertCompleted();
-        testSubscriber.assertUnsubscribed();
+        testObserver.assertComplete();
+        assertTrue(testObserver.isDisposed());
     }
 
     @Test
@@ -85,45 +84,40 @@ public class NaviActivityLifecycleTest {
         NaviEmitter activity = NaviEmitter.createActivityEmitter();
         LifecycleProvider<ActivityEvent> provider = NaviLifecycle.createActivityLifecycleProvider(activity);
 
-        Observable<Object> observable = PublishSubject.create().asObservable();
+        Observable<Object> observable = PublishSubject.create().hide();
 
         activity.onCreate(null);
-        TestSubscriber<Object> createTestSub = new TestSubscriber<>();
-        observable.compose(provider.bindToLifecycle()).subscribe(createTestSub);
+        TestObserver<Object> createObserver = observable.compose(provider.bindToLifecycle()).test();
 
         activity.onStart();
-        assertFalse(createTestSub.isUnsubscribed());
-        TestSubscriber<Object> startTestSub = new TestSubscriber<>();
-        observable.compose(provider.bindToLifecycle()).subscribe(startTestSub);
+        assertFalse(createObserver.isDisposed());
+        TestObserver<Object> startObserver = observable.compose(provider.bindToLifecycle()).test();
 
         activity.onResume();
-        assertFalse(createTestSub.isUnsubscribed());
-        assertFalse(startTestSub.isUnsubscribed());
-        TestSubscriber<Object> resumeTestSub = new TestSubscriber<>();
-        observable.compose(provider.bindToLifecycle()).subscribe(resumeTestSub);
+        assertFalse(createObserver.isDisposed());
+        assertFalse(startObserver.isDisposed());
+        TestObserver<Object> resumeTestSub = observable.compose(provider.bindToLifecycle()).test();
 
         activity.onPause();
-        assertFalse(createTestSub.isUnsubscribed());
-        assertFalse(startTestSub.isUnsubscribed());
-        resumeTestSub.assertCompleted();
-        resumeTestSub.assertUnsubscribed();
-        TestSubscriber<Object> pauseTestSub = new TestSubscriber<>();
-        observable.compose(provider.bindToLifecycle()).subscribe(pauseTestSub);
+        assertFalse(createObserver.isDisposed());
+        assertFalse(startObserver.isDisposed());
+        resumeTestSub.assertComplete();
+        assertTrue(resumeTestSub.isDisposed());
+        TestObserver<Object> pauseObserver = observable.compose(provider.bindToLifecycle()).test();
 
         activity.onStop();
-        assertFalse(createTestSub.isUnsubscribed());
-        startTestSub.assertCompleted();
-        startTestSub.assertUnsubscribed();
-        pauseTestSub.assertCompleted();
-        pauseTestSub.assertUnsubscribed();
-        TestSubscriber<Object> stopTestSub = new TestSubscriber<>();
-        observable.compose(provider.bindToLifecycle()).subscribe(stopTestSub);
+        assertFalse(createObserver.isDisposed());
+        startObserver.assertComplete();
+        assertTrue(startObserver.isDisposed());
+        pauseObserver.assertComplete();
+        assertTrue(pauseObserver.isDisposed());
+        TestObserver<Object> stopObserver = observable.compose(provider.bindToLifecycle()).test();
 
         activity.onDestroy();
-        createTestSub.assertCompleted();
-        createTestSub.assertUnsubscribed();
-        stopTestSub.assertCompleted();
-        stopTestSub.assertUnsubscribed();
+        createObserver.assertComplete();
+        assertTrue(createObserver.isDisposed());
+        stopObserver.assertComplete();
+        assertTrue(stopObserver.isDisposed());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -140,8 +134,7 @@ public class NaviActivityLifecycleTest {
         NaviEmitter activity = NaviEmitter.createActivityEmitter();
         LifecycleProvider<ActivityEvent> provider = NaviLifecycle.createActivityLifecycleProvider(activity);
 
-        TestSubscriber<ActivityEvent> testSubscriber = new TestSubscriber<>();
-        provider.lifecycle().subscribe(testSubscriber);
+        TestObserver<ActivityEvent> testObserver = provider.lifecycle().test();
 
         activity.onCreate(null);
         activity.onStart();
@@ -153,7 +146,7 @@ public class NaviActivityLifecycleTest {
         // Verify that you can remain subscribed until the Activity is completely gone
         activity.onCreate(null);
 
-        testSubscriber.assertValues(
+        testObserver.assertValues(
             ActivityEvent.CREATE,
             ActivityEvent.START,
             ActivityEvent.RESUME,
@@ -171,9 +164,8 @@ public class NaviActivityLifecycleTest {
         WeakReference<NaviEmitter> activityRef = new WeakReference<>(activity);
         WeakReference<LifecycleProvider<ActivityEvent>> providerRef = new WeakReference<>(provider);
 
-        Observable<Object> observable = PublishSubject.create().asObservable();
-        TestSubscriber<Object> testSubscriber = new TestSubscriber<>();
-        observable.compose(provider.bindUntilEvent(ActivityEvent.STOP)).subscribe(testSubscriber);
+        Observable<Object> observable = PublishSubject.create().hide();
+        TestObserver<Object> testObserver = observable.compose(provider.bindUntilEvent(ActivityEvent.STOP)).test();
 
         activity.onCreate(null);
         activity.onStart();

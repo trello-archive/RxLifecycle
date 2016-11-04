@@ -1,19 +1,19 @@
 package com.trello.rxlifecycle.navi;
 
-import com.trello.navi.Event;
+import com.trello.navi2.Event;
 import com.trello.rxlifecycle.android.ActivityEvent;
 import com.trello.rxlifecycle.android.FragmentEvent;
-import rx.functions.Func1;
+import io.reactivex.functions.Function;
 
 /**
  * Maps from Navi events to RxLifecycleAndroid events
  */
 final class NaviLifecycleMaps {
 
-    static final Func1<Event.Type, ActivityEvent> ACTIVITY_EVENT_MAP =
-        new Func1<Event.Type, ActivityEvent>() {
+    static final Function<Event.Type, ActivityEvent> ACTIVITY_EVENT_MAP =
+        new Function<Event.Type, ActivityEvent>() {
             @Override
-            public ActivityEvent call(Event.Type type) {
+            public ActivityEvent apply(Event.Type type) throws Exception {
                 switch (type) {
                     case CREATE:
                         return ActivityEvent.CREATE;
@@ -33,10 +33,10 @@ final class NaviLifecycleMaps {
             }
         };
 
-    static final Func1<Event.Type, FragmentEvent> FRAGMENT_EVENT_MAP =
-        new Func1<Event.Type, FragmentEvent>() {
+    static final Function<Event.Type, FragmentEvent> FRAGMENT_EVENT_MAP =
+        new Function<Event.Type, FragmentEvent>() {
             @Override
-            public FragmentEvent call(Event.Type type) {
+            public FragmentEvent apply(Event.Type type) throws Exception {
                 switch (type) {
                     case ATTACH:
                         return FragmentEvent.ATTACH;

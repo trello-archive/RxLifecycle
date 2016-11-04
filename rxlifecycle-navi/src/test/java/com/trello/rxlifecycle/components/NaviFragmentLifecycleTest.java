@@ -14,22 +14,23 @@
 
 package com.trello.rxlifecycle.components;
 
-import com.trello.navi.Event;
-import com.trello.navi.NaviComponent;
-import com.trello.navi.internal.NaviEmitter;
+import com.trello.navi2.Event;
+import com.trello.navi2.NaviComponent;
+import com.trello.navi2.internal.NaviEmitter;
 import com.trello.rxlifecycle.LifecycleProvider;
 import com.trello.rxlifecycle.android.FragmentEvent;
 import com.trello.rxlifecycle.navi.NaviLifecycle;
+import io.reactivex.Observable;
+import io.reactivex.observers.TestObserver;
+import io.reactivex.subjects.PublishSubject;
 import org.junit.Test;
-import rx.Observable;
-import rx.observers.TestSubscriber;
-import rx.subjects.PublishSubject;
 
 import java.lang.ref.WeakReference;
 import java.util.HashSet;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public class NaviFragmentLifecycleTest {
 
@@ -38,8 +39,7 @@ public class NaviFragmentLifecycleTest {
         NaviEmitter fragment = NaviEmitter.createFragmentEmitter();
         LifecycleProvider<FragmentEvent> provider = NaviLifecycle.createFragmentLifecycleProvider(fragment);
 
-        TestSubscriber<FragmentEvent> testSubscriber = new TestSubscriber<>();
-        provider.lifecycle().subscribe(testSubscriber);
+        TestObserver<FragmentEvent> testObserver = provider.lifecycle().test();
 
         fragment.onAttach(null);
         fragment.onCreate(null);
@@ -52,7 +52,7 @@ public class NaviFragmentLifecycleTest {
         fragment.onDestroy();
         fragment.onDetach();
 
-        testSubscriber.assertValues(
+        testObserver.assertValues(
             FragmentEvent.ATTACH,
             FragmentEvent.CREATE,
             FragmentEvent.CREATE_VIEW,
@@ -71,25 +71,24 @@ public class NaviFragmentLifecycleTest {
         NaviEmitter fragment = NaviEmitter.createFragmentEmitter();
         LifecycleProvider<FragmentEvent> provider = NaviLifecycle.createFragmentLifecycleProvider(fragment);
 
-        Observable<Object> observable = PublishSubject.create().asObservable();
-        TestSubscriber<Object> testSubscriber = new TestSubscriber<>();
-        observable.compose(provider.bindUntilEvent(FragmentEvent.STOP)).subscribe(testSubscriber);
+        Observable<Object> observable = PublishSubject.create().hide();
+        TestObserver<Object> testObserver = observable.compose(provider.bindUntilEvent(FragmentEvent.STOP)).test();
 
         fragment.onAttach(null);
-        assertFalse(testSubscriber.isUnsubscribed());
+        assertFalse(testObserver.isDisposed());
         fragment.onCreate(null);
-        assertFalse(testSubscriber.isUnsubscribed());
+        assertFalse(testObserver.isDisposed());
         fragment.onCreate(null);
-        assertFalse(testSubscriber.isUnsubscribed());
+        assertFalse(testObserver.isDisposed());
         fragment.onStart();
-        assertFalse(testSubscriber.isUnsubscribed());
+        assertFalse(testObserver.isDisposed());
         fragment.onResume();
-        assertFalse(testSubscriber.isUnsubscribed());
+        assertFalse(testObserver.isDisposed());
         fragment.onPause();
-        assertFalse(testSubscriber.isUnsubscribed());
+        assertFalse(testObserver.isDisposed());
         fragment.onStop();
-        testSubscriber.assertCompleted();
-        testSubscriber.assertUnsubscribed();
+        testObserver.assertComplete();
+        assertTrue(testObserver.isDisposed());
     }
 
     @Test
@@ -97,83 +96,74 @@ public class NaviFragmentLifecycleTest {
         NaviEmitter fragment = NaviEmitter.createFragmentEmitter();
         LifecycleProvider<FragmentEvent> provider = NaviLifecycle.createFragmentLifecycleProvider(fragment);
 
-        Observable<Object> observable = PublishSubject.create().asObservable();
+        Observable<Object> observable = PublishSubject.create().hide();
 
         fragment.onAttach(null);
-        TestSubscriber<Object> attachTestSub = new TestSubscriber<>();
-        observable.compose(provider.bindToLifecycle()).subscribe(attachTestSub);
+        TestObserver<Object> attachObserver = observable.compose(provider.bindToLifecycle()).test();
 
         fragment.onCreate(null);
-        assertFalse(attachTestSub.isUnsubscribed());
-        TestSubscriber<Object> createTestSub = new TestSubscriber<>();
-        observable.compose(provider.bindToLifecycle()).subscribe(createTestSub);
+        assertFalse(attachObserver.isDisposed());
+        TestObserver<Object> createObserver = observable.compose(provider.bindToLifecycle()).test();
 
         fragment.onCreateView(null);
-        assertFalse(attachTestSub.isUnsubscribed());
-        assertFalse(createTestSub.isUnsubscribed());
-        TestSubscriber<Object> createViewTestSub = new TestSubscriber<>();
-        observable.compose(provider.bindToLifecycle()).subscribe(createViewTestSub);
+        assertFalse(attachObserver.isDisposed());
+        assertFalse(createObserver.isDisposed());
+        TestObserver<Object> createViewObserver = observable.compose(provider.bindToLifecycle()).test();
 
         fragment.onStart();
-        assertFalse(attachTestSub.isUnsubscribed());
-        assertFalse(createTestSub.isUnsubscribed());
-        assertFalse(createViewTestSub.isUnsubscribed());
-        TestSubscriber<Object> startTestSub = new TestSubscriber<>();
-        observable.compose(provider.bindToLifecycle()).subscribe(startTestSub);
+        assertFalse(attachObserver.isDisposed());
+        assertFalse(createObserver.isDisposed());
+        assertFalse(createViewObserver.isDisposed());
+        TestObserver<Object> startObserver = observable.compose(provider.bindToLifecycle()).test();
 
         fragment.onResume();
-        assertFalse(attachTestSub.isUnsubscribed());
-        assertFalse(createTestSub.isUnsubscribed());
-        assertFalse(createViewTestSub.isUnsubscribed());
-        assertFalse(startTestSub.isUnsubscribed());
-        TestSubscriber<Object> resumeTestSub = new TestSubscriber<>();
-        observable.compose(provider.bindToLifecycle()).subscribe(resumeTestSub);
+        assertFalse(attachObserver.isDisposed());
+        assertFalse(createObserver.isDisposed());
+        assertFalse(createViewObserver.isDisposed());
+        assertFalse(startObserver.isDisposed());
+        TestObserver<Object> resumeObserver = observable.compose(provider.bindToLifecycle()).test();
 
         fragment.onPause();
-        assertFalse(attachTestSub.isUnsubscribed());
-        assertFalse(createTestSub.isUnsubscribed());
-        assertFalse(createViewTestSub.isUnsubscribed());
-        assertFalse(startTestSub.isUnsubscribed());
-        resumeTestSub.assertCompleted();
-        resumeTestSub.assertUnsubscribed();
-        TestSubscriber<Object> pauseTestSub = new TestSubscriber<>();
-        observable.compose(provider.bindToLifecycle()).subscribe(pauseTestSub);
+        assertFalse(attachObserver.isDisposed());
+        assertFalse(createObserver.isDisposed());
+        assertFalse(createViewObserver.isDisposed());
+        assertFalse(startObserver.isDisposed());
+        resumeObserver.assertComplete();
+        assertTrue(resumeObserver.isDisposed());
+        TestObserver<Object> pauseObserver = observable.compose(provider.bindToLifecycle()).test();
 
         fragment.onStop();
-        assertFalse(attachTestSub.isUnsubscribed());
-        assertFalse(createTestSub.isUnsubscribed());
-        assertFalse(createViewTestSub.isUnsubscribed());
-        startTestSub.assertCompleted();
-        startTestSub.assertUnsubscribed();
-        pauseTestSub.assertCompleted();
-        pauseTestSub.assertUnsubscribed();
-        TestSubscriber<Object> stopTestSub = new TestSubscriber<>();
-        observable.compose(provider.bindToLifecycle()).subscribe(stopTestSub);
+        assertFalse(attachObserver.isDisposed());
+        assertFalse(createObserver.isDisposed());
+        assertFalse(createViewObserver.isDisposed());
+        startObserver.assertComplete();
+        assertTrue(startObserver.isDisposed());
+        pauseObserver.assertComplete();
+        assertTrue(pauseObserver.isDisposed());
+        TestObserver<Object> stopObserver = observable.compose(provider.bindToLifecycle()).test();
 
         fragment.onDestroyView();
-        assertFalse(attachTestSub.isUnsubscribed());
-        assertFalse(createTestSub.isUnsubscribed());
-        createViewTestSub.assertCompleted();
-        createViewTestSub.assertUnsubscribed();
-        stopTestSub.assertCompleted();
-        stopTestSub.assertUnsubscribed();
-        TestSubscriber<Object> destroyViewTestSub = new TestSubscriber<>();
-        observable.compose(provider.bindToLifecycle()).subscribe(destroyViewTestSub);
+        assertFalse(attachObserver.isDisposed());
+        assertFalse(createObserver.isDisposed());
+        createViewObserver.assertComplete();
+        assertTrue(createViewObserver.isDisposed());
+        stopObserver.assertComplete();
+        assertTrue(stopObserver.isDisposed());
+        TestObserver<Object> destroyViewObserver = observable.compose(provider.bindToLifecycle()).test();
 
         fragment.onDestroy();
-        assertFalse(attachTestSub.isUnsubscribed());
-        createTestSub.assertCompleted();
-        createTestSub.assertUnsubscribed();
-        destroyViewTestSub.assertCompleted();
-        destroyViewTestSub.assertUnsubscribed();
-        TestSubscriber<Object> destroyTestSub = new TestSubscriber<>();
-        observable.compose(provider.bindToLifecycle()).subscribe(destroyTestSub);
+        assertFalse(attachObserver.isDisposed());
+        createObserver.assertComplete();
+        assertTrue(createObserver.isDisposed());
+        destroyViewObserver.assertComplete();
+        assertTrue(destroyViewObserver.isDisposed());
+        TestObserver<Object> destroyObserver = observable.compose(provider.bindToLifecycle()).test();
 
         fragment.onDetach();
-        attachTestSub.assertCompleted();
-        attachTestSub.assertUnsubscribed();
-        destroyTestSub.assertCompleted();
-        destroyTestSub.assertUnsubscribed();
+        attachObserver.assertComplete();
+        assertTrue(attachObserver.isDisposed());
+        destroyObserver.assertComplete();
+        assertTrue(destroyObserver.isDisposed());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -190,8 +180,7 @@ public class NaviFragmentLifecycleTest {
         NaviEmitter fragment = NaviEmitter.createFragmentEmitter();
         LifecycleProvider<FragmentEvent> provider = NaviLifecycle.createFragmentLifecycleProvider(fragment);
 
-        TestSubscriber<FragmentEvent> testSubscriber = new TestSubscriber<>();
-        provider.lifecycle().subscribe(testSubscriber);
+        TestObserver<FragmentEvent> testObserver = provider.lifecycle().test();
 
         fragment.onAttach(null);
         fragment.onCreate(null);
@@ -207,7 +196,7 @@ public class NaviFragmentLifecycleTest {
         // Verify that you can remain subscribed until the Fragment is completely gone
         fragment.onAttach(null);
 
-        testSubscriber.assertValues(
+        testObserver.assertValues(
             FragmentEvent.ATTACH,
             FragmentEvent.CREATE,
             FragmentEvent.CREATE_VIEW,
@@ -229,9 +218,8 @@ public class NaviFragmentLifecycleTest {
         WeakReference<NaviEmitter> fragmentRef = new WeakReference<>(fragment);
         WeakReference<LifecycleProvider<FragmentEvent>> providerRef = new WeakReference<>(provider);
 
-        Observable<Object> observable = PublishSubject.create().asObservable();
-        TestSubscriber<Object> testSubscriber = new TestSubscriber<>();
-        observable.compose(provider.bindUntilEvent(FragmentEvent.STOP)).subscribe(testSubscriber);
+        Observable<Object> observable = PublishSubject.create().hide();
+        TestObserver<Object> testObserver = observable.compose(provider.bindUntilEvent(FragmentEvent.STOP)).test();
 
         fragment.onAttach(null);
         fragment.onCreate(null);
