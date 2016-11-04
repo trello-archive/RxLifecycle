@@ -1,7 +1,9 @@
 package com.trello.rxlifecycle2;
 
+import io.reactivex.BackpressureStrategy;
 import io.reactivex.Completable;
 import io.reactivex.CompletableSource;
+import io.reactivex.Flowable;
 import io.reactivex.Maybe;
 import io.reactivex.MaybeSource;
 import io.reactivex.Observable;
@@ -9,6 +11,7 @@ import io.reactivex.ObservableSource;
 import io.reactivex.Single;
 import io.reactivex.SingleSource;
 import io.reactivex.functions.Predicate;
+import org.reactivestreams.Publisher;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -30,6 +33,11 @@ final class UntilEventTransformer<T, R> implements LifecycleTransformer<T> {
     @Override
     public ObservableSource<T> apply(Observable<T> upstream) {
         return upstream.takeUntil(takeUntilEvent(lifecycle, event));
+    }
+
+    @Override
+    public Publisher<T> apply(Flowable<T> upstream) {
+        return upstream.takeUntil(takeUntilEvent(lifecycle, event).toFlowable(BackpressureStrategy.LATEST));
     }
 
     @Override
