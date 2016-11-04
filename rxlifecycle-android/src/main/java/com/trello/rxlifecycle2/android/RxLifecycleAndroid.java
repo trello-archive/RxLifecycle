@@ -69,8 +69,7 @@ public class RxLifecycleAndroid {
      */
     @NonNull
     @CheckResult
-    public static <T> LifecycleTransformer<T> bindFragment(
-        @NonNull final Observable<com.trello.rxlifecycle2.android.FragmentEvent> lifecycle) {
+    public static <T> LifecycleTransformer<T> bindFragment(@NonNull final Observable<FragmentEvent> lifecycle) {
         return bind(lifecycle, FRAGMENT_LIFECYCLE);
     }
 

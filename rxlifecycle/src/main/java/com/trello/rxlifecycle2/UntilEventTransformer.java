@@ -8,11 +8,10 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.Single;
 import io.reactivex.SingleSource;
+import io.reactivex.functions.Predicate;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-
-import static com.trello.rxlifecycle2.TakeUntilGenerator.takeUntilEvent;
 
 /**
  * Continues a subscription until it sees a particular lifecycle event.
@@ -49,6 +48,15 @@ final class UntilEventTransformer<T, R> implements LifecycleTransformer<T> {
             upstream,
             takeUntilEvent(lifecycle, event).flatMapCompletable(Functions.CANCEL_COMPLETABLE)
         );
+    }
+
+    private static <T> Observable<T> takeUntilEvent(final Observable<T> lifecycle, final T event) {
+        return lifecycle.filter(new Predicate<T>() {
+            @Override
+            public boolean test(T lifecycleEvent) throws Exception {
+                return lifecycleEvent.equals(event);
+            }
+        }).take(1);
     }
 
     @Override
