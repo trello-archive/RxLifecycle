@@ -2,6 +2,8 @@ package com.trello.rxlifecycle2;
 
 import io.reactivex.Completable;
 import io.reactivex.CompletableSource;
+import io.reactivex.Maybe;
+import io.reactivex.MaybeSource;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.Single;
@@ -37,11 +39,15 @@ final class UntilEventTransformer<T, R> implements LifecycleTransformer<T> {
     }
 
     @Override
+    public MaybeSource<T> apply(Maybe<T> upstream) {
+        return upstream.takeUntil(takeUntilEvent(lifecycle, event).firstElement());
+    }
+
+    @Override
     public CompletableSource apply(Completable upstream) {
         return Completable.ambArray(
             upstream,
-            takeUntilEvent(lifecycle, event)
-                .flatMapCompletable(Functions.CANCEL_COMPLETABLE)
+            takeUntilEvent(lifecycle, event).flatMapCompletable(Functions.CANCEL_COMPLETABLE)
         );
     }
 

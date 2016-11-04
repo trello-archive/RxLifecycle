@@ -2,6 +2,8 @@ package com.trello.rxlifecycle2;
 
 import io.reactivex.Completable;
 import io.reactivex.CompletableSource;
+import io.reactivex.Maybe;
+import io.reactivex.MaybeSource;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.Single;
@@ -39,6 +41,11 @@ final class UntilCorrespondingEventTransformer<T, R> implements LifecycleTransfo
     @Override
     public SingleSource<T> apply(Single<T> upstream) {
         return upstream.takeUntil(takeUntilCorrespondingEvent(sharedLifecycle, correspondingEvents).singleOrError());
+    }
+
+    @Override
+    public MaybeSource<T> apply(Maybe<T> upstream) {
+        return upstream.takeUntil(takeUntilCorrespondingEvent(sharedLifecycle, correspondingEvents).firstElement());
     }
 
     @Override
