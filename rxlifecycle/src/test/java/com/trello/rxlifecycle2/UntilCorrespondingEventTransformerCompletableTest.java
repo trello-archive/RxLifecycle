@@ -25,7 +25,7 @@ public class UntilCorrespondingEventTransformerCompletableTest {
     @Test
     public void noEvents() {
         TestObserver<Void> testObserver = completable
-            .compose(new UntilCorrespondingEventTransformer<String, String>(lifecycle, CORRESPONDING_EVENTS))
+            .compose(RxLifecycle.bind(lifecycle, CORRESPONDING_EVENTS))
             .test();
 
         subject.onComplete();
@@ -35,7 +35,7 @@ public class UntilCorrespondingEventTransformerCompletableTest {
     @Test
     public void oneStartEvent() {
         TestObserver<Void> testObserver = completable
-            .compose(new UntilCorrespondingEventTransformer<String, String>(lifecycle, CORRESPONDING_EVENTS))
+            .compose(RxLifecycle.bind(lifecycle, CORRESPONDING_EVENTS))
             .test();
 
         lifecycle.onNext("create");
@@ -46,7 +46,7 @@ public class UntilCorrespondingEventTransformerCompletableTest {
     @Test
     public void twoOpenEvents() {
         TestObserver<Void> testObserver = completable
-            .compose(new UntilCorrespondingEventTransformer<String, String>(lifecycle, CORRESPONDING_EVENTS))
+            .compose(RxLifecycle.bind(lifecycle, CORRESPONDING_EVENTS))
             .test();
 
         lifecycle.onNext("create");
@@ -58,7 +58,7 @@ public class UntilCorrespondingEventTransformerCompletableTest {
     @Test
     public void openAndCloseEvent() {
         TestObserver<Void> testObserver = completable
-            .compose(new UntilCorrespondingEventTransformer<String, String>(lifecycle, CORRESPONDING_EVENTS))
+            .compose(RxLifecycle.bind(lifecycle, CORRESPONDING_EVENTS))
             .test();
 
         lifecycle.onNext("create");

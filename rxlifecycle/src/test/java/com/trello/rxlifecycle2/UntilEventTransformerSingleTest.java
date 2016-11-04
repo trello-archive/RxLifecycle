@@ -25,7 +25,7 @@ public class UntilEventTransformerSingleTest {
     public void noEvents() {
         TestObserver<String> testObserver = Single.just("1")
             .delay(1, TimeUnit.MILLISECONDS, testScheduler)
-            .compose(new UntilEventTransformer<String, String>(lifecycle, "stop"))
+            .compose(RxLifecycle.<String, String>bindUntilEvent(lifecycle, "stop"))
             .test();
 
         testObserver.assertNoValues();
@@ -39,7 +39,7 @@ public class UntilEventTransformerSingleTest {
     public void oneWrongEvent() {
         TestObserver<String> testObserver = Single.just("1")
             .delay(1, TimeUnit.MILLISECONDS, testScheduler)
-            .compose(new UntilEventTransformer<String, String>(lifecycle, "stop"))
+            .compose(RxLifecycle.<String, String>bindUntilEvent(lifecycle, "stop"))
             .test();
 
         testObserver.assertNoValues();
@@ -55,7 +55,7 @@ public class UntilEventTransformerSingleTest {
     public void twoEvents() {
         TestObserver<String> testObserver = Single.just("1")
             .delay(1, TimeUnit.MILLISECONDS, testScheduler)
-            .compose(new UntilEventTransformer<String, String>(lifecycle, "stop"))
+            .compose(RxLifecycle.<String, String>bindUntilEvent(lifecycle, "stop"))
             .test();
 
         lifecycle.onNext("keep going");

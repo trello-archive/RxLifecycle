@@ -23,7 +23,7 @@ public class UntilCorrespondingEventTransformerMaybeTest {
     @Test
     public void noEvents() {
         TestObserver<String> testObserver = maybe
-            .compose(new UntilCorrespondingEventTransformer<String, String>(lifecycle, CORRESPONDING_EVENTS))
+            .compose(RxLifecycle.<String, String>bind(lifecycle, CORRESPONDING_EVENTS))
             .test();
 
         subject.onNext("1");
@@ -34,7 +34,7 @@ public class UntilCorrespondingEventTransformerMaybeTest {
     @Test
     public void oneStartEvent() {
         TestObserver<String> testObserver = maybe
-            .compose(new UntilCorrespondingEventTransformer<String, String>(lifecycle, CORRESPONDING_EVENTS))
+            .compose(RxLifecycle.<String, String>bind(lifecycle, CORRESPONDING_EVENTS))
             .test();
 
         lifecycle.onNext("create");
@@ -46,7 +46,7 @@ public class UntilCorrespondingEventTransformerMaybeTest {
     @Test
     public void twoOpenEvents() {
         TestObserver<String> testObserver = maybe
-            .compose(new UntilCorrespondingEventTransformer<String, String>(lifecycle, CORRESPONDING_EVENTS))
+            .compose(RxLifecycle.<String, String>bind(lifecycle, CORRESPONDING_EVENTS))
             .test();
 
         lifecycle.onNext("create");
@@ -59,7 +59,7 @@ public class UntilCorrespondingEventTransformerMaybeTest {
     @Test
     public void openAndCloseEvent() {
         TestObserver<String> testObserver = maybe
-            .compose(new UntilCorrespondingEventTransformer<String, String>(lifecycle, CORRESPONDING_EVENTS))
+            .compose(RxLifecycle.<String, String>bind(lifecycle, CORRESPONDING_EVENTS))
             .test();
 
         lifecycle.onNext("create");

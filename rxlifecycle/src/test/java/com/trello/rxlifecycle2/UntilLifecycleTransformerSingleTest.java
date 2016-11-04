@@ -25,7 +25,7 @@ public class UntilLifecycleTransformerSingleTest {
     public void noEvent() {
         TestObserver<String> testObserver = Single.just("1")
             .delay(1, TimeUnit.MILLISECONDS, testScheduler)
-            .compose(new UntilLifecycleTransformer<String, String>(lifecycle))
+            .compose(RxLifecycle.<String, String>bind(lifecycle))
             .test();
 
         testObserver.assertNoValues();
@@ -39,7 +39,7 @@ public class UntilLifecycleTransformerSingleTest {
     public void oneEvent() {
         TestObserver<String> testObserver = Single.just("1")
             .delay(1, TimeUnit.MILLISECONDS, testScheduler)
-            .compose(new UntilLifecycleTransformer<String, String>(lifecycle))
+            .compose(RxLifecycle.<String, String>bind(lifecycle))
             .test();
 
         testObserver.assertNoValues();
