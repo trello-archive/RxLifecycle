@@ -9,7 +9,6 @@ import io.reactivex.SingleSource;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.Arrays;
 
 /**
  * Continues a subscription until it sees *any* lifecycle event.
@@ -35,13 +34,11 @@ final class UntilLifecycleTransformer<T, R> implements LifecycleTransformer<T> {
 
     @Override
     public CompletableSource apply(Completable upstream) {
-        return Completable.amb(
-            Arrays.asList(
-                upstream,
-                lifecycle
-                    .flatMap(Functions.CANCEL_COMPLETABLE)
-                    .ignoreElements()
-            )
+        return Completable.ambArray(
+            upstream,
+            lifecycle
+                .flatMap(Functions.CANCEL_COMPLETABLE)
+                .ignoreElements()
         );
     }
 

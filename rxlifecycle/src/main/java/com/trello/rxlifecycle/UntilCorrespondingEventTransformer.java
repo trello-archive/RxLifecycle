@@ -10,7 +10,6 @@ import io.reactivex.functions.Function;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.Arrays;
 
 import static com.trello.rxlifecycle.TakeUntilGenerator.takeUntilCorrespondingEvent;
 
@@ -44,13 +43,11 @@ final class UntilCorrespondingEventTransformer<T, R> implements LifecycleTransfo
 
     @Override
     public CompletableSource apply(Completable upstream) {
-        return Completable.amb(
-            Arrays.asList(
-                upstream,
-                takeUntilCorrespondingEvent(sharedLifecycle, correspondingEvents)
-                    .flatMap(Functions.CANCEL_COMPLETABLE)
-                    .ignoreElements()
-            )
+        return Completable.ambArray(
+            upstream,
+            takeUntilCorrespondingEvent(sharedLifecycle, correspondingEvents)
+                .flatMap(Functions.CANCEL_COMPLETABLE)
+                .ignoreElements()
         );
     }
 
