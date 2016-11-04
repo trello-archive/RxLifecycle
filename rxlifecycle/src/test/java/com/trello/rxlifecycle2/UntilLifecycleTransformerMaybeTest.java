@@ -22,7 +22,7 @@ public class UntilLifecycleTransformerMaybeTest {
     @Test
     public void noEvent() {
         TestObserver<String> testObserver = maybe
-            .compose(new UntilLifecycleTransformer<String, String>(lifecycle))
+            .compose(RxLifecycle.<String, String>bind(lifecycle))
             .test();
 
         stream.onNext("1");
@@ -33,7 +33,7 @@ public class UntilLifecycleTransformerMaybeTest {
     @Test
     public void oneEvent() {
         TestObserver<String> testObserver = maybe
-            .compose(new UntilLifecycleTransformer<String, String>(lifecycle))
+            .compose(RxLifecycle.<String, String>bind(lifecycle))
             .test();
 
         lifecycle.onNext("stop");

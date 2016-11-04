@@ -26,7 +26,7 @@ public class UntilCorrespondingEventTransformerSingleTest {
     public void noEvents() {
         TestObserver<String> testObserver = Single.just("1")
             .delay(1, TimeUnit.MILLISECONDS, testScheduler)
-            .compose(new UntilCorrespondingEventTransformer<String, String>(lifecycle, CORRESPONDING_EVENTS))
+            .compose(RxLifecycle.<String, String>bind(lifecycle, CORRESPONDING_EVENTS))
             .test();
 
         testObserver.assertNoValues();
@@ -40,7 +40,7 @@ public class UntilCorrespondingEventTransformerSingleTest {
     public void oneStartEvent() {
         TestObserver<String> testObserver = Single.just("1")
             .delay(1, TimeUnit.MILLISECONDS, testScheduler)
-            .compose(new UntilCorrespondingEventTransformer<String, String>(lifecycle, CORRESPONDING_EVENTS))
+            .compose(RxLifecycle.<String, String>bind(lifecycle, CORRESPONDING_EVENTS))
             .test();
 
         testObserver.assertNoValues();
@@ -55,7 +55,7 @@ public class UntilCorrespondingEventTransformerSingleTest {
     public void twoOpenEvents() {
         TestObserver<String> testObserver = Single.just("1")
             .delay(1, TimeUnit.MILLISECONDS, testScheduler)
-            .compose(new UntilCorrespondingEventTransformer<String, String>(lifecycle, CORRESPONDING_EVENTS))
+            .compose(RxLifecycle.<String, String>bind(lifecycle, CORRESPONDING_EVENTS))
             .test();
 
         testObserver.assertNoValues();
@@ -71,7 +71,7 @@ public class UntilCorrespondingEventTransformerSingleTest {
     public void openAndCloseEvent() {
         TestObserver<String> testObserver = Single.just("1")
             .delay(1, TimeUnit.MILLISECONDS, testScheduler)
-            .compose(new UntilCorrespondingEventTransformer<String, String>(lifecycle, CORRESPONDING_EVENTS))
+            .compose(RxLifecycle.<String, String>bind(lifecycle, CORRESPONDING_EVENTS))
             .test();
 
         lifecycle.onNext("create");

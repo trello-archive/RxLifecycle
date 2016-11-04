@@ -24,7 +24,7 @@ public class UntilEventTransformerCompletableTest {
     @Test
     public void noEvents() {
         TestObserver<Void> testObserver = completable
-            .compose(new UntilEventTransformer<String, String>(lifecycle, "stop"))
+            .compose(RxLifecycle.bindUntilEvent(lifecycle, "stop"))
             .test();
 
         subject.onComplete();
@@ -34,7 +34,7 @@ public class UntilEventTransformerCompletableTest {
     @Test
     public void oneWrongEvent() {
         TestObserver<Void> testObserver = completable
-            .compose(new UntilEventTransformer<String, String>(lifecycle, "stop"))
+            .compose(RxLifecycle.bindUntilEvent(lifecycle, "stop"))
             .test();
 
         lifecycle.onNext("keep going");
@@ -45,7 +45,7 @@ public class UntilEventTransformerCompletableTest {
     @Test
     public void twoEvents() {
         TestObserver<Void> testObserver = completable
-            .compose(new UntilEventTransformer<String, String>(lifecycle, "stop"))
+            .compose(RxLifecycle.bindUntilEvent(lifecycle, "stop"))
             .test();
 
         lifecycle.onNext("keep going");

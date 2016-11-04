@@ -20,7 +20,7 @@ public class UntilLifecycleTransformerFlowableTest {
     @Test
     public void noEvent() {
         TestSubscriber<String> testSubscriber = stream
-            .compose(new UntilLifecycleTransformer<String, String>(lifecycle))
+            .compose(RxLifecycle.<String, String>bind(lifecycle))
             .test();
 
         stream.onNext("1");
@@ -32,7 +32,7 @@ public class UntilLifecycleTransformerFlowableTest {
     @Test
     public void oneEvent() {
         TestSubscriber<String> testSubscriber = stream
-            .compose(new UntilLifecycleTransformer<String, String>(lifecycle))
+            .compose(RxLifecycle.<String, String>bind(lifecycle))
             .test();
 
         stream.onNext("1");

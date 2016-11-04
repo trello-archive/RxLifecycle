@@ -24,7 +24,7 @@ public class UntilLifecycleTransformerCompletableTest {
     @Test
     public void noEvent() {
         TestObserver<Void> testObserver = completable
-            .compose(new UntilLifecycleTransformer<String, String>(lifecycle))
+            .compose(RxLifecycle.bind(lifecycle))
             .test();
 
         subject.onComplete();
@@ -35,7 +35,7 @@ public class UntilLifecycleTransformerCompletableTest {
     @Test
     public void oneEvent() {
         TestObserver<Void> testObserver = completable
-            .compose(new UntilLifecycleTransformer<String, String>(lifecycle))
+            .compose(RxLifecycle.bind(lifecycle))
             .test();
 
         lifecycle.onNext("stop");

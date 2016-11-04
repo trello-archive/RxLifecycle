@@ -21,7 +21,7 @@ public class UntilCorrespondingEventTransformerFlowableTest {
     @Test
     public void noEvents() {
         TestSubscriber<String> testSubscriber = stream
-            .compose(new UntilCorrespondingEventTransformer<String, String>(lifecycle, CORRESPONDING_EVENTS))
+            .compose(RxLifecycle.<String, String>bind(lifecycle, CORRESPONDING_EVENTS))
             .test();
 
         stream.onNext("1");
@@ -33,7 +33,7 @@ public class UntilCorrespondingEventTransformerFlowableTest {
     @Test
     public void oneStartEvent() {
         TestSubscriber<String> testSubscriber = stream
-            .compose(new UntilCorrespondingEventTransformer<String, String>(lifecycle, CORRESPONDING_EVENTS))
+            .compose(RxLifecycle.<String, String>bind(lifecycle, CORRESPONDING_EVENTS))
             .test();
 
         lifecycle.onNext("create");
@@ -47,7 +47,7 @@ public class UntilCorrespondingEventTransformerFlowableTest {
     @Test
     public void twoOpenEvents() {
         TestSubscriber<String> testSubscriber = stream
-            .compose(new UntilCorrespondingEventTransformer<String, String>(lifecycle, CORRESPONDING_EVENTS))
+            .compose(RxLifecycle.<String, String>bind(lifecycle, CORRESPONDING_EVENTS))
             .test();
 
         lifecycle.onNext("create");
@@ -62,7 +62,7 @@ public class UntilCorrespondingEventTransformerFlowableTest {
     @Test
     public void openAndCloseEvent() {
         TestSubscriber<String> testSubscriber = stream
-            .compose(new UntilCorrespondingEventTransformer<String, String>(lifecycle, CORRESPONDING_EVENTS))
+            .compose(RxLifecycle.<String, String>bind(lifecycle, CORRESPONDING_EVENTS))
             .test();
 
         lifecycle.onNext("create");
