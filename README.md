@@ -106,22 +106,20 @@ myObservable
 
 ## Installation
 
-RxLifecycle2 is currently only on OSS snapshot repository (https://oss.sonatype.org/content/repositories/snapshots/).
-
 ```gradle
-compile 'com.trello.rxlifecycle2:rxlifecycle:2.0-SNAPSHOT'
+compile 'com.trello.rxlifecycle2:rxlifecycle:2.0'
 
 // If you want to bind to Android-specific lifecycles
-compile 'com.trello.rxlifecycle2:rxlifecycle-android:2.0-SNAPSHOT'
+compile 'com.trello.rxlifecycle2:rxlifecycle-android:2.0'
 
 // If you want pre-written Activities and Fragments you can subclass as providers
-compile 'com.trello.rxlifecycle2:rxlifecycle-components:2.0-SNAPSHOT'
+compile 'com.trello.rxlifecycle2:rxlifecycle-components:2.0'
 
 // If you want to use Navi for providers
-compile 'com.trello.rxlifecycle2:rxlifecycle-navi:2.0-SNAPSHOT'
+compile 'com.trello.rxlifecycle2:rxlifecycle-navi:2.0'
 
 // If you want to use Kotlin syntax
-compile 'com.trello.rxlifecycle2:rxlifecycle-kotlin:2.0-SNAPSHOT'
+compile 'com.trello.rxlifecycle2:rxlifecycle-kotlin:2.0'
 ```
 
 ## License
