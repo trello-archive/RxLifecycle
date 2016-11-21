@@ -14,6 +14,7 @@
 
 package com.trello.rxlifecycle2.components;
 
+import android.os.Bundle;
 import com.trello.navi2.Event;
 import com.trello.navi2.NaviComponent;
 import com.trello.navi2.internal.NaviEmitter;
@@ -64,6 +65,16 @@ public class NaviFragmentLifecycleTest {
             FragmentEvent.DESTROY,
             FragmentEvent.DETACH
         );
+    }
+
+    @Test
+    public void testNonLifecycleEvents() {
+        NaviEmitter fragment = NaviEmitter.createFragmentEmitter();
+        LifecycleProvider<FragmentEvent> provider = NaviLifecycle.createFragmentLifecycleProvider(fragment);
+        TestObserver<FragmentEvent> testObserver = provider.lifecycle().test();
+        fragment.onRestoreInstanceState(new Bundle());
+        testObserver.assertNoValues();
+        testObserver.assertNoErrors();
     }
 
     @Test
