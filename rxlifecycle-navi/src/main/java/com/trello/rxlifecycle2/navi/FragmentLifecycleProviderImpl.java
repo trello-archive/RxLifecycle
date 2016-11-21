@@ -27,6 +27,9 @@ import com.trello.rxlifecycle2.android.RxLifecycleAndroid;
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
 
+import static com.trello.rxlifecycle2.navi.NaviLifecycleMaps.FRAGMENT_EVENT_FILTER;
+import static com.trello.rxlifecycle2.navi.NaviLifecycleMaps.FRAGMENT_EVENT_MAP;
+
 final class FragmentLifecycleProviderImpl implements LifecycleProvider<FragmentEvent> {
     private final BehaviorSubject<FragmentEvent> lifecycleSubject = BehaviorSubject.create();
 
@@ -37,8 +40,8 @@ final class FragmentLifecycleProviderImpl implements LifecycleProvider<FragmentE
         }
 
         RxNavi.observe(fragment, Event.ALL)
-            .map(NaviLifecycleMaps.FRAGMENT_EVENT_MAP)
-            .filter(RxUtils.notNull())
+            .filter(FRAGMENT_EVENT_FILTER)
+            .map(FRAGMENT_EVENT_MAP)
             .subscribe(lifecycleSubject);
     }
 

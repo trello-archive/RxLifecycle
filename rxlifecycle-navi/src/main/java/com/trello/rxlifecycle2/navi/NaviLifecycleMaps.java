@@ -14,19 +14,39 @@
 
 package com.trello.rxlifecycle2.navi;
 
+import android.support.annotation.NonNull;
 import com.trello.navi2.Event;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 import com.trello.rxlifecycle2.android.FragmentEvent;
 import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 
 /**
  * Maps from Navi events to RxLifecycleAndroid events
  */
 final class NaviLifecycleMaps {
 
+    static final Predicate<Event.Type> ACTIVITY_EVENT_FILTER = new Predicate<Event.Type>() {
+        @Override
+        public boolean test(Event.Type type) throws Exception {
+            switch (type) {
+                case CREATE:
+                case START:
+                case RESUME:
+                case PAUSE:
+                case STOP:
+                case DESTROY:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+    };
+
     static final Function<Event.Type, ActivityEvent> ACTIVITY_EVENT_MAP =
         new Function<Event.Type, ActivityEvent>() {
             @Override
+            @NonNull
             public ActivityEvent apply(Event.Type type) throws Exception {
                 switch (type) {
                     case CREATE:
@@ -42,14 +62,36 @@ final class NaviLifecycleMaps {
                     case DESTROY:
                         return ActivityEvent.DESTROY;
                     default:
-                        return null;
+                        throw new IllegalArgumentException("Cannot map " + type + " to a ActivityEvent.");
                 }
             }
         };
 
+    static final Predicate<Event.Type> FRAGMENT_EVENT_FILTER = new Predicate<Event.Type>() {
+        @Override
+        public boolean test(Event.Type type) throws Exception {
+            switch (type) {
+                case ATTACH:
+                case CREATE:
+                case CREATE_VIEW:
+                case START:
+                case RESUME:
+                case PAUSE:
+                case STOP:
+                case DESTROY_VIEW:
+                case DESTROY:
+                case DETACH:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+    };
+
     static final Function<Event.Type, FragmentEvent> FRAGMENT_EVENT_MAP =
         new Function<Event.Type, FragmentEvent>() {
             @Override
+            @NonNull
             public FragmentEvent apply(Event.Type type) throws Exception {
                 switch (type) {
                     case ATTACH:
@@ -73,7 +115,7 @@ final class NaviLifecycleMaps {
                     case DETACH:
                         return FragmentEvent.DETACH;
                     default:
-                        return null;
+                        throw new IllegalArgumentException("Cannot map " + type + " to a FragmentEvent.");
                 }
             }
         };
