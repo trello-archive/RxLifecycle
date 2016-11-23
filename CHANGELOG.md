@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.1 (2016-11-23)
+
+- [#183](https://github.com/trello/RxLifecycle/pull/183): Fix usage of null in navi module
+
 ## 2.0 (2016-11-21)
 
 This major revision was made to support RxJava 2. RxLifecycle 2.0 lives in a new namespace and package
