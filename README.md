@@ -3,6 +3,8 @@
 The utilities provided here allow for automatic completion of sequences based on `Activity` or `Fragment`
 lifecycle events. This capability is useful in Android, where incomplete subscriptions can cause memory leaks.
 
+**Looking for an RxJava 2 compatible library? Check out [the RxLifecycle 2.x branch](https://github.com/trello/RxLifecycle/tree/2.x).**
+
 ## Usage
 
 You must provide an `Observable<ActivityEvent>` or `Observable<FragmentEvent>` that gives
