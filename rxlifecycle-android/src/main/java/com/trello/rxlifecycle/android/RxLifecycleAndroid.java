@@ -17,7 +17,6 @@ package com.trello.rxlifecycle.android;
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 import android.view.View;
-import com.jakewharton.rxbinding.view.RxView;
 import com.trello.rxlifecycle.*;
 import rx.Observable;
 import rx.functions.Func1;
@@ -98,7 +97,7 @@ public class RxLifecycleAndroid {
     public static <T> LifecycleTransformer<T> bindView(@NonNull final View view) {
         checkNotNull(view, "view == null");
 
-        return bind(RxView.detaches(view));
+        return bind(Observable.create(new ViewDetachesObservable(view)));
     }
 
     // Figures out which corresponding next lifecycle event in which to unsubscribe, for Activities
