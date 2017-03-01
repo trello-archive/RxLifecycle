@@ -21,9 +21,6 @@ import io.reactivex.subjects.PublishSubject;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 public class RxLifecycleTest {
 
     private Observable<Object> observable;
@@ -38,9 +35,9 @@ public class RxLifecycleTest {
     public void testBindLifecycle() {
         BehaviorSubject<Object> lifecycle = BehaviorSubject.create();
         TestObserver<Object> testObserver = observable.compose(RxLifecycle.bind(lifecycle)).test();
-        assertFalse(testObserver.isDisposed());
+        testObserver.assertNotComplete();
         lifecycle.onNext(new Object());
-        assertTrue(testObserver.isDisposed());
+        testObserver.assertComplete();
     }
 
     @Test
@@ -48,9 +45,9 @@ public class RxLifecycleTest {
         // Ensures it works with other types as well, and not just "Object"
         BehaviorSubject<String> lifecycle = BehaviorSubject.create();
         TestObserver<Object> testObserver = observable.compose(RxLifecycle.bind(lifecycle)).test();
-        assertFalse(testObserver.isDisposed());
+        testObserver.assertNotComplete();
         lifecycle.onNext("");
-        assertTrue(testObserver.isDisposed());
+        testObserver.assertComplete();
     }
 
     // Null checks
