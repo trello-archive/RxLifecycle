@@ -29,9 +29,11 @@ import org.junit.Test;
 import java.lang.ref.WeakReference;
 import java.util.HashSet;
 
-import static org.junit.Assert.assertFalse;
+import static com.trello.navi2.internal.NaviEmitter.createActivityEmitter;
+import static com.trello.rxlifecycle2.android.ActivityEvent.STOP;
+import static com.trello.rxlifecycle2.navi.NaviLifecycle.createActivityLifecycleProvider;
+import static io.reactivex.subjects.PublishSubject.create;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 public class NaviActivityLifecycleTest {
 
@@ -71,64 +73,58 @@ public class NaviActivityLifecycleTest {
 
     @Test
     public void testBindUntilEvent() {
-        NaviEmitter activity = NaviEmitter.createActivityEmitter();
-        LifecycleProvider<ActivityEvent> provider = NaviLifecycle.createActivityLifecycleProvider(activity);
+        NaviEmitter activity = createActivityEmitter();
+        LifecycleProvider<ActivityEvent> provider = createActivityLifecycleProvider(activity);
 
-        Observable<Object> observable = PublishSubject.create().hide();
-        TestObserver<Object> testObserver = observable.compose(provider.bindUntilEvent(ActivityEvent.STOP)).test();
+        Observable<Object> observable = create().hide();
+        TestObserver<Object> testObserver = observable.compose(provider.bindUntilEvent(STOP)).test();
 
         activity.onCreate(null);
-        assertFalse(testObserver.isDisposed());
+        testObserver.assertNotComplete();
         activity.onStart();
-        assertFalse(testObserver.isDisposed());
+        testObserver.assertNotComplete();
         activity.onResume();
-        assertFalse(testObserver.isDisposed());
+        testObserver.assertNotComplete();
         activity.onPause();
-        assertFalse(testObserver.isDisposed());
+        testObserver.assertNotComplete();
         activity.onStop();
         testObserver.assertComplete();
-        assertTrue(testObserver.isDisposed());
     }
 
     @Test
     public void testBindToLifecycle() {
-        NaviEmitter activity = NaviEmitter.createActivityEmitter();
-        LifecycleProvider<ActivityEvent> provider = NaviLifecycle.createActivityLifecycleProvider(activity);
+        NaviEmitter activity = createActivityEmitter();
+        LifecycleProvider<ActivityEvent> provider = createActivityLifecycleProvider(activity);
 
-        Observable<Object> observable = PublishSubject.create().hide();
+        Observable<Object> observable = create().hide();
 
         activity.onCreate(null);
         TestObserver<Object> createObserver = observable.compose(provider.bindToLifecycle()).test();
 
         activity.onStart();
-        assertFalse(createObserver.isDisposed());
+        createObserver.assertNotComplete();
         TestObserver<Object> startObserver = observable.compose(provider.bindToLifecycle()).test();
 
         activity.onResume();
-        assertFalse(createObserver.isDisposed());
-        assertFalse(startObserver.isDisposed());
+        createObserver.assertNotComplete();
+        startObserver.assertNotComplete();
         TestObserver<Object> resumeTestSub = observable.compose(provider.bindToLifecycle()).test();
 
         activity.onPause();
-        assertFalse(createObserver.isDisposed());
-        assertFalse(startObserver.isDisposed());
+        createObserver.assertNotComplete();
+        startObserver.assertNotComplete();
         resumeTestSub.assertComplete();
-        assertTrue(resumeTestSub.isDisposed());
         TestObserver<Object> pauseObserver = observable.compose(provider.bindToLifecycle()).test();
 
         activity.onStop();
-        assertFalse(createObserver.isDisposed());
+        createObserver.assertNotComplete();
         startObserver.assertComplete();
-        assertTrue(startObserver.isDisposed());
         pauseObserver.assertComplete();
-        assertTrue(pauseObserver.isDisposed());
         TestObserver<Object> stopObserver = observable.compose(provider.bindToLifecycle()).test();
 
         activity.onDestroy();
         createObserver.assertComplete();
-        assertTrue(createObserver.isDisposed());
         stopObserver.assertComplete();
-        assertTrue(stopObserver.isDisposed());
     }
 
     @Test(expected = IllegalArgumentException.class)

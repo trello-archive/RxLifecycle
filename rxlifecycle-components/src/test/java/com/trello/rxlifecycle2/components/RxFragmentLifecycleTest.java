@@ -27,8 +27,8 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 import org.robolectric.util.FragmentTestUtil;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static com.trello.rxlifecycle2.android.FragmentEvent.STOP;
+import static org.robolectric.util.FragmentTestUtil.startFragment;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(manifest = Config.NONE)
@@ -96,98 +96,88 @@ public class RxFragmentLifecycleTest {
     // Tests bindUntil for any given LifecycleProvider<FragmentEvent> implementation
     private void testBindUntilEvent(LifecycleProvider<FragmentEvent> provider) {
         Fragment fragment = (Fragment) provider;
-        FragmentTestUtil.startFragment(fragment);
+        startFragment(fragment);
 
-        TestObserver<Object> testObserver = observable.compose(provider.bindUntilEvent(FragmentEvent.STOP)).test();
+        TestObserver<Object> testObserver = observable.compose(provider.bindUntilEvent(STOP)).test();
 
         fragment.onAttach(null);
-        assertFalse(testObserver.isDisposed());
+        testObserver.assertNotComplete();
         fragment.onCreate(null);
-        assertFalse(testObserver.isDisposed());
+        testObserver.assertNotComplete();
         fragment.onViewCreated(null, null);
-        assertFalse(testObserver.isDisposed());
+        testObserver.assertNotComplete();
         fragment.onStart();
-        assertFalse(testObserver.isDisposed());
+        testObserver.assertNotComplete();
         fragment.onResume();
-        assertFalse(testObserver.isDisposed());
+        testObserver.assertNotComplete();
         fragment.onPause();
-        assertFalse(testObserver.isDisposed());
+        testObserver.assertNotComplete();
         fragment.onStop();
         testObserver.assertComplete();
-        assertTrue(testObserver.isDisposed());
     }
 
     // Tests bindToLifecycle for any given LifecycleProvider<FragmentEvent> implementation
     private void testBindToLifecycle(LifecycleProvider<FragmentEvent> provider) {
         Fragment fragment = (Fragment) provider;
-        FragmentTestUtil.startFragment(fragment);
+        startFragment(fragment);
 
         fragment.onAttach(null);
         TestObserver<Object> attachObserver = observable.compose(provider.bindToLifecycle()).test();
 
         fragment.onCreate(null);
-        assertFalse(attachObserver.isDisposed());
+        attachObserver.assertNotComplete();
         TestObserver<Object> createObserver = observable.compose(provider.bindToLifecycle()).test();
 
         fragment.onViewCreated(null, null);
-        assertFalse(attachObserver.isDisposed());
-        assertFalse(createObserver.isDisposed());
+        attachObserver.assertNotComplete();
+        createObserver.assertNotComplete();
         TestObserver<Object> createViewObserver = observable.compose(provider.bindToLifecycle()).test();
 
         fragment.onStart();
-        assertFalse(attachObserver.isDisposed());
-        assertFalse(createObserver.isDisposed());
-        assertFalse(createViewObserver.isDisposed());
+        attachObserver.assertNotComplete();
+        createObserver.assertNotComplete();
+        createViewObserver.assertNotComplete();
         TestObserver<Object> startObserver = observable.compose(provider.bindToLifecycle()).test();
 
         fragment.onResume();
-        assertFalse(attachObserver.isDisposed());
-        assertFalse(createObserver.isDisposed());
-        assertFalse(createViewObserver.isDisposed());
-        assertFalse(startObserver.isDisposed());
+        attachObserver.assertNotComplete();
+        createObserver.assertNotComplete();
+        createViewObserver.assertNotComplete();
+        startObserver.assertNotComplete();
         TestObserver<Object> resumeObserver = observable.compose(provider.bindToLifecycle()).test();
 
         fragment.onPause();
-        assertFalse(attachObserver.isDisposed());
-        assertFalse(createObserver.isDisposed());
-        assertFalse(createViewObserver.isDisposed());
-        assertFalse(startObserver.isDisposed());
+        attachObserver.assertNotComplete();
+        createObserver.assertNotComplete();
+        createViewObserver.assertNotComplete();
+        startObserver.assertNotComplete();
         resumeObserver.assertComplete();
-        assertTrue(resumeObserver.isDisposed());
         TestObserver<Object> pauseObserver = observable.compose(provider.bindToLifecycle()).test();
 
         fragment.onStop();
-        assertFalse(attachObserver.isDisposed());
-        assertFalse(createObserver.isDisposed());
-        assertFalse(createViewObserver.isDisposed());
+        attachObserver.assertNotComplete();
+        createObserver.assertNotComplete();
+        createViewObserver.assertNotComplete();
         startObserver.assertComplete();
-        assertTrue(startObserver.isDisposed());
         pauseObserver.assertComplete();
-        assertTrue(pauseObserver.isDisposed());
         TestObserver<Object> stopObserver = observable.compose(provider.bindToLifecycle()).test();
 
         fragment.onDestroyView();
-        assertFalse(attachObserver.isDisposed());
-        assertFalse(createObserver.isDisposed());
+        attachObserver.assertNotComplete();
+        createObserver.assertNotComplete();
         createViewObserver.assertComplete();
-        assertTrue(createViewObserver.isDisposed());
         stopObserver.assertComplete();
-        assertTrue(stopObserver.isDisposed());
         TestObserver<Object> destroyViewObserver = observable.compose(provider.bindToLifecycle()).test();
 
         fragment.onDestroy();
-        assertFalse(attachObserver.isDisposed());
+        attachObserver.assertNotComplete();
         createObserver.assertComplete();
-        assertTrue(createObserver.isDisposed());
         destroyViewObserver.assertComplete();
-        assertTrue(destroyViewObserver.isDisposed());
         TestObserver<Object> destroyObserver = observable.compose(provider.bindToLifecycle()).test();
 
         fragment.onDetach();
         attachObserver.assertComplete();
-        assertTrue(attachObserver.isDisposed());
         destroyObserver.assertComplete();
-        assertTrue(destroyObserver.isDisposed());
     }
 
     // These classes are just for testing since components are abstract

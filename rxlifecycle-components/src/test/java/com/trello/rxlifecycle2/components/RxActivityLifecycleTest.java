@@ -28,7 +28,7 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 import org.robolectric.util.ActivityController;
 
-import static org.junit.Assert.assertFalse;
+import static com.trello.rxlifecycle2.android.ActivityEvent.STOP;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(RobolectricTestRunner.class)
@@ -90,19 +90,18 @@ public class RxActivityLifecycleTest {
     private void testBindUntilEvent(ActivityController<? extends LifecycleProvider<ActivityEvent>> controller) {
         LifecycleProvider<ActivityEvent> activity = controller.get();
 
-        TestObserver<Object> testObserver = observable.compose(activity.bindUntilEvent(ActivityEvent.STOP)).test();
+        TestObserver<Object> testObserver = observable.compose(activity.bindUntilEvent(STOP)).test();
 
         controller.create();
-        assertFalse(testObserver.isDisposed());
+        testObserver.assertNotComplete();
         controller.start();
-        assertFalse(testObserver.isDisposed());
+        testObserver.assertNotComplete();
         controller.resume();
-        assertFalse(testObserver.isDisposed());
+        testObserver.assertNotComplete();
         controller.pause();
-        assertFalse(testObserver.isDisposed());
+        testObserver.assertNotComplete();
         controller.stop();
         testObserver.assertComplete();
-        assertTrue(testObserver.isDisposed());
     }
 
     // Tests bindToLifecycle for any given RxActivityLifecycle implementation
@@ -113,34 +112,29 @@ public class RxActivityLifecycleTest {
         TestObserver<Object> createObserver = observable.compose(activity.bindToLifecycle()).test();
 
         controller.start();
-        assertFalse(createObserver.isDisposed());
+        createObserver.assertNotComplete();
         TestObserver<Object> startObserver = observable.compose(activity.bindToLifecycle()).test();
 
         controller.resume();
-        assertFalse(createObserver.isDisposed());
-        assertFalse(startObserver.isDisposed());
+        createObserver.assertNotComplete();
+        startObserver.assertNotComplete();
         TestObserver<Object> resumeObserver = observable.compose(activity.bindToLifecycle()).test();
 
         controller.pause();
-        assertFalse(createObserver.isDisposed());
-        assertFalse(startObserver.isDisposed());
+        createObserver.assertNotComplete();
+        startObserver.assertNotComplete();
         resumeObserver.assertComplete();
-        assertTrue(resumeObserver.isDisposed());
         TestObserver<Object> pauseObserver = observable.compose(activity.bindToLifecycle()).test();
 
         controller.stop();
-        assertFalse(createObserver.isDisposed());
+        createObserver.assertNotComplete();
         startObserver.assertComplete();
-        assertTrue(startObserver.isDisposed());
         pauseObserver.assertComplete();
-        assertTrue(pauseObserver.isDisposed());
         TestObserver<Object> stopObserver = observable.compose(activity.bindToLifecycle()).test();
 
         controller.destroy();
         createObserver.assertComplete();
-        assertTrue(createObserver.isDisposed());
         stopObserver.assertComplete();
-        assertTrue(stopObserver.isDisposed());
     }
 
     // These classes are just for testing since components are abstract

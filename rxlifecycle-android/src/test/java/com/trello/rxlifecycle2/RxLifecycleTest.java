@@ -34,7 +34,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(manifest = Config.NONE)
@@ -56,20 +55,20 @@ public class RxLifecycleTest {
             observable.compose(RxLifecycle.bindUntilEvent(lifecycle, FragmentEvent.STOP)).test();
 
         lifecycle.onNext(FragmentEvent.ATTACH);
-        assertFalse(testObserver.isDisposed());
+        testObserver.assertNotComplete();
         lifecycle.onNext(FragmentEvent.CREATE);
-        assertFalse(testObserver.isDisposed());
+        testObserver.assertNotComplete();
         lifecycle.onNext(FragmentEvent.CREATE_VIEW);
-        assertFalse(testObserver.isDisposed());
+        testObserver.assertNotComplete();
         lifecycle.onNext(FragmentEvent.START);
-        assertFalse(testObserver.isDisposed());
+        testObserver.assertNotComplete();
         lifecycle.onNext(FragmentEvent.RESUME);
-        assertFalse(testObserver.isDisposed());
+        testObserver.assertNotComplete();
         lifecycle.onNext(FragmentEvent.PAUSE);
-        assertFalse(testObserver.isDisposed());
+        testObserver.assertNotComplete();
+        testObserver.assertNotComplete();
         lifecycle.onNext(FragmentEvent.STOP);
         testObserver.assertComplete();
-        assertTrue(testObserver.isDisposed());
     }
 
     @Test
@@ -80,16 +79,15 @@ public class RxLifecycleTest {
             observable.compose(RxLifecycle.bindUntilEvent(lifecycle, ActivityEvent.STOP)).test();
 
         lifecycle.onNext(ActivityEvent.CREATE);
-        assertFalse(testObserver.isDisposed());
+        testObserver.assertNotComplete();
         lifecycle.onNext(ActivityEvent.START);
-        assertFalse(testObserver.isDisposed());
+        testObserver.assertNotComplete();
         lifecycle.onNext(ActivityEvent.RESUME);
-        assertFalse(testObserver.isDisposed());
+        testObserver.assertNotComplete();
         lifecycle.onNext(ActivityEvent.PAUSE);
-        assertFalse(testObserver.isDisposed());
+        testObserver.assertNotComplete();
         lifecycle.onNext(ActivityEvent.STOP);
         testObserver.assertComplete();
-        assertTrue(testObserver.isDisposed());
     }
 
     @Test
@@ -100,34 +98,29 @@ public class RxLifecycleTest {
         TestObserver<Object> createObserver = observable.compose(RxLifecycleAndroid.bindActivity(lifecycle)).test();
 
         lifecycle.onNext(ActivityEvent.START);
-        assertFalse(createObserver.isDisposed());
+        createObserver.assertNotComplete();
         TestObserver<Object> startObserver = observable.compose(RxLifecycleAndroid.bindActivity(lifecycle)).test();
 
         lifecycle.onNext(ActivityEvent.RESUME);
-        assertFalse(createObserver.isDisposed());
-        assertFalse(startObserver.isDisposed());
+        createObserver.assertNotComplete();
+        startObserver.assertNotComplete();
         TestObserver<Object> resumeObserver = observable.compose(RxLifecycleAndroid.bindActivity(lifecycle)).test();
 
         lifecycle.onNext(ActivityEvent.PAUSE);
-        assertFalse(createObserver.isDisposed());
-        assertFalse(startObserver.isDisposed());
+        createObserver.assertNotComplete();
+        startObserver.assertNotComplete();
         resumeObserver.assertComplete();
-        assertTrue(resumeObserver.isDisposed());
 
         TestObserver<Object> pauseObserver = observable.compose(RxLifecycleAndroid.bindActivity(lifecycle)).test();
         lifecycle.onNext(ActivityEvent.STOP);
-        assertFalse(createObserver.isDisposed());
+        createObserver.assertNotComplete();
         startObserver.assertComplete();
-        assertTrue(startObserver.isDisposed());
         pauseObserver.assertComplete();
-        assertTrue(pauseObserver.isDisposed());
         TestObserver<Object> stopObserver = observable.compose(RxLifecycleAndroid.bindActivity(lifecycle)).test();
 
         lifecycle.onNext(ActivityEvent.DESTROY);
         createObserver.assertComplete();
-        assertTrue(createObserver.isDisposed());
         stopObserver.assertComplete();
-        assertTrue(stopObserver.isDisposed());
     }
 
     @Test
@@ -137,7 +130,6 @@ public class RxLifecycleTest {
 
         TestObserver<Object> testObserver = observable.compose(RxLifecycleAndroid.bindActivity(lifecycle)).test();
         testObserver.assertComplete();
-        assertTrue(testObserver.isDisposed());
     }
 
     @Test
@@ -148,69 +140,60 @@ public class RxLifecycleTest {
         TestObserver<Object> attachObserver = observable.compose(RxLifecycleAndroid.bindFragment(lifecycle)).test();
 
         lifecycle.onNext(FragmentEvent.CREATE);
-        assertFalse(attachObserver.isDisposed());
+        attachObserver.assertNotComplete();
         TestObserver<Object> createObserver = observable.compose(RxLifecycleAndroid.bindFragment(lifecycle)).test();
 
         lifecycle.onNext(FragmentEvent.CREATE_VIEW);
-        assertFalse(attachObserver.isDisposed());
-        assertFalse(createObserver.isDisposed());
+        attachObserver.assertNotComplete();
+        createObserver.assertNotComplete();
         TestObserver<Object> createViewObserver = observable.compose(RxLifecycleAndroid.bindFragment(lifecycle)).test();
 
         lifecycle.onNext(FragmentEvent.START);
-        assertFalse(attachObserver.isDisposed());
-        assertFalse(createObserver.isDisposed());
-        assertFalse(createViewObserver.isDisposed());
+        attachObserver.assertNotComplete();
+        createObserver.assertNotComplete();
+        createViewObserver.assertNotComplete();
         TestObserver<Object> startObserver = observable.compose(RxLifecycleAndroid.bindFragment(lifecycle)).test();
 
         lifecycle.onNext(FragmentEvent.RESUME);
-        assertFalse(attachObserver.isDisposed());
-        assertFalse(createObserver.isDisposed());
-        assertFalse(createViewObserver.isDisposed());
-        assertFalse(startObserver.isDisposed());
+        attachObserver.assertNotComplete();
+        createObserver.assertNotComplete();
+        createViewObserver.assertNotComplete();
+        startObserver.assertNotComplete();
         TestObserver<Object> resumeObserver = observable.compose(RxLifecycleAndroid.bindFragment(lifecycle)).test();
 
         lifecycle.onNext(FragmentEvent.PAUSE);
-        assertFalse(attachObserver.isDisposed());
-        assertFalse(createObserver.isDisposed());
-        assertFalse(createViewObserver.isDisposed());
-        assertFalse(startObserver.isDisposed());
+        attachObserver.assertNotComplete();
+        createObserver.assertNotComplete();
+        createViewObserver.assertNotComplete();
+        startObserver.assertNotComplete();
         resumeObserver.assertComplete();
-        assertTrue(resumeObserver.isDisposed());
         TestObserver<Object> pauseObserver = observable.compose(RxLifecycleAndroid.bindFragment(lifecycle)).test();
 
         lifecycle.onNext(FragmentEvent.STOP);
-        assertFalse(attachObserver.isDisposed());
-        assertFalse(createObserver.isDisposed());
-        assertFalse(createViewObserver.isDisposed());
+        attachObserver.assertNotComplete();
+        createObserver.assertNotComplete();
+        createViewObserver.assertNotComplete();
         startObserver.assertComplete();
-        assertTrue(startObserver.isDisposed());
         pauseObserver.assertComplete();
-        assertTrue(pauseObserver.isDisposed());
         TestObserver<Object> stopObserver = observable.compose(RxLifecycleAndroid.bindFragment(lifecycle)).test();
 
         lifecycle.onNext(FragmentEvent.DESTROY_VIEW);
-        assertFalse(attachObserver.isDisposed());
-        assertFalse(createObserver.isDisposed());
+        attachObserver.assertNotComplete();
+        createObserver.assertNotComplete();
         createViewObserver.assertComplete();
-        assertTrue(createViewObserver.isDisposed());
         stopObserver.assertComplete();
-        assertTrue(stopObserver.isDisposed());
         TestObserver<Object> destroyViewObserver = observable.compose(RxLifecycleAndroid.bindFragment(lifecycle))
             .test();
 
         lifecycle.onNext(FragmentEvent.DESTROY);
-        assertFalse(attachObserver.isDisposed());
+        attachObserver.assertNotComplete();
         createObserver.assertComplete();
-        assertTrue(createObserver.isDisposed());
         destroyViewObserver.assertComplete();
-        assertTrue(destroyViewObserver.isDisposed());
         TestObserver<Object> destroyObserver = observable.compose(RxLifecycleAndroid.bindFragment(lifecycle)).test();
 
         lifecycle.onNext(FragmentEvent.DETACH);
         attachObserver.assertComplete();
-        assertTrue(attachObserver.isDisposed());
         destroyObserver.assertComplete();
-        assertTrue(destroyObserver.isDisposed());
     }
 
     @Test
@@ -220,7 +203,6 @@ public class RxLifecycleTest {
 
         TestObserver<Object> testObserver = observable.compose(RxLifecycleAndroid.bindFragment(lifecycle)).test();
         testObserver.assertComplete();
-        assertTrue(testObserver.isDisposed());
     }
 
     @Test
@@ -238,7 +220,7 @@ public class RxLifecycleTest {
 
         // Subscribe
         TestObserver<Object> viewAttachObserver = observable.compose(RxLifecycleAndroid.bindView(view)).test();
-        assertFalse(viewAttachObserver.isDisposed());
+        viewAttachObserver.assertNotComplete();
         listeners = TestUtil.getAttachStateChangeListeners(view);
         assertNotNull(listeners);
         assertFalse(listeners.isEmpty());
@@ -247,7 +229,7 @@ public class RxLifecycleTest {
         for (View.OnAttachStateChangeListener listener : listeners) {
             listener.onViewDetachedFromWindow(view);
         }
-        assertTrue(viewAttachObserver.isDisposed());
+        viewAttachObserver.assertComplete();
     }
 
     // Null checks
