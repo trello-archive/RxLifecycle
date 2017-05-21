@@ -1,5 +1,6 @@
 include ':rxlifecycle'
 include ':rxlifecycle-android'
+include ':rxlifecycle-android-lifecycle'
 include ':rxlifecycle-components'
 include ':rxlifecycle-navi'
 include ':rxlifecycle-kotlin'
