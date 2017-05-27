@@ -5,13 +5,10 @@ import android.arch.lifecycle.LifecycleObserver;
 import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.OnLifecycleEvent;
 import android.support.annotation.CheckResult;
-
+import android.support.annotation.NonNull;
 import com.trello.rxlifecycle2.LifecycleProvider;
 import com.trello.rxlifecycle2.LifecycleTransformer;
 import com.trello.rxlifecycle2.RxLifecycle;
-
-import javax.annotation.Nonnull;
-
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
 
@@ -38,21 +35,21 @@ public final class AndroidLifecycle implements LifecycleProvider<Lifecycle.Event
         owner.getLifecycle().addObserver(this);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     @CheckResult
     public Observable<Lifecycle.Event> lifecycle() {
         return lifecycleSubject.hide();
     }
 
-    @Nonnull
+    @NonNull
     @Override
     @CheckResult
-    public <T> LifecycleTransformer<T> bindUntilEvent(@Nonnull Lifecycle.Event event) {
+    public <T> LifecycleTransformer<T> bindUntilEvent(@NonNull Lifecycle.Event event) {
         return RxLifecycle.bindUntilEvent(lifecycleSubject, event);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     @CheckResult
     public <T> LifecycleTransformer<T> bindToLifecycle() {
