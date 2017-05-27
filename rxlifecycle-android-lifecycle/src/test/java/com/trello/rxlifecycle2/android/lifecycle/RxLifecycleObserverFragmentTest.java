@@ -7,8 +7,8 @@ import android.arch.lifecycle.LifecycleRuntimeTrojanProvider;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 
+import com.trello.lifecycle2.android.lifecycle.RxLifecycleObserver;
 import com.trello.rxlifecycle2.LifecycleProvider;
-import com.trellow.relifecycle2.android.lifecycle.RxLifecycleObserver;
 
 import org.junit.Before;
 import org.junit.Test;

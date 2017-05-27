@@ -14,18 +14,11 @@
 
 package com.trello.rxlifecycle2.kotlin
 
-import android.arch.lifecycle.Lifecycle
-import android.arch.lifecycle.LifecycleOwner
 import android.view.View
 import com.trello.rxlifecycle2.LifecycleProvider
 import com.trello.rxlifecycle2.RxLifecycle
 import com.trello.rxlifecycle2.android.RxLifecycleAndroid
-import com.trellow.relifecycle2.android.lifecycle.RxLifecycleObserver
-import io.reactivex.Completable
-import io.reactivex.Flowable
-import io.reactivex.Maybe
-import io.reactivex.Observable
-import io.reactivex.Single
+import io.reactivex.*
 import io.reactivex.functions.Function
 
 // RxLifecycle extensions
@@ -121,35 +114,3 @@ fun <E> Completable.bindUntilEvent(provider: LifecycleProvider<E>, event: E): Co
 
 fun Completable.bindToLifecycle(view: View): Completable
     = this.compose(RxLifecycleAndroid.bindView<Completable>(view))
-
-// RxLifecycleAndroidLifecycle extensions
-
-fun <T> Observable<T>.bindToLifecycle(owner: LifecycleOwner): Observable<T>
-    = this.compose(RxLifecycleObserver(owner).bindToLifecycle())
-
-fun <T> Observable<T>.bindUntilEvent(owner: LifecycleOwner, event: Lifecycle.Event): Observable<T>
-    = this.compose(RxLifecycleObserver(owner).bindUntilEvent(event))
-
-fun <T> Flowable<T>.bindToLifecycle(owner: LifecycleOwner): Flowable<T>
-    = this.compose(RxLifecycleObserver(owner).bindToLifecycle())
-
-fun <T> Flowable<T>.bindUntilEvent(owner: LifecycleOwner, event: Lifecycle.Event): Flowable<T>
-    = this.compose(RxLifecycleObserver(owner).bindUntilEvent(event))
-
-fun <T> Single<T>.bindToLifecycle(owner: LifecycleOwner): Single<T>
-    = this.compose(RxLifecycleObserver(owner).bindToLifecycle())
-
-fun <T> Single<T>.bindUntilEvent(owner: LifecycleOwner, event: Lifecycle.Event): Single<T>
-    = this.compose(RxLifecycleObserver(owner).bindUntilEvent(event))
-
-fun <T> Maybe<T>.bindToLifecycle(owner: LifecycleOwner): Maybe<T>
-    = this.compose(RxLifecycleObserver(owner).bindToLifecycle())
-
-fun <T> Maybe<T>.bindUntilEvent(owner: LifecycleOwner, event: Lifecycle.Event): Maybe<T>
-    = this.compose(RxLifecycleObserver(owner).bindUntilEvent(event))
-
-fun <T> Completable.bindToLifecycle(owner: LifecycleOwner): Completable
-    = this.compose(RxLifecycleObserver(owner).bindToLifecycle<Completable>())
-
-fun <T> Completable.bindUntilEvent(owner: LifecycleOwner, event: Lifecycle.Event): Completable
-    = this.compose(RxLifecycleObserver(owner).bindUntilEvent<Completable>(event))

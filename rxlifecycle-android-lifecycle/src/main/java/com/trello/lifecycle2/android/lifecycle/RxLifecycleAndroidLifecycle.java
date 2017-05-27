@@ -1,4 +1,4 @@
-package com.trellow.relifecycle2;
+package com.trello.lifecycle2.android.lifecycle;
 
 import android.arch.lifecycle.Lifecycle;
 import android.support.annotation.NonNull;
@@ -11,7 +11,7 @@ import io.reactivex.functions.Function;
 
 import static com.trello.rxlifecycle2.RxLifecycle.bind;
 
-public class RxLifecycleAndroidLifecycle {
+public final class RxLifecycleAndroidLifecycle {
 
     private RxLifecycleAndroidLifecycle() {
         throw new AssertionError("No instances");

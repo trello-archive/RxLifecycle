@@ -2,7 +2,7 @@ package com.trello.rxlifecycle2;
 
 import android.arch.lifecycle.Lifecycle;
 
-import com.trellow.relifecycle2.RxLifecycleAndroidLifecycle;
+import com.trello.lifecycle2.android.lifecycle.RxLifecycleAndroidLifecycle;
 
 import org.junit.Before;
 import org.junit.Test;

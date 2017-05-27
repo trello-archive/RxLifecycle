@@ -1,4 +1,4 @@
-package com.trellow.relifecycle2.android.lifecycle;
+package com.trello.lifecycle2.android.lifecycle;
 
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleObserver;
@@ -9,14 +9,13 @@ import android.support.annotation.CheckResult;
 import com.trello.rxlifecycle2.LifecycleProvider;
 import com.trello.rxlifecycle2.LifecycleTransformer;
 import com.trello.rxlifecycle2.RxLifecycle;
-import com.trellow.relifecycle2.RxLifecycleAndroidLifecycle;
 
 import javax.annotation.Nonnull;
 
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
 
-public class RxLifecycleObserver implements LifecycleProvider<Lifecycle.Event>, LifecycleObserver {
+public final class RxLifecycleObserver implements LifecycleProvider<Lifecycle.Event>, LifecycleObserver {
 
     private final BehaviorSubject<Lifecycle.Event> lifecycleSubject = BehaviorSubject.create();
 
