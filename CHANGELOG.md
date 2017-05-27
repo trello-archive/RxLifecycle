@@ -3,6 +3,7 @@
 ## 2.1.0 (2017-05-27)
 
 - [#216](https://github.com/trello/RxLifecycle/pull/216): Added support for Android Architecture Components
+
   These can be found in the new rxlifecycle-android-lifecycle and rxlifecycle-android-kotlin artifacts.
 
 - [#219](https://github.com/trello/RxLifecycle/pull/219): Fix potential build issues by making JSR305 compileOnly
