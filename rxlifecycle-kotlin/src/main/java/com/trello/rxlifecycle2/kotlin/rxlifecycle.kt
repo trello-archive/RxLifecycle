@@ -18,11 +18,7 @@ import android.view.View
 import com.trello.rxlifecycle2.LifecycleProvider
 import com.trello.rxlifecycle2.RxLifecycle
 import com.trello.rxlifecycle2.android.RxLifecycleAndroid
-import io.reactivex.Completable
-import io.reactivex.Flowable
-import io.reactivex.Maybe
-import io.reactivex.Observable
-import io.reactivex.Single
+import io.reactivex.*
 import io.reactivex.functions.Function
 
 // RxLifecycle extensions

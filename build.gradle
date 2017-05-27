@@ -8,7 +8,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.0-rc1'
+        classpath 'com.android.tools.build:gradle:2.3.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$verKotlin"
         classpath "org.jetbrains.kotlin:kotlin-android-extensions:$verKotlin"
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.14.0'
@@ -30,6 +30,7 @@ ext {
     buildToolsVersion = '25'
 
     supportLibVersion = '25.2.0'
+    lifecycleVersion = '1.0.0-alpha1'
 
     sourceCompatibilityVersion = JavaVersion.VERSION_1_7
     targetCompatibilityVersion = JavaVersion.VERSION_1_7
@@ -38,6 +39,8 @@ ext {
     rxJava = 'io.reactivex.rxjava2:rxjava:2.0.6'
     rxAndroid = 'io.reactivex.rxjava2:rxandroid:2.0.1'
     navi = 'com.trello.navi2:navi:2.0'
+    lifecycle = "android.arch.lifecycle:runtime:$lifecycleVersion"
+    lifecycleProcessor = "android.arch.lifecycle:compiler:$lifecycleVersion"
     kotlinStdlib = "org.jetbrains.kotlin:kotlin-stdlib:$verKotlin"
     appCompat = "com.android.support:appcompat-v7:$supportLibVersion"
     supportAnnotations = "com.android.support:support-annotations:$supportLibVersion"
