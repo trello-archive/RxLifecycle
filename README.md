@@ -146,14 +146,14 @@ compile 'com.trello.rxlifecycle2:rxlifecycle-components:2.0.1'
 // If you want to use Navi for providers
 compile 'com.trello.rxlifecycle2:rxlifecycle-navi:2.0.1'
 
-// If you want to use Android Lifecycle for providers
-compile 'com.trello.rxlifecycle2:rxlifecycle-android-lifecycle:2.0.1'
+// If you want to use Android Lifecycle for providers (WARNING: NOT YET RELEASED)
+compile 'com.trello.rxlifecycle2:rxlifecycle-android-lifecycle:2.1.0-SNAPSHOT'
 
 // If you want to use Kotlin syntax
 compile 'com.trello.rxlifecycle2:rxlifecycle-kotlin:2.0.1'
 
-// If you want to use Kotlin syntax with Android Lifecycle
-compile 'com.trello.rxlifecycle2:rxlifecycle-android-kotlin:2.0.1'
+// If you want to use Kotlin syntax with Android Lifecycle (WARNING: NOT YET RELEASED)
+compile 'com.trello.rxlifecycle2:rxlifecycle-android-kotlin:2.1.0-SNAPSHOT'
 ```
 
 ## License
