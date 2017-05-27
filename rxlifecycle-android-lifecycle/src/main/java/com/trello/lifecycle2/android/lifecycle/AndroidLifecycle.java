@@ -15,11 +15,26 @@ import javax.annotation.Nonnull;
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
 
-public final class RxLifecycleObserver implements LifecycleProvider<Lifecycle.Event>, LifecycleObserver {
+/**
+ * Wraps a {@link LifecycleOwner} so that it can be used as a {@link LifecycleProvider}. For example,
+ * you can do
+ * <pre>{@code
+ * LifecycleProvider<Lifecycle.Event> provider = AndroidLifecycle.createLifecycleProvider(this);
+ * myObservable
+ *     .compose(provider.bindLifecycle())
+ *     .subscribe();
+ * }</pre>
+ * where {@code this} is a {@link android.arch.lifecycle.LifecycleActivity} or {@link android.arch.lifecycle.LifecycleFragment}.
+ */
+public final class AndroidLifecycle implements LifecycleProvider<Lifecycle.Event>, LifecycleObserver {
+
+    public static LifecycleProvider<Lifecycle.Event> createLifecycleProvider(LifecycleOwner owner) {
+        return new AndroidLifecycle(owner);
+    }
 
     private final BehaviorSubject<Lifecycle.Event> lifecycleSubject = BehaviorSubject.create();
 
-    public RxLifecycleObserver(LifecycleOwner owner) {
+    private AndroidLifecycle(LifecycleOwner owner) {
         owner.getLifecycle().addObserver(this);
     }
 

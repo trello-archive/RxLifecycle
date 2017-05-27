@@ -1,6 +1,7 @@
 package com.trello.lifecycle2.android.lifecycle;
 
 import android.arch.lifecycle.Lifecycle;
+import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 
 import com.trello.rxlifecycle2.LifecycleTransformer;
@@ -17,6 +18,20 @@ public final class RxLifecycleAndroidLifecycle {
         throw new AssertionError("No instances");
     }
 
+    /**
+     * Binds the given source to an Android lifecycle.
+     * <p>
+     * This helper automatically determines (based on the lifecycle sequence itself) when the source
+     * should stop emitting items. In the case that the lifecycle sequence is in the
+     * creation phase (ON_CREATE, ON_START, etc) it will choose the equivalent destructive phase (ON_DESTROY,
+     * ON_STOP, etc). If used in the destructive phase, the notifications will cease at the next event;
+     * for example, if used in ON_PAUSE, it will unsubscribe in ON_STOP.
+     *
+     * @param lifecycle the lifecycle sequence of an Activity
+     * @return a reusable {@link LifecycleTransformer} that unsubscribes the source during the Activity lifecycle
+     */
+    @NonNull
+    @CheckResult
     public static <T> LifecycleTransformer<T> bindLifecycle(@NonNull Observable<Lifecycle.Event> lifecycle) {
         return bind(lifecycle, LIFECYCLE);
     }

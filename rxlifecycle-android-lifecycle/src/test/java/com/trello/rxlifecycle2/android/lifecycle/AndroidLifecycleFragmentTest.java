@@ -1,11 +1,13 @@
 package com.trello.rxlifecycle2.android.lifecycle;
 
 import android.arch.lifecycle.Lifecycle;
-import android.arch.lifecycle.LifecycleActivity;
+import android.arch.lifecycle.LifecycleFragment;
 import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.LifecycleRuntimeTrojanProvider;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 
-import com.trello.lifecycle2.android.lifecycle.RxLifecycleObserver;
+import com.trello.lifecycle2.android.lifecycle.AndroidLifecycle;
 import com.trello.rxlifecycle2.LifecycleProvider;
 
 import org.junit.Before;
@@ -21,9 +23,8 @@ import io.reactivex.observers.TestObserver;
 import io.reactivex.subjects.PublishSubject;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(manifest = Config.NONE, sdk = 17)
-public class RxLifecycleObserverActivityTest {
-
+@Config(manifest = Config.NONE)
+public class AndroidLifecycleFragmentTest {
     private Observable<Object> observable;
 
     @Before
@@ -34,19 +35,18 @@ public class RxLifecycleObserverActivityTest {
     }
 
     @Test
-    public void testLifecycleActivity() {
-        testLifecycle(Robolectric.buildActivity(LifecycleActivity.class));
-        testBindUntilEvent(Robolectric.buildActivity(LifecycleActivity.class));
-        testBindToLifecycle(Robolectric.buildActivity(LifecycleActivity.class));
+    public void testLifecycleFragment() {
+        testLifecycle(new LifecycleFragment());
+        testBindUntilEvent(new LifecycleFragment());
+        testBindToLifecycle(new LifecycleFragment());
     }
 
+    private void testLifecycle(LifecycleOwner owner) {
+        Fragment fragment = (Fragment) owner;
+        ActivityController<?> controller = startFragment(fragment);
 
-    private void testLifecycle(ActivityController<? extends LifecycleOwner> controller) {
-        LifecycleProvider<Lifecycle.Event> provider = new RxLifecycleObserver(controller.get());
+        TestObserver<Lifecycle.Event> testObserver = AndroidLifecycle.createLifecycleProvider(owner).lifecycle().test();
 
-        TestObserver<Lifecycle.Event> testObserver = provider.lifecycle().test();
-
-        controller.create();
         controller.start();
         controller.resume();
         controller.pause();
@@ -63,13 +63,13 @@ public class RxLifecycleObserverActivityTest {
         );
     }
 
-    // Tests bindUntil for any given RxLifecycleObserver Activity implementation
-    private void testBindUntilEvent(ActivityController<? extends LifecycleOwner> controller) {
-        LifecycleProvider<Lifecycle.Event> activity = new RxLifecycleObserver(controller.get());
+    // Tests bindUntil for any given AndroidLifecycle Fragment implementation
+    private void testBindUntilEvent(LifecycleOwner owner) {
+        Fragment fragment = (Fragment) owner;
+        ActivityController<?> controller = startFragment(fragment);
 
-        TestObserver<Object> testObserver = observable.compose(activity.bindUntilEvent(Lifecycle.Event.ON_STOP)).test();
+        TestObserver<Object> testObserver = observable.compose(AndroidLifecycle.createLifecycleProvider(owner).bindUntilEvent(Lifecycle.Event.ON_STOP)).test();
 
-        controller.create();
         testObserver.assertNotComplete();
         controller.start();
         testObserver.assertNotComplete();
@@ -81,11 +81,12 @@ public class RxLifecycleObserverActivityTest {
         testObserver.assertComplete();
     }
 
-    // Tests bindToLifecycle for any given RxLifecycleObserver Activity implementation
-    private void testBindToLifecycle(ActivityController<? extends LifecycleOwner> controller) {
-        LifecycleProvider<Lifecycle.Event> provider = new RxLifecycleObserver(controller.get());
+    // Tests bindToLifecycle for any given RxLifecycle Fragment implementation
+    private void testBindToLifecycle(LifecycleOwner owner) {
+        Fragment fragment = (Fragment) owner;
+        LifecycleProvider<Lifecycle.Event> provider = AndroidLifecycle.createLifecycleProvider(owner);
+        ActivityController<?> controller = startFragment(fragment);
 
-        controller.create();
         TestObserver<Object> createObserver = observable.compose(provider.bindToLifecycle()).test();
 
         controller.start();
@@ -112,5 +113,16 @@ public class RxLifecycleObserverActivityTest {
         controller.destroy();
         createObserver.assertComplete();
         stopObserver.assertComplete();
+    }
+
+    // Easier than making everyone create their own shadows
+    private ActivityController<FragmentActivity> startFragment(Fragment fragment) {
+        ActivityController<FragmentActivity> controller = Robolectric.buildActivity(FragmentActivity.class);
+        controller.create();
+        controller.get().getSupportFragmentManager()
+                .beginTransaction()
+                .add(android.R.id.content, fragment)
+                .commitNow();
+        return controller;
     }
 }
