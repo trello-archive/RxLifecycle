@@ -153,7 +153,7 @@ compile 'com.trello.rxlifecycle2:rxlifecycle-android-lifecycle:2.1.0'
 compile 'com.trello.rxlifecycle2:rxlifecycle-kotlin:2.1.0'
 
 // If you want to use Kotlin syntax with Android Lifecycle
-compile 'com.trello.rxlifecycle2:rxlifecycle-android-kotlin:2.1.0'
+compile 'com.trello.rxlifecycle2:rxlifecycle-android-lifecycle-kotlin:2.1.0'
 ```
 
 ## License
