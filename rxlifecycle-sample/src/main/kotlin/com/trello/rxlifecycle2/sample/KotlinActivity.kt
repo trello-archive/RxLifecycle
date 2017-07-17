@@ -36,7 +36,7 @@ class KotlinActivity : RxAppCompatActivity() {
         Observable.interval(1, TimeUnit.SECONDS)
                 .doOnDispose { Log.i(TAG, "Unsubscribing subscription from onCreate()") }
                 .bindUntilEvent(this, ActivityEvent.PAUSE)
-                .subscribe { num -> Log.i(TAG, "Started in onCreate(), running until onPause(): " + num!!) }
+                .subscribe { num -> Log.i(TAG, "Started in onCreate(), running until onPause(): " + num) }
     }
 
     override fun onStart() {
@@ -49,7 +49,7 @@ class KotlinActivity : RxAppCompatActivity() {
         Observable.interval(1, TimeUnit.SECONDS)
                 .doOnDispose { Log.i(TAG, "Unsubscribing subscription from onStart()") }
                 .bindToLifecycle(this)
-                .subscribe { num -> Log.i(TAG, "Started in onStart(), running until in onStop(): " + num!!) }
+                .subscribe { num -> Log.i(TAG, "Started in onStart(), running until in onStop(): " + num) }
     }
 
     override fun onResume() {
@@ -60,7 +60,7 @@ class KotlinActivity : RxAppCompatActivity() {
         Observable.interval(1, TimeUnit.SECONDS)
                 .doOnDispose { Log.i(TAG, "Unsubscribing subscription from onResume()") }
                 .bindUntilEvent(this, ActivityEvent.DESTROY)
-                .subscribe { num -> Log.i(TAG, "Started in onResume(), running until in onDestroy(): " + num!!) }
+                .subscribe { num -> Log.i(TAG, "Started in onResume(), running until in onDestroy(): " + num) }
     }
 
     override fun onPause() {
