@@ -9,7 +9,7 @@ repositories {
 
 dependencies {
     compile rootProject.ext.rxJava
-    compile rootProject.ext.jsr305Annotations
+    compileOnly rootProject.ext.jsr305Annotations
 
     testCompile rootProject.ext.junit
 }
