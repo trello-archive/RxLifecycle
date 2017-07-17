@@ -21,7 +21,8 @@ import io.reactivex.subjects.BehaviorSubject;
  *     .compose(provider.bindLifecycle())
  *     .subscribe();
  * }</pre>
- * where {@code this} is a {@link android.arch.lifecycle.LifecycleActivity} or {@link android.arch.lifecycle.LifecycleFragment}.
+ * where {@code this} is a {@code android.arch.lifecycle.LifecycleActivity} or
+ * {@code android.arch.lifecycle.LifecycleFragment}.
  */
 public final class AndroidLifecycle implements LifecycleProvider<Lifecycle.Event>, LifecycleObserver {
 

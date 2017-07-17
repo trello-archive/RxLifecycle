@@ -12,7 +12,7 @@ android {
 
 repositories {
     mavenCentral()
-    maven { url 'https://maven.google.com' }
+    google()
 }
 
 dependencies {
@@ -25,6 +25,7 @@ dependencies {
 
     testCompile rootProject.ext.junit
     testCompile rootProject.ext.robolectric
+    testCompile rootProject.ext.lifecycleExtensions
 }
 
 apply from: "$rootDir/gradle/artifacts.gradle"
