@@ -1,5 +1,31 @@
 # Changelog
 
+## 2.1.0 (2017-05-27)
+
+- [#216](https://github.com/trello/RxLifecycle/pull/216): Added support for Android Architecture Components
+
+  These can be found in the new rxlifecycle-android-lifecycle and rxlifecycle-android-kotlin artifacts.
+
+- [#219](https://github.com/trello/RxLifecycle/pull/219): Fix potential build issues by making JSR305 compileOnly
+
+## 2.0.1 (2016-11-23)
+
+- [#183](https://github.com/trello/RxLifecycle/pull/183): Fix usage of null in navi module
+
+## 2.0 (2016-11-21)
+
+This major revision was made to support RxJava 2. RxLifecycle 2.0 lives in a new namespace and package
+names so that it can work side-by-side with RxLifecycle 1.0 (while transitioning).
+
+The biggest change is that `LifecycleTransformer` now works for *all* RxJava types:
+`Observable`, `Flowable`, `Single`, `Maybe` and `Completable`. Unlike before, there's
+no extra steps you have to take to make it work with types other than `Observable`.
+
+- [#167](https://github.com/trello/RxLifecycle/pull/167): Upgrade to RxJava 2
+- [#169](https://github.com/trello/RxLifecycle/pull/169): Move to com.trello.rxlifecycle2
+- [#170](https://github.com/trello/RxLifecycle/pull/170): Added Maybe support
+- [#172](https://github.com/trello/RxLifecycle/pull/172): Added Flowable support
+
 ## 1.0 (2016-11-03)
 
 First and (hopefully) final release of 1.x branch!

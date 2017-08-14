@@ -7,7 +7,7 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
-        applicationId "com.trello.rxlifecycle.sample"
+        applicationId "com.trello.rxlifecycle2.sample"
         minSdkVersion rootProject.ext.minSdkVersion
 
         targetSdkVersion rootProject.ext.targetSdkVersion
@@ -22,6 +22,7 @@ android {
 
 repositories {
     mavenCentral()
+    google()
 }
 
 dependencies {
