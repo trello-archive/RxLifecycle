@@ -28,7 +28,7 @@ ext {
     targetSdkVersion = compileSdkVersion
     buildToolsVersion = '25.0.3'
 
-    supportLibVersion = '26.0.0'
+    supportLibVersion = '26.0.1'
     lifecycleVersion = '1.0.0-alpha4'
 
     sourceCompatibilityVersion = JavaVersion.VERSION_1_7
