@@ -14,6 +14,7 @@
 
 package com.trello.rxlifecycle2.components.support;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import com.trello.rxlifecycle2.LifecycleProvider;
@@ -63,6 +64,16 @@ public class RxSupportFragmentLifecycleTest {
         // testLifecycle(new RxAppCompatDialogFragment());
         // testBindUntilEvent(new RxAppCompatDialogFragment());
         // testBindToLifecycle(new RxAppCompatDialogFragment());
+    }
+
+    @Test
+    public void testRxPreferenceFragmentCompat() {
+        // Requires android.support.v7.preference.R.preferenceTheme
+        // attribute being set.
+        //
+        // testLifecycle(new TestRxPreferenceFragmentCompat());
+        // testBindUntilEvent(new TestRxPreferenceFragmentCompat());
+        // testBindToLifecycle(new TestRxPreferenceFragmentCompat());
     }
 
     private void testLifecycle(LifecycleProvider<FragmentEvent> provider) {
@@ -197,5 +208,11 @@ public class RxSupportFragmentLifecycleTest {
     }
 
     public static class TestRxDialogFragment extends RxDialogFragment {
+    }
+
+    public static class TestRxPreferenceFragmentCompat extends RxPreferenceFragmentCompat {
+        @Override
+        public void onCreatePreferences(Bundle bundle, String s) {
+        }
     }
 }
