@@ -12,8 +12,9 @@
  * limitations under the License.
  */
 
-package com.trello.rxlifecycle2.components.support;
+package com.trello.rxlifecycle2.components.preference;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import com.trello.rxlifecycle2.LifecycleProvider;
@@ -32,7 +33,7 @@ import static com.trello.rxlifecycle2.android.FragmentEvent.STOP;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(manifest = Config.NONE)
-public class RxSupportFragmentLifecycleTest {
+public class RxPreferenceFragmentLifecycleTest {
 
     private Observable<Object> observable;
 
@@ -42,27 +43,13 @@ public class RxSupportFragmentLifecycleTest {
     }
 
     @Test
-    public void testRxFragment() {
-        testLifecycle(new TestRxFragment());
-        testBindUntilEvent(new TestRxFragment());
-        testBindToLifecycle(new TestRxFragment());
-    }
-
-    @Test
-    public void testRxDialogFragment() {
-        testLifecycle(new TestRxDialogFragment());
-        testBindUntilEvent(new TestRxDialogFragment());
-        testBindToLifecycle(new TestRxDialogFragment());
-    }
-
-    @Test
-    public void testRxAppCompatDialogFragment() {
-        // Once Robolectric is less broken we could run these tests
-        // Until then, these are identical to RxDialogFragment, so whatever.
+    public void testRxPreferenceFragmentCompat() {
+        // Requires android.support.v7.preference.R.preferenceTheme
+        // attribute being set.
         //
-        // testLifecycle(new RxAppCompatDialogFragment());
-        // testBindUntilEvent(new RxAppCompatDialogFragment());
-        // testBindToLifecycle(new RxAppCompatDialogFragment());
+        // testLifecycle(new TestRxPreferenceFragmentCompat());
+        // testBindUntilEvent(new TestRxPreferenceFragmentCompat());
+        // testBindToLifecycle(new TestRxPreferenceFragmentCompat());
     }
 
     private void testLifecycle(LifecycleProvider<FragmentEvent> provider) {
@@ -193,9 +180,9 @@ public class RxSupportFragmentLifecycleTest {
 
     // These classes are just for testing since components are abstract
 
-    public static class TestRxFragment extends RxFragment {
-    }
-
-    public static class TestRxDialogFragment extends RxDialogFragment {
+    public static class TestRxPreferenceFragmentCompat extends RxPreferenceFragmentCompat {
+        @Override
+        public void onCreatePreferences(Bundle bundle, String s) {
+        }
     }
 }

@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.trello.rxlifecycle2.components.support;
+package com.trello.rxlifecycle2.components.preference;
 
 import android.os.Bundle;
 import android.support.v7.preference.PreferenceFragmentCompat;

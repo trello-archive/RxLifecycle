@@ -20,7 +20,7 @@ dependencies {
 
     compile rootProject.ext.rxJava
 
-    compile rootProject.ext.appCompat
+    compile rootProject.ext.preferenceCompat
 
     testCompile rootProject.ext.junit
     testCompile rootProject.ext.robolectric
