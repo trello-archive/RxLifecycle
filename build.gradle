@@ -43,6 +43,7 @@ ext {
     lifecycleExtensions = "android.arch.lifecycle:extensions:$lifecycleVersion"
     kotlinStdlib = "org.jetbrains.kotlin:kotlin-stdlib:$verKotlin"
     appCompat = "com.android.support:appcompat-v7:$supportLibVersion"
+    preferenceCompat = "com.android.support:preference-v7:$supportLibVersion"
     supportAnnotations = "com.android.support:support-annotations:$supportLibVersion"
     jsr305Annotations = 'com.google.code.findbugs:jsr305:3.0.2'
     junit = 'junit:junit:4.12'

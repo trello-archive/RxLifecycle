@@ -1,0 +1,30 @@
+apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdkVersion
+    }
+}
+
+repositories {
+    mavenCentral()
+    google()
+}
+
+dependencies {
+    compile project(':rxlifecycle-android')
+
+    compile rootProject.ext.rxJava
+
+    compile rootProject.ext.preferenceCompat
+
+    testCompile rootProject.ext.junit
+    testCompile rootProject.ext.robolectric
+}
+
+apply from: "$rootDir/gradle/artifacts.gradle"
+apply from: "$rootDir/gradle/gradle-mvn-push.gradle"
