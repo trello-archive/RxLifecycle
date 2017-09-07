@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.2.0 (2017-09-06)
+
+- [#239](https://github.com/trello/RxLifecycle/pull/239): Added support for support preference fragments
+
+  These can be found in the new rxlifecycle-components-preference artifact.
+
 ## 2.1.0 (2017-05-27)
 
 - [#216](https://github.com/trello/RxLifecycle/pull/216): Added support for Android Architecture Components
