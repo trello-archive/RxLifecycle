@@ -43,8 +43,8 @@ fun <T> Maybe<T>.bindToLifecycle(owner: LifecycleOwner): Maybe<T>
 fun <T> Maybe<T>.bindUntilEvent(owner: LifecycleOwner, event: Lifecycle.Event): Maybe<T>
         = this.compose(AndroidLifecycle.createLifecycleProvider(owner).bindUntilEvent(event))
 
-fun <T> Completable.bindToLifecycle(owner: LifecycleOwner): Completable
+fun Completable.bindToLifecycle(owner: LifecycleOwner): Completable
         = this.compose(AndroidLifecycle.createLifecycleProvider(owner).bindToLifecycle<Completable>())
 
-fun <T> Completable.bindUntilEvent(owner: LifecycleOwner, event: Lifecycle.Event): Completable
+fun Completable.bindUntilEvent(owner: LifecycleOwner, event: Lifecycle.Event): Completable
         = this.compose(AndroidLifecycle.createLifecycleProvider(owner).bindUntilEvent<Completable>(event))
