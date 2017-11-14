@@ -29,7 +29,8 @@ ext {
     buildToolsVersion = '26.0.1'
 
     supportLibVersion = '26.0.2'
-    lifecycleVersion = '1.0.0-alpha9'
+    lifecycleVersion = '1.0.0'
+    lifecycleRuntimeVersion = '1.0.3'
 
     sourceCompatibilityVersion = JavaVersion.VERSION_1_7
     targetCompatibilityVersion = JavaVersion.VERSION_1_7
@@ -38,7 +39,7 @@ ext {
     rxJava = 'io.reactivex.rxjava2:rxjava:2.1.3'
     rxAndroid = 'io.reactivex.rxjava2:rxandroid:2.0.1'
     navi = 'com.trello.navi2:navi:2.0'
-    lifecycle = "android.arch.lifecycle:runtime:$lifecycleVersion"
+    lifecycle = "android.arch.lifecycle:runtime:$lifecycleRuntimeVersion"
     lifecycleProcessor = "android.arch.lifecycle:compiler:$lifecycleVersion"
     lifecycleExtensions = "android.arch.lifecycle:extensions:$lifecycleVersion"
     kotlinStdlib = "org.jetbrains.kotlin:kotlin-stdlib:$verKotlin"
