@@ -4,6 +4,7 @@ buildscript {
         verKotlin = '1.1.4-3'
     }
     repositories {
+        google()
         jcenter()
     }
     dependencies {
