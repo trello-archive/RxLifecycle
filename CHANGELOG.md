@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.2.1 (2017-11-15)
+
+- [#248](https://github.com/trello/RxLifecycle/pull/248): Remove generic type declaration for Completable bindings
+
+- [#249](https://github.com/trello/RxLifecycle/pull/249): Updated to release version of Android architecture components
+
 ## 2.2.0 (2017-09-06)
 
 - [#239](https://github.com/trello/RxLifecycle/pull/239): Added support for support preference fragments
