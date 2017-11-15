@@ -3,7 +3,6 @@ package com.trello.rxlifecycle2.android.lifecycle;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleActivity;
 import android.arch.lifecycle.LifecycleOwner;
-import android.arch.lifecycle.LifecycleRuntimeTrojanProvider;
 import com.trello.lifecycle2.android.lifecycle.AndroidLifecycle;
 import com.trello.rxlifecycle2.LifecycleProvider;
 import io.reactivex.Observable;
@@ -26,8 +25,6 @@ public class AndroidLifecycleActivityTest {
     @Before
     public void setup() {
         observable = PublishSubject.create().hide();
-        // LifecycleRegistryOwner requires a content provider to init correctly.
-        Robolectric.buildContentProvider(LifecycleRuntimeTrojanProvider.class).create();
     }
 
     @Test
