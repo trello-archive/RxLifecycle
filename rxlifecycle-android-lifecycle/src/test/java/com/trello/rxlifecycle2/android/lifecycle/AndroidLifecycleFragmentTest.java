@@ -3,7 +3,6 @@ package com.trello.rxlifecycle2.android.lifecycle;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleFragment;
 import android.arch.lifecycle.LifecycleOwner;
-import android.arch.lifecycle.LifecycleRuntimeTrojanProvider;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import com.trello.lifecycle2.android.lifecycle.AndroidLifecycle;
@@ -27,8 +26,6 @@ public class AndroidLifecycleFragmentTest {
     @Before
     public void setup() {
         observable = PublishSubject.create().hide();
-        // LifecycleRegistryOwner requires a content provider to init correctly.
-        Robolectric.buildContentProvider(LifecycleRuntimeTrojanProvider.class).create();
     }
 
     @Test
