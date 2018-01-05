@@ -54,6 +54,6 @@ public class UntilLifecycleTransformerMaybeTest {
         stream.onNext("1");
 
         testObserver.assertNoValues();
-        testObserver.assertComplete();
+        testObserver.assertNotComplete();
     }
 }

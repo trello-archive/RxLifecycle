@@ -21,8 +21,6 @@ import io.reactivex.subjects.PublishSubject;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.concurrent.CancellationException;
-
 public class UntilCorrespondingEventTransformerCompletableTest {
 
     PublishSubject<Object> subject;
@@ -78,7 +76,7 @@ public class UntilCorrespondingEventTransformerCompletableTest {
         lifecycle.onNext("create");
         lifecycle.onNext("destroy");
         subject.onComplete();
-        testObserver.assertError(CancellationException.class);
+        testObserver.assertNotComplete();
     }
 
     private static final Function<String, String> CORRESPONDING_EVENTS = new Function<String, String>() {

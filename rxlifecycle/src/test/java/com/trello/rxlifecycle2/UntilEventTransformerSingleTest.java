@@ -21,7 +21,6 @@ import io.reactivex.subjects.PublishSubject;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.concurrent.CancellationException;
 import java.util.concurrent.TimeUnit;
 
 public class UntilEventTransformerSingleTest {
@@ -79,7 +78,7 @@ public class UntilEventTransformerSingleTest {
         testScheduler.advanceTimeBy(1, TimeUnit.MILLISECONDS);
 
         testObserver.assertNoValues();
-        testObserver.assertError(CancellationException.class);
+        testObserver.assertNotComplete();
     }
 
 }

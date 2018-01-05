@@ -14,7 +14,12 @@
 
 package com.trello.rxlifecycle2;
 
-import io.reactivex.BackpressureStrategy;
+import com.trello.rxlifecycle2.internal.CompletableDisposeWhen;
+import com.trello.rxlifecycle2.internal.FlowableCancelWhen;
+import com.trello.rxlifecycle2.internal.MaybeDisposeWhen;
+import com.trello.rxlifecycle2.internal.ObservableDisposeWhen;
+import com.trello.rxlifecycle2.internal.SingleDisposeWhen;
+
 import io.reactivex.Completable;
 import io.reactivex.CompletableSource;
 import io.reactivex.CompletableTransformer;
@@ -54,27 +59,27 @@ public final class LifecycleTransformer<T> implements ObservableTransformer<T, T
 
     @Override
     public ObservableSource<T> apply(Observable<T> upstream) {
-        return upstream.takeUntil(observable);
+        return new ObservableDisposeWhen<>(upstream, observable);
     }
 
     @Override
     public Publisher<T> apply(Flowable<T> upstream) {
-        return upstream.takeUntil(observable.toFlowable(BackpressureStrategy.LATEST));
+        return new FlowableCancelWhen<>(upstream, observable);
     }
 
     @Override
     public SingleSource<T> apply(Single<T> upstream) {
-        return upstream.takeUntil(observable.firstOrError());
+        return new SingleDisposeWhen<>(upstream, observable);
     }
 
     @Override
     public MaybeSource<T> apply(Maybe<T> upstream) {
-        return upstream.takeUntil(observable.firstElement());
+        return new MaybeDisposeWhen<>(upstream, observable);
     }
 
     @Override
     public CompletableSource apply(Completable upstream) {
-        return Completable.ambArray(upstream, observable.flatMapCompletable(Functions.CANCEL_COMPLETABLE));
+        return new CompletableDisposeWhen(upstream, observable);
     }
 
     @Override

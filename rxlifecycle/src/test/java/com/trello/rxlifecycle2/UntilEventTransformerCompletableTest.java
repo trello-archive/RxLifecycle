@@ -20,8 +20,6 @@ import io.reactivex.subjects.PublishSubject;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.concurrent.CancellationException;
-
 public class UntilEventTransformerCompletableTest {
 
     PublishSubject<Object> subject;
@@ -65,7 +63,7 @@ public class UntilEventTransformerCompletableTest {
         lifecycle.onNext("keep going");
         lifecycle.onNext("stop");
         subject.onComplete();
-        testObserver.assertError(CancellationException.class);
+        testObserver.assertNotComplete();
     }
 
 }

@@ -32,7 +32,6 @@ import java.util.HashSet;
 import static com.trello.navi2.internal.NaviEmitter.createFragmentEmitter;
 import static com.trello.rxlifecycle2.android.FragmentEvent.STOP;
 import static com.trello.rxlifecycle2.navi.NaviLifecycle.createFragmentLifecycleProvider;
-import static io.reactivex.subjects.PublishSubject.create;
 import static org.junit.Assert.assertNull;
 
 public class NaviFragmentLifecycleTest {
@@ -84,23 +83,32 @@ public class NaviFragmentLifecycleTest {
         NaviEmitter fragment = createFragmentEmitter();
         LifecycleProvider<FragmentEvent> provider = createFragmentLifecycleProvider(fragment);
 
-        Observable<Object> observable = create().hide();
+        PublishSubject<Object> stream = PublishSubject.create();
+        Observable<Object> observable = stream.hide();
         TestObserver<Object> testObserver = observable.compose(provider.bindUntilEvent(STOP)).test();
 
         fragment.onAttach(null);
+        stream.onNext("attach");
         testObserver.assertNotComplete();
         fragment.onCreate(null);
+        stream.onNext("create");
         testObserver.assertNotComplete();
-        fragment.onCreate(null);
+        fragment.onCreateView(null);
+        stream.onNext("createView");
         testObserver.assertNotComplete();
         fragment.onStart();
+        stream.onNext("start");
         testObserver.assertNotComplete();
         fragment.onResume();
+        stream.onNext("resume");
         testObserver.assertNotComplete();
         fragment.onPause();
+        stream.onNext("pause");
         testObserver.assertNotComplete();
         fragment.onStop();
-        testObserver.assertComplete();
+        stream.onNext("stop");
+        testObserver.assertValues("attach", "create", "createView", "start", "resume", "pause");
+        testObserver.assertNotComplete();
     }
 
     @Test
@@ -108,65 +116,66 @@ public class NaviFragmentLifecycleTest {
         NaviEmitter fragment = createFragmentEmitter();
         LifecycleProvider<FragmentEvent> provider = createFragmentLifecycleProvider(fragment);
 
-        Observable<Object> observable = create().hide();
+        PublishSubject<Object> stream = PublishSubject.create();
+        Observable<Object> observable = stream.hide();
 
         fragment.onAttach(null);
-        TestObserver<Object> attachObserver = observable.compose(provider.bindToLifecycle()).test();
+        TestObserver<Object> attachObserver = stream.hide().compose(provider.bindToLifecycle()).test();
+        stream.onNext("attach");
 
         fragment.onCreate(null);
-        attachObserver.assertNotComplete();
-        TestObserver<Object> createObserver = observable.compose(provider.bindToLifecycle()).test();
+        TestObserver<Object> createObserver = stream.hide().compose(provider.bindToLifecycle()).test();
+        stream.onNext("create");
 
         fragment.onCreateView(null);
-        attachObserver.assertNotComplete();
-        createObserver.assertNotComplete();
-        TestObserver<Object> createViewObserver = observable.compose(provider.bindToLifecycle()).test();
+        TestObserver<Object> createViewObserver = stream.hide().compose(provider.bindToLifecycle()).test();
+        stream.onNext("createView");
 
         fragment.onStart();
-        attachObserver.assertNotComplete();
-        createObserver.assertNotComplete();
-        createViewObserver.assertNotComplete();
-        TestObserver<Object> startObserver = observable.compose(provider.bindToLifecycle()).test();
+        TestObserver<Object> startObserver = stream.hide().compose(provider.bindToLifecycle()).test();
+        stream.onNext("start");
 
         fragment.onResume();
-        attachObserver.assertNotComplete();
-        createObserver.assertNotComplete();
-        createViewObserver.assertNotComplete();
-        startObserver.assertNotComplete();
-        TestObserver<Object> resumeObserver = observable.compose(provider.bindToLifecycle()).test();
+        TestObserver<Object> resumeObserver = stream.hide().compose(provider.bindToLifecycle()).test();
+        stream.onNext("resume");
 
         fragment.onPause();
-        attachObserver.assertNotComplete();
-        createObserver.assertNotComplete();
-        createViewObserver.assertNotComplete();
-        startObserver.assertNotComplete();
-        resumeObserver.assertComplete();
-        TestObserver<Object> pauseObserver = observable.compose(provider.bindToLifecycle()).test();
+        TestObserver<Object> pauseObserver = stream.hide().compose(provider.bindToLifecycle()).test();
+        stream.onNext("pause");
+        resumeObserver.assertNotComplete();
+        resumeObserver.assertValues("resume");
 
         fragment.onStop();
-        attachObserver.assertNotComplete();
-        createObserver.assertNotComplete();
-        createViewObserver.assertNotComplete();
-        startObserver.assertComplete();
-        pauseObserver.assertComplete();
-        TestObserver<Object> stopObserver = observable.compose(provider.bindToLifecycle()).test();
+        TestObserver<Object> stopObserver = stream.hide().compose(provider.bindToLifecycle()).test();
+        stream.onNext("stop");
+        startObserver.assertNotComplete();
+        startObserver.assertValues("start", "resume", "pause");
+        pauseObserver.assertNotComplete();
+        pauseObserver.assertValues("pause");
 
         fragment.onDestroyView();
-        attachObserver.assertNotComplete();
-        createObserver.assertNotComplete();
-        createViewObserver.assertComplete();
-        stopObserver.assertComplete();
-        TestObserver<Object> destroyViewObserver = observable.compose(provider.bindToLifecycle()).test();
+        TestObserver<Object> destroyViewObserver = stream.hide().compose(provider.bindToLifecycle()).test();
+        stream.onNext("destroyView");
+        createViewObserver.assertNotComplete();
+        createViewObserver.assertValues("createView", "start", "resume", "pause", "stop");
+        stopObserver.assertNotComplete();
+        stopObserver.assertValues("stop");
 
         fragment.onDestroy();
-        attachObserver.assertNotComplete();
-        createObserver.assertComplete();
-        destroyViewObserver.assertComplete();
-        TestObserver<Object> destroyObserver = observable.compose(provider.bindToLifecycle()).test();
+        TestObserver<Object> destroyObserver = stream.hide().compose(provider.bindToLifecycle()).test();
+        stream.onNext("destroy");
+        createObserver.assertNotComplete();
+        createObserver.assertValues("create", "createView", "start", "resume", "pause", "stop", "destroyView");
+        destroyViewObserver.assertNotComplete();
+        destroyViewObserver.assertValues("destroyView");
 
         fragment.onDetach();
-        attachObserver.assertComplete();
-        destroyObserver.assertComplete();
+        stream.onNext("detach");
+        attachObserver.assertNotComplete();
+        attachObserver.assertValues("attach", "create", "createView", "start", "resume",
+                "pause", "stop", "destroyView", "destroy");
+        destroyObserver.assertNotComplete();
+        destroyObserver.assertValues("destroy");
     }
 
     @Test(expected = IllegalArgumentException.class)

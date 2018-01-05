@@ -22,7 +22,6 @@ import io.reactivex.subjects.PublishSubject;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.concurrent.CancellationException;
 import java.util.concurrent.TimeUnit;
 
 public class UntilCorrespondingEventTransformerSingleTest {
@@ -94,7 +93,7 @@ public class UntilCorrespondingEventTransformerSingleTest {
         lifecycle.onNext("destroy");
         testScheduler.advanceTimeBy(1, TimeUnit.MILLISECONDS);
         testObserver.assertNoValues();
-        testObserver.assertError(CancellationException.class);
+        testObserver.assertNotComplete();
     }
 
     private static final Function<String, String> CORRESPONDING_EVENTS = new Function<String, String>() {

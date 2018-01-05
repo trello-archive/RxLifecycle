@@ -32,12 +32,14 @@ public class OutsideLifecycleExceptionTest {
             .compose(RxLifecycle.<String, String>bind(lifecycle, CORRESPONDING_EVENTS))
             .test();
 
-        // Event is out of lifecycle, but this just results in completing the stream
+        // Event is out of lifecycle, this will result in dispose the stream
         lifecycle.onNext("destroy");
         stream.onNext("1");
 
         testObserver.assertNoValues();
-        testObserver.assertComplete();
+        testObserver.assertNotComplete();
+        // We will not emit OutsideLifecycleException to downstream.
+        testObserver.assertNoErrors();
     }
 
     @Test

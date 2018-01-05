@@ -32,7 +32,6 @@ import java.util.HashSet;
 import static com.trello.navi2.internal.NaviEmitter.createActivityEmitter;
 import static com.trello.rxlifecycle2.android.ActivityEvent.STOP;
 import static com.trello.rxlifecycle2.navi.NaviLifecycle.createActivityLifecycleProvider;
-import static io.reactivex.subjects.PublishSubject.create;
 import static org.junit.Assert.assertNull;
 
 public class NaviActivityLifecycleTest {
@@ -76,19 +75,26 @@ public class NaviActivityLifecycleTest {
         NaviEmitter activity = createActivityEmitter();
         LifecycleProvider<ActivityEvent> provider = createActivityLifecycleProvider(activity);
 
-        Observable<Object> observable = create().hide();
+        PublishSubject<Object> stream = PublishSubject.create();
+        Observable<Object> observable = stream.hide();
         TestObserver<Object> testObserver = observable.compose(provider.bindUntilEvent(STOP)).test();
 
         activity.onCreate(null);
+        stream.onNext("create");
         testObserver.assertNotComplete();
         activity.onStart();
+        stream.onNext("start");
         testObserver.assertNotComplete();
         activity.onResume();
+        stream.onNext("resume");
         testObserver.assertNotComplete();
         activity.onPause();
+        stream.onNext("pause");
         testObserver.assertNotComplete();
         activity.onStop();
-        testObserver.assertComplete();
+        stream.onNext("stop");
+        testObserver.assertValues("create", "start", "resume", "pause");
+        testObserver.assertNotComplete();
     }
 
     @Test
@@ -96,35 +102,41 @@ public class NaviActivityLifecycleTest {
         NaviEmitter activity = createActivityEmitter();
         LifecycleProvider<ActivityEvent> provider = createActivityLifecycleProvider(activity);
 
-        Observable<Object> observable = create().hide();
+        PublishSubject<Object> stream = PublishSubject.create();
+        Observable<Object> observable = stream.hide();
 
         activity.onCreate(null);
         TestObserver<Object> createObserver = observable.compose(provider.bindToLifecycle()).test();
+        stream.onNext("create");
 
         activity.onStart();
-        createObserver.assertNotComplete();
         TestObserver<Object> startObserver = observable.compose(provider.bindToLifecycle()).test();
+        stream.onNext("start");
 
         activity.onResume();
-        createObserver.assertNotComplete();
-        startObserver.assertNotComplete();
-        TestObserver<Object> resumeTestSub = observable.compose(provider.bindToLifecycle()).test();
+        TestObserver<Object> resumeObserver = observable.compose(provider.bindToLifecycle()).test();
+        stream.onNext("resume");
 
         activity.onPause();
-        createObserver.assertNotComplete();
-        startObserver.assertNotComplete();
-        resumeTestSub.assertComplete();
         TestObserver<Object> pauseObserver = observable.compose(provider.bindToLifecycle()).test();
+        stream.onNext("pause");
+        resumeObserver.assertNotComplete();
+        resumeObserver.assertValues("resume");
 
         activity.onStop();
-        createObserver.assertNotComplete();
-        startObserver.assertComplete();
-        pauseObserver.assertComplete();
         TestObserver<Object> stopObserver = observable.compose(provider.bindToLifecycle()).test();
+        stream.onNext("stop");
+        startObserver.assertNotComplete();
+        startObserver.assertValues("start", "resume", "pause");
+        pauseObserver.assertNotComplete();
+        pauseObserver.assertValues("pause");
 
         activity.onDestroy();
-        createObserver.assertComplete();
-        stopObserver.assertComplete();
+        stream.onNext("destroy");
+        createObserver.assertNotComplete();
+        createObserver.assertValues("create", "start", "resume", "pause", "stop");
+        stopObserver.assertNotComplete();
+        stopObserver.assertValues("stop");
     }
 
     @Test(expected = IllegalArgumentException.class)

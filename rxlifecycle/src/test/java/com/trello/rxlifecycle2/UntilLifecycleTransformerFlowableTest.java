@@ -54,6 +54,6 @@ public class UntilLifecycleTransformerFlowableTest {
         stream.onNext("2");
 
         testSubscriber.assertValues("1");
-        testSubscriber.assertComplete();
+        testSubscriber.assertNotComplete();
     }
 }

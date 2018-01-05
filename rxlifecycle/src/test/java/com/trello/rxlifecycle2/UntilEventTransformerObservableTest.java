@@ -69,7 +69,7 @@ public class UntilEventTransformerObservableTest {
         stream.onNext("3");
 
         testObserver.assertValues("1", "2");
-        testObserver.assertComplete();
+        testObserver.assertNotComplete();
     }
 
 }
