@@ -5,7 +5,6 @@ import android.arch.lifecycle.LifecycleActivity;
 import android.arch.lifecycle.LifecycleOwner;
 import com.trello.lifecycle2.android.lifecycle.AndroidLifecycle;
 import com.trello.rxlifecycle2.LifecycleProvider;
-import io.reactivex.Observable;
 import io.reactivex.observers.TestObserver;
 import io.reactivex.subjects.PublishSubject;
 import org.junit.Before;
@@ -20,11 +19,11 @@ import org.robolectric.annotation.Config;
 @Config(manifest = Config.NONE, sdk = 17)
 public class AndroidLifecycleActivityTest {
 
-    private Observable<Object> observable;
+    private PublishSubject<Object> stream;
 
     @Before
     public void setup() {
-        observable = PublishSubject.create().hide();
+        stream = PublishSubject.create();
     }
 
     @Test
@@ -61,18 +60,24 @@ public class AndroidLifecycleActivityTest {
     private void testBindUntilEvent(ActivityController<? extends LifecycleOwner> controller) {
         LifecycleProvider<Lifecycle.Event> activity = AndroidLifecycle.createLifecycleProvider(controller.get());
 
-        TestObserver<Object> testObserver = observable.compose(activity.bindUntilEvent(Lifecycle.Event.ON_STOP)).test();
+        TestObserver<Object> testObserver = stream.hide().compose(activity.bindUntilEvent(Lifecycle.Event.ON_STOP)).test();
 
         controller.create();
+        stream.onNext("create");
         testObserver.assertNotComplete();
         controller.start();
+        stream.onNext("start");
         testObserver.assertNotComplete();
         controller.resume();
+        stream.onNext("resume");
         testObserver.assertNotComplete();
         controller.pause();
+        stream.onNext("pause");
         testObserver.assertNotComplete();
         controller.stop();
-        testObserver.assertComplete();
+        stream.onNext("stop");
+        testObserver.assertValues("create", "start", "resume", "pause");
+        testObserver.assertNotComplete();
     }
 
     // Tests bindToLifecycle for any given AndroidLifecycle Activity implementation
@@ -80,31 +85,36 @@ public class AndroidLifecycleActivityTest {
         LifecycleProvider<Lifecycle.Event> provider = AndroidLifecycle.createLifecycleProvider(controller.get());
 
         controller.create();
-        TestObserver<Object> createObserver = observable.compose(provider.bindToLifecycle()).test();
+        TestObserver<Object> createObserver = stream.hide().compose(provider.bindToLifecycle()).test();
+        stream.onNext("create");
 
         controller.start();
-        createObserver.assertNotComplete();
-        TestObserver<Object> startObserver = observable.compose(provider.bindToLifecycle()).test();
+        TestObserver<Object> startObserver = stream.hide().compose(provider.bindToLifecycle()).test();
+        stream.onNext("start");
 
         controller.resume();
-        createObserver.assertNotComplete();
-        startObserver.assertNotComplete();
-        TestObserver<Object> resumeObserver = observable.compose(provider.bindToLifecycle()).test();
+        TestObserver<Object> resumeObserver = stream.hide().compose(provider.bindToLifecycle()).test();
+        stream.onNext("resume");
 
         controller.pause();
-        createObserver.assertNotComplete();
-        startObserver.assertNotComplete();
-        resumeObserver.assertComplete();
-        TestObserver<Object> pauseObserver = observable.compose(provider.bindToLifecycle()).test();
+        TestObserver<Object> pauseObserver = stream.hide().compose(provider.bindToLifecycle()).test();
+        stream.onNext("pause");
+        resumeObserver.assertNotComplete();
+        resumeObserver.assertValues("resume");
 
         controller.stop();
-        createObserver.assertNotComplete();
-        startObserver.assertComplete();
-        pauseObserver.assertComplete();
-        TestObserver<Object> stopObserver = observable.compose(provider.bindToLifecycle()).test();
+        TestObserver<Object> stopObserver = stream.hide().compose(provider.bindToLifecycle()).test();
+        stream.onNext("stop");
+        startObserver.assertNotComplete();
+        startObserver.assertValues("start", "resume", "pause");
+        pauseObserver.assertNotComplete();
+        pauseObserver.assertValues("pause");
 
         controller.destroy();
-        createObserver.assertComplete();
-        stopObserver.assertComplete();
+        stream.onNext("destroy");
+        createObserver.assertNotComplete();
+        createObserver.assertValues("create", "start", "resume", "pause", "stop");
+        stopObserver.assertNotComplete();
+        stopObserver.assertValues("stop");
     }
 }

@@ -19,7 +19,7 @@ import android.view.View;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 import com.trello.rxlifecycle2.android.FragmentEvent;
 import com.trello.rxlifecycle2.android.RxLifecycleAndroid;
-import io.reactivex.Observable;
+
 import io.reactivex.observers.TestObserver;
 import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.PublishSubject;
@@ -39,12 +39,11 @@ import static org.junit.Assert.assertNotNull;
 @Config(manifest = Config.NONE)
 public class RxLifecycleTest {
 
-    private Observable<Object> observable;
+    private PublishSubject<Object> stream;
 
     @Before
     public void setup() {
-        // Simulate an actual lifecycle (hot Observable that does not end)
-        observable = PublishSubject.create().hide();
+        stream = PublishSubject.create();
     }
 
     @Test
@@ -52,23 +51,24 @@ public class RxLifecycleTest {
         BehaviorSubject<FragmentEvent> lifecycle = BehaviorSubject.create();
 
         TestObserver<Object> testObserver =
-            observable.compose(RxLifecycle.bindUntilEvent(lifecycle, FragmentEvent.STOP)).test();
+            stream.hide().compose(RxLifecycle.bindUntilEvent(lifecycle, FragmentEvent.STOP)).test();
 
         lifecycle.onNext(FragmentEvent.ATTACH);
-        testObserver.assertNotComplete();
+        stream.onNext("attach");
         lifecycle.onNext(FragmentEvent.CREATE);
-        testObserver.assertNotComplete();
+        stream.onNext("create");
         lifecycle.onNext(FragmentEvent.CREATE_VIEW);
-        testObserver.assertNotComplete();
+        stream.onNext("createView");
         lifecycle.onNext(FragmentEvent.START);
-        testObserver.assertNotComplete();
+        stream.onNext("start");
         lifecycle.onNext(FragmentEvent.RESUME);
-        testObserver.assertNotComplete();
+        stream.onNext("resume");
         lifecycle.onNext(FragmentEvent.PAUSE);
-        testObserver.assertNotComplete();
-        testObserver.assertNotComplete();
+        stream.onNext("pause");
         lifecycle.onNext(FragmentEvent.STOP);
-        testObserver.assertComplete();
+        stream.onNext("stop");
+        testObserver.assertValues("attach", "create", "createView", "start", "resume", "pause");
+        testObserver.assertNotComplete();
     }
 
     @Test
@@ -76,18 +76,20 @@ public class RxLifecycleTest {
         BehaviorSubject<ActivityEvent> lifecycle = BehaviorSubject.create();
 
         TestObserver<Object> testObserver =
-            observable.compose(RxLifecycle.bindUntilEvent(lifecycle, ActivityEvent.STOP)).test();
+            stream.hide().compose(RxLifecycle.bindUntilEvent(lifecycle, ActivityEvent.STOP)).test();
 
         lifecycle.onNext(ActivityEvent.CREATE);
-        testObserver.assertNotComplete();
+        stream.onNext("create");
         lifecycle.onNext(ActivityEvent.START);
-        testObserver.assertNotComplete();
+        stream.onNext("start");
         lifecycle.onNext(ActivityEvent.RESUME);
-        testObserver.assertNotComplete();
+        stream.onNext("resume");
         lifecycle.onNext(ActivityEvent.PAUSE);
-        testObserver.assertNotComplete();
+        stream.onNext("pause");
         lifecycle.onNext(ActivityEvent.STOP);
-        testObserver.assertComplete();
+        stream.onNext("stop");
+        testObserver.assertValues("create", "start", "resume", "pause");
+        testObserver.assertNotComplete();
     }
 
     @Test
@@ -95,32 +97,37 @@ public class RxLifecycleTest {
         BehaviorSubject<ActivityEvent> lifecycle = BehaviorSubject.create();
 
         lifecycle.onNext(ActivityEvent.CREATE);
-        TestObserver<Object> createObserver = observable.compose(RxLifecycleAndroid.bindActivity(lifecycle)).test();
+        TestObserver<Object> createObserver = stream.hide().compose(RxLifecycleAndroid.bindActivity(lifecycle)).test();
+        stream.onNext("create");
 
         lifecycle.onNext(ActivityEvent.START);
-        createObserver.assertNotComplete();
-        TestObserver<Object> startObserver = observable.compose(RxLifecycleAndroid.bindActivity(lifecycle)).test();
+        TestObserver<Object> startObserver = stream.hide().compose(RxLifecycleAndroid.bindActivity(lifecycle)).test();
+        stream.onNext("start");
 
         lifecycle.onNext(ActivityEvent.RESUME);
-        createObserver.assertNotComplete();
-        startObserver.assertNotComplete();
-        TestObserver<Object> resumeObserver = observable.compose(RxLifecycleAndroid.bindActivity(lifecycle)).test();
+        TestObserver<Object> resumeObserver = stream.hide().compose(RxLifecycleAndroid.bindActivity(lifecycle)).test();
+        stream.onNext("resume");
 
         lifecycle.onNext(ActivityEvent.PAUSE);
-        createObserver.assertNotComplete();
-        startObserver.assertNotComplete();
-        resumeObserver.assertComplete();
+        TestObserver<Object> pauseObserver = stream.hide().compose(RxLifecycleAndroid.bindActivity(lifecycle)).test();
+        stream.onNext("pause");
+        resumeObserver.assertNotComplete();
+        resumeObserver.assertValues("resume");
 
-        TestObserver<Object> pauseObserver = observable.compose(RxLifecycleAndroid.bindActivity(lifecycle)).test();
         lifecycle.onNext(ActivityEvent.STOP);
-        createObserver.assertNotComplete();
-        startObserver.assertComplete();
-        pauseObserver.assertComplete();
-        TestObserver<Object> stopObserver = observable.compose(RxLifecycleAndroid.bindActivity(lifecycle)).test();
+        TestObserver<Object> stopObserver = stream.hide().compose(RxLifecycleAndroid.bindActivity(lifecycle)).test();
+        stream.onNext("stop");
+        startObserver.assertNotComplete();
+        startObserver.assertValues("start", "resume", "pause");
+        pauseObserver.assertNotComplete();
+        pauseObserver.assertValues("pause");
 
         lifecycle.onNext(ActivityEvent.DESTROY);
-        createObserver.assertComplete();
-        stopObserver.assertComplete();
+        stream.onNext("destroy");
+        createObserver.assertNotComplete();
+        createObserver.assertValues("create", "start", "resume", "pause", "stop");
+        stopObserver.assertNotComplete();
+        stopObserver.assertValues("stop");
     }
 
     @Test
@@ -128,8 +135,11 @@ public class RxLifecycleTest {
         BehaviorSubject<ActivityEvent> lifecycle = BehaviorSubject.create();
         lifecycle.onNext(ActivityEvent.DESTROY);
 
-        TestObserver<Object> testObserver = observable.compose(RxLifecycleAndroid.bindActivity(lifecycle)).test();
-        testObserver.assertComplete();
+        TestObserver<Object> testObserver = stream.hide().compose(RxLifecycleAndroid.bindActivity(lifecycle)).test();
+        stream.onNext("outside");
+        testObserver.assertNoValues();
+        testObserver.assertNotComplete();
+        testObserver.assertNoErrors();
     }
 
     @Test
@@ -137,63 +147,63 @@ public class RxLifecycleTest {
         BehaviorSubject<FragmentEvent> lifecycle = BehaviorSubject.create();
 
         lifecycle.onNext(FragmentEvent.ATTACH);
-        TestObserver<Object> attachObserver = observable.compose(RxLifecycleAndroid.bindFragment(lifecycle)).test();
+        TestObserver<Object> attachObserver = stream.hide().compose(RxLifecycleAndroid.bindFragment(lifecycle)).test();
+        stream.onNext("attach");
 
         lifecycle.onNext(FragmentEvent.CREATE);
-        attachObserver.assertNotComplete();
-        TestObserver<Object> createObserver = observable.compose(RxLifecycleAndroid.bindFragment(lifecycle)).test();
+        TestObserver<Object> createObserver = stream.hide().compose(RxLifecycleAndroid.bindFragment(lifecycle)).test();
+        stream.onNext("create");
 
         lifecycle.onNext(FragmentEvent.CREATE_VIEW);
-        attachObserver.assertNotComplete();
-        createObserver.assertNotComplete();
-        TestObserver<Object> createViewObserver = observable.compose(RxLifecycleAndroid.bindFragment(lifecycle)).test();
+        TestObserver<Object> createViewObserver = stream.hide().compose(RxLifecycleAndroid.bindFragment(lifecycle)).test();
+        stream.onNext("createView");
 
         lifecycle.onNext(FragmentEvent.START);
-        attachObserver.assertNotComplete();
-        createObserver.assertNotComplete();
-        createViewObserver.assertNotComplete();
-        TestObserver<Object> startObserver = observable.compose(RxLifecycleAndroid.bindFragment(lifecycle)).test();
+        TestObserver<Object> startObserver = stream.hide().compose(RxLifecycleAndroid.bindFragment(lifecycle)).test();
+        stream.onNext("start");
 
         lifecycle.onNext(FragmentEvent.RESUME);
-        attachObserver.assertNotComplete();
-        createObserver.assertNotComplete();
-        createViewObserver.assertNotComplete();
-        startObserver.assertNotComplete();
-        TestObserver<Object> resumeObserver = observable.compose(RxLifecycleAndroid.bindFragment(lifecycle)).test();
+        TestObserver<Object> resumeObserver = stream.hide().compose(RxLifecycleAndroid.bindFragment(lifecycle)).test();
+        stream.onNext("resume");
 
         lifecycle.onNext(FragmentEvent.PAUSE);
-        attachObserver.assertNotComplete();
-        createObserver.assertNotComplete();
-        createViewObserver.assertNotComplete();
-        startObserver.assertNotComplete();
-        resumeObserver.assertComplete();
-        TestObserver<Object> pauseObserver = observable.compose(RxLifecycleAndroid.bindFragment(lifecycle)).test();
+        TestObserver<Object> pauseObserver = stream.hide().compose(RxLifecycleAndroid.bindFragment(lifecycle)).test();
+        stream.onNext("pause");
+        resumeObserver.assertNotComplete();
+        resumeObserver.assertValues("resume");
 
         lifecycle.onNext(FragmentEvent.STOP);
-        attachObserver.assertNotComplete();
-        createObserver.assertNotComplete();
-        createViewObserver.assertNotComplete();
-        startObserver.assertComplete();
-        pauseObserver.assertComplete();
-        TestObserver<Object> stopObserver = observable.compose(RxLifecycleAndroid.bindFragment(lifecycle)).test();
+        TestObserver<Object> stopObserver = stream.hide().compose(RxLifecycleAndroid.bindFragment(lifecycle)).test();
+        stream.onNext("stop");
+        startObserver.assertNotComplete();
+        startObserver.assertValues("start", "resume", "pause");
+        pauseObserver.assertNotComplete();
+        pauseObserver.assertValues("pause");
 
         lifecycle.onNext(FragmentEvent.DESTROY_VIEW);
-        attachObserver.assertNotComplete();
-        createObserver.assertNotComplete();
-        createViewObserver.assertComplete();
-        stopObserver.assertComplete();
-        TestObserver<Object> destroyViewObserver = observable.compose(RxLifecycleAndroid.bindFragment(lifecycle))
+        TestObserver<Object> destroyViewObserver = stream.hide().compose(RxLifecycleAndroid.bindFragment(lifecycle))
             .test();
+        stream.onNext("destroyView");
+        createViewObserver.assertNotComplete();
+        createViewObserver.assertValues("createView", "start", "resume", "pause", "stop");
+        stopObserver.assertNotComplete();
+        stopObserver.assertValues("stop");
 
         lifecycle.onNext(FragmentEvent.DESTROY);
-        attachObserver.assertNotComplete();
-        createObserver.assertComplete();
-        destroyViewObserver.assertComplete();
-        TestObserver<Object> destroyObserver = observable.compose(RxLifecycleAndroid.bindFragment(lifecycle)).test();
+        TestObserver<Object> destroyObserver = stream.hide().compose(RxLifecycleAndroid.bindFragment(lifecycle)).test();
+        stream.onNext("destroy");
+        createObserver.assertNotComplete();
+        createObserver.assertValues("create", "createView", "start", "resume", "pause", "stop", "destroyView");
+        destroyViewObserver.assertNotComplete();
+        destroyViewObserver.assertValues("destroyView");
 
         lifecycle.onNext(FragmentEvent.DETACH);
-        attachObserver.assertComplete();
-        destroyObserver.assertComplete();
+        stream.onNext("detach");
+        attachObserver.assertNotComplete();
+        attachObserver.assertValues("attach", "create", "createView", "start", "resume",
+                "pause", "stop", "destroyView", "destroy");
+        destroyObserver.assertNotComplete();
+        destroyObserver.assertValues("destroy");
     }
 
     @Test
@@ -201,8 +211,11 @@ public class RxLifecycleTest {
         BehaviorSubject<FragmentEvent> lifecycle = BehaviorSubject.create();
         lifecycle.onNext(FragmentEvent.DETACH);
 
-        TestObserver<Object> testObserver = observable.compose(RxLifecycleAndroid.bindFragment(lifecycle)).test();
-        testObserver.assertComplete();
+        TestObserver<Object> testObserver = stream.hide().compose(RxLifecycleAndroid.bindFragment(lifecycle)).test();
+        stream.onNext("outside");
+        testObserver.assertNoValues();
+        testObserver.assertNotComplete();
+        testObserver.assertNoErrors();
     }
 
     @Test
@@ -219,7 +232,7 @@ public class RxLifecycleTest {
         }
 
         // Subscribe
-        TestObserver<Object> viewAttachObserver = observable.compose(RxLifecycleAndroid.bindView(view)).test();
+        TestObserver<Object> viewAttachObserver = stream.hide().compose(RxLifecycleAndroid.bindView(view)).test();
         viewAttachObserver.assertNotComplete();
         listeners = TestUtil.getAttachStateChangeListeners(view);
         assertNotNull(listeners);
@@ -228,8 +241,11 @@ public class RxLifecycleTest {
         // Now detach
         for (View.OnAttachStateChangeListener listener : listeners) {
             listener.onViewDetachedFromWindow(view);
+            stream.onNext("detach");
         }
-        viewAttachObserver.assertComplete();
+        viewAttachObserver.assertNoValues();
+        viewAttachObserver.assertNotComplete();
+        viewAttachObserver.assertNoErrors();
     }
 
     // Null checks

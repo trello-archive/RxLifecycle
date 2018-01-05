@@ -37,7 +37,7 @@ public class RxLifecycleTest {
         TestObserver<Object> testObserver = observable.compose(RxLifecycle.bind(lifecycle)).test();
         testObserver.assertNotComplete();
         lifecycle.onNext(new Object());
-        testObserver.assertComplete();
+        testObserver.assertNotComplete();
     }
 
     @Test
@@ -47,7 +47,7 @@ public class RxLifecycleTest {
         TestObserver<Object> testObserver = observable.compose(RxLifecycle.bind(lifecycle)).test();
         testObserver.assertNotComplete();
         lifecycle.onNext("");
-        testObserver.assertComplete();
+        testObserver.assertNotComplete();
     }
 
     // Null checks

@@ -67,7 +67,7 @@ public class UntilEventTransformerMaybeTest {
 
         subject.onNext("1");
         testObserver.assertNoValues();
-        testObserver.assertComplete();
+        testObserver.assertNotComplete();
     }
 
 }

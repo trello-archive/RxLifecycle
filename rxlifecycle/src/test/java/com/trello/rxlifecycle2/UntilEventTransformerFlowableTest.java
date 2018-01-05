@@ -70,7 +70,7 @@ public class UntilEventTransformerFlowableTest {
         stream.onNext("3");
 
         testSubscriber.assertValues("1", "2");
-        testSubscriber.assertComplete();
+        testSubscriber.assertNotComplete();
     }
 
 }

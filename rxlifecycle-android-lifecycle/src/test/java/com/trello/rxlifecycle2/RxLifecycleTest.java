@@ -10,7 +10,6 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-import io.reactivex.Observable;
 import io.reactivex.observers.TestObserver;
 import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.PublishSubject;
@@ -19,12 +18,12 @@ import io.reactivex.subjects.PublishSubject;
 @Config(manifest = Config.NONE)
 public class RxLifecycleTest {
 
-    private Observable<Object> observable;
+    private PublishSubject<Object> stream;
 
     @Before
     public void setup() {
         // Simulate an actual lifecycle (hot Observable that does not end)
-        observable = PublishSubject.create().hide();
+        stream = PublishSubject.create();
     }
 
     @Test
@@ -32,18 +31,20 @@ public class RxLifecycleTest {
         BehaviorSubject<Lifecycle.Event> lifecycle = BehaviorSubject.create();
 
         TestObserver<Object> testObserver =
-                observable.compose(RxLifecycle.bindUntilEvent(lifecycle, Lifecycle.Event.ON_STOP)).test();
+                stream.hide().compose(RxLifecycle.bindUntilEvent(lifecycle, Lifecycle.Event.ON_STOP)).test();
 
         lifecycle.onNext(Lifecycle.Event.ON_CREATE);
-        testObserver.assertNotComplete();
+        stream.onNext("create");
         lifecycle.onNext(Lifecycle.Event.ON_START);
-        testObserver.assertNotComplete();
+        stream.onNext("start");
         lifecycle.onNext(Lifecycle.Event.ON_RESUME);
-        testObserver.assertNotComplete();
+        stream.onNext("resume");
         lifecycle.onNext(Lifecycle.Event.ON_PAUSE);
-        testObserver.assertNotComplete();
+        stream.onNext("pause");
         lifecycle.onNext(Lifecycle.Event.ON_STOP);
-        testObserver.assertComplete();
+        stream.onNext("stop");
+        testObserver.assertValues("create", "start", "resume", "pause");
+        testObserver.assertNotComplete();
     }
 
     @Test
@@ -51,41 +52,48 @@ public class RxLifecycleTest {
         BehaviorSubject<Lifecycle.Event> lifecycle = BehaviorSubject.create();
 
         lifecycle.onNext(Lifecycle.Event.ON_CREATE);
-        TestObserver<Object> createObserver = observable.compose(RxLifecycleAndroidLifecycle.bindLifecycle(lifecycle)).test();
+        TestObserver<Object> createObserver = stream.hide().compose(RxLifecycleAndroidLifecycle.bindLifecycle(lifecycle)).test();
+        stream.onNext("create");
 
         lifecycle.onNext(Lifecycle.Event.ON_START);
-        createObserver.assertNotComplete();
-        TestObserver<Object> startObserver = observable.compose(RxLifecycleAndroidLifecycle.bindLifecycle(lifecycle)).test();
+        TestObserver<Object> startObserver = stream.hide().compose(RxLifecycleAndroidLifecycle.bindLifecycle(lifecycle)).test();
+        stream.onNext("start");
 
         lifecycle.onNext(Lifecycle.Event.ON_RESUME);
-        createObserver.assertNotComplete();
-        startObserver.assertNotComplete();
-        TestObserver<Object> resumeObserver = observable.compose(RxLifecycleAndroidLifecycle.bindLifecycle(lifecycle)).test();
+        TestObserver<Object> resumeObserver = stream.hide().compose(RxLifecycleAndroidLifecycle.bindLifecycle(lifecycle)).test();
+        stream.onNext("resume");
 
         lifecycle.onNext(Lifecycle.Event.ON_PAUSE);
-        createObserver.assertNotComplete();
-        startObserver.assertNotComplete();
-        resumeObserver.assertComplete();
+        TestObserver<Object> pauseObserver = stream.hide().compose(RxLifecycleAndroidLifecycle.bindLifecycle(lifecycle)).test();
+        stream.onNext("pause");
+        resumeObserver.assertNotComplete();
+        resumeObserver.assertValues("resume");
 
-        TestObserver<Object> pauseObserver = observable.compose(RxLifecycleAndroidLifecycle.bindLifecycle(lifecycle)).test();
         lifecycle.onNext(Lifecycle.Event.ON_STOP);
-        createObserver.assertNotComplete();
-        startObserver.assertComplete();
-        pauseObserver.assertComplete();
-        TestObserver<Object> stopObserver = observable.compose(RxLifecycleAndroidLifecycle.bindLifecycle(lifecycle)).test();
+        TestObserver<Object> stopObserver = stream.hide().compose(RxLifecycleAndroidLifecycle.bindLifecycle(lifecycle)).test();
+        stream.onNext("stop");
+        startObserver.assertNotComplete();
+        startObserver.assertValues("start", "resume", "pause");
+        pauseObserver.assertNotComplete();
+        pauseObserver.assertValues("pause");
 
         lifecycle.onNext(Lifecycle.Event.ON_DESTROY);
-        createObserver.assertComplete();
-        stopObserver.assertComplete();
+        stream.onNext("destroy");
+        createObserver.assertNotComplete();
+        createObserver.assertValues("create", "start", "resume", "pause", "stop");
+        stopObserver.assertNotComplete();
+        stopObserver.assertValues("stop");
     }
 
     @Test
     public void testEndsImmediatelyOutsideLifecycle() {
         BehaviorSubject<Lifecycle.Event> lifecycle = BehaviorSubject.create();
         lifecycle.onNext(Lifecycle.Event.ON_DESTROY);
+        stream.onNext("destroy");
 
-        TestObserver<Object> testObserver = observable.compose(RxLifecycleAndroidLifecycle.bindLifecycle(lifecycle)).test();
-        testObserver.assertComplete();
+        TestObserver<Object> testObserver = stream.hide().compose(RxLifecycleAndroidLifecycle.bindLifecycle(lifecycle)).test();
+        testObserver.assertNoValues();
+        testObserver.assertNotComplete();
     }
 
     // Null checks

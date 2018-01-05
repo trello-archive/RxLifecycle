@@ -80,7 +80,7 @@ public class UntilCorrespondingEventTransformerMaybeTest {
         lifecycle.onNext("destroy");
         subject.onNext("1");
         testObserver.assertNoValues();
-        testObserver.assertComplete();
+        testObserver.assertNotComplete();
     }
 
     private static final Function<String, String> CORRESPONDING_EVENTS = new Function<String, String>() {

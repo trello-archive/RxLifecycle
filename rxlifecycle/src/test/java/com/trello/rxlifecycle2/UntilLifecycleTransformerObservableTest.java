@@ -53,6 +53,6 @@ public class UntilLifecycleTransformerObservableTest {
         stream.onNext("2");
 
         testObserver.assertValues("1");
-        testObserver.assertComplete();
+        testObserver.assertNotComplete();
     }
 }

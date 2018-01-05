@@ -84,7 +84,7 @@ public class UntilCorrespondingEventTransformerObservableTest {
         stream.onNext("2");
 
         testObserver.assertValues("1");
-        testObserver.assertComplete();
+        testObserver.assertNotComplete();
     }
 
     private static final Function<String, String> CORRESPONDING_EVENTS = new Function<String, String>() {
