@@ -128,7 +128,7 @@ with `LivecycleOwner`'s.
 ```kotlin
 
 myObservable
-    .bindToLifecycle(myLifecycleActivity, ON_STOP)
+    .bindUntilEvent(myLifecycleActivity, ON_STOP)
     .subscribe { }
 ```
 
