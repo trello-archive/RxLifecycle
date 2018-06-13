@@ -5,6 +5,8 @@ targetCompatibility = rootProject.ext.targetCompatibilityVersion
 
 repositories {
     mavenCentral()
+    jcenter()
+    google()
 }
 
 dependencies {
