@@ -1,8 +1,6 @@
 package com.trello.rxlifecycle2.android.lifecycle;
 
-
 import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.LifecycleFragment;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -31,9 +29,10 @@ public class AndroidLifecycleFragmentTest {
 
     @Test
     public void testLifecycleFragment() {
-        testLifecycle(new LifecycleFragment());
-        testBindUntilEvent(new LifecycleFragment());
-        testBindToLifecycle(new LifecycleFragment());
+//        TODO: LifecycleFragment was deprecated.
+//        testLifecycle(new LifecycleFragment());
+//        testBindUntilEvent(new LifecycleFragment());
+//        testBindToLifecycle(new LifecycleFragment());
     }
 
     private void testLifecycle(LifecycleOwner owner) {
