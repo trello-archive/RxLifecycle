@@ -1,5 +1,6 @@
 package com.trello.rxlifecycle2.android.lifecycle;
 
+
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleFragment;
 import androidx.lifecycle.LifecycleOwner;
