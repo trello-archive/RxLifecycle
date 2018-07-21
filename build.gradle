@@ -1,14 +1,14 @@
 buildscript {
     ext {
         //version here to share between build script and projects
-        verKotlin = '1.1.4-3'
+        verKotlin = '1.2.51'
     }
     repositories {
         google()
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.0'
+        classpath 'com.android.tools.build:gradle:3.3.0-alpha03'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$verKotlin"
         classpath "org.jetbrains.kotlin:kotlin-android-extensions:$verKotlin"
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.15.0'
@@ -25,13 +25,13 @@ apply plugin: 'com.github.ben-manes.versions'
 
 ext {
     minSdkVersion = 14
-    compileSdkVersion = 26
+    compileSdkVersion = 28
     targetSdkVersion = compileSdkVersion
-    buildToolsVersion = '26.0.2'
+    buildToolsVersion = '27.0.3'
 
-    supportLibVersion = '26.0.2'
-    lifecycleVersion = '1.0.0'
-    lifecycleRuntimeVersion = '1.0.3'
+    supportLibVersion = '1.0.0-alpha1'
+    lifecycleVersion = '2.0.0-alpha1'
+    lifecycleRuntimeVersion = '2.0.0-alpha1'
 
     sourceCompatibilityVersion = JavaVersion.VERSION_1_7
     targetCompatibilityVersion = JavaVersion.VERSION_1_7
@@ -40,13 +40,14 @@ ext {
     rxJava = 'io.reactivex.rxjava2:rxjava:2.1.3'
     rxAndroid = 'io.reactivex.rxjava2:rxandroid:2.0.1'
     navi = 'com.trello.navi2:navi:2.0'
-    lifecycle = "android.arch.lifecycle:runtime:$lifecycleRuntimeVersion"
-    lifecycleProcessor = "android.arch.lifecycle:compiler:$lifecycleVersion"
-    lifecycleExtensions = "android.arch.lifecycle:extensions:$lifecycleVersion"
+
+    lifecycle = "androidx.lifecycle:lifecycle-runtime:$lifecycleRuntimeVersion"
+    lifecycleProcessor = "androidx.lifecycle:lifecycle-compiler:$lifecycleVersion"
+    lifecycleExtensions = "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
     kotlinStdlib = "org.jetbrains.kotlin:kotlin-stdlib:$verKotlin"
-    appCompat = "com.android.support:appcompat-v7:$supportLibVersion"
-    preferenceCompat = "com.android.support:preference-v7:$supportLibVersion"
-    supportAnnotations = "com.android.support:support-annotations:$supportLibVersion"
+    appCompat = "androidx.appcompat:appcompat:$supportLibVersion"
+    preferenceCompat = "androidx.preference:preference:$supportLibVersion"
+    supportAnnotations = "androidx.annotation:annotation:$supportLibVersion"
     jsr305Annotations = 'com.google.code.findbugs:jsr305:3.0.2'
     junit = 'junit:junit:4.12'
     robolectric = 'org.robolectric:robolectric:3.4.2'

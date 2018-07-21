@@ -1,8 +1,8 @@
 package com.trello.lifecycle2.android.lifecycle;
 
-import android.arch.lifecycle.Lifecycle;
-import android.support.annotation.CheckResult;
-import android.support.annotation.NonNull;
+import androidx.lifecycle.Lifecycle;
+import androidx.annotation.CheckResult;
+import androidx.annotation.NonNull;
 
 import com.trello.rxlifecycle2.LifecycleTransformer;
 import com.trello.rxlifecycle2.OutsideLifecycleException;
