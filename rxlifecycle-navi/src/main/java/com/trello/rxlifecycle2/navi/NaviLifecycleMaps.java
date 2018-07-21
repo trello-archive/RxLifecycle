@@ -14,7 +14,7 @@
 
 package com.trello.rxlifecycle2.navi;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import com.trello.navi2.Event;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 import com.trello.rxlifecycle2.android.FragmentEvent;
