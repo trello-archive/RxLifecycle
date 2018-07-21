@@ -8,6 +8,7 @@ import io.reactivex.Observable;
 import io.reactivex.observers.TestObserver;
 import io.reactivex.subjects.PublishSubject;
 import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.android.controller.ActivityController;
@@ -24,6 +25,7 @@ public class AndroidLifecycleActivityTest {
         observable = PublishSubject.create().hide();
     }
 
+    @Test
     public void testLifecycleActivity() {
 //        TODO: LifecycleActivity was deprecated.
 //        testLifecycle(Robolectric.buildActivity(LifecycleActivity.class));
