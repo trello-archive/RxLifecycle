@@ -30,8 +30,8 @@ ext {
     buildToolsVersion = '26.0.2'
 
     supportLibVersion = '26.0.2'
-    lifecycleVersion = '1.0.0'
-    lifecycleRuntimeVersion = '1.0.3'
+    lifecycleVersion = '1.1.1'
+    lifecycleRuntimeVersion = '1.1.1'
 
     sourceCompatibilityVersion = JavaVersion.VERSION_1_7
     targetCompatibilityVersion = JavaVersion.VERSION_1_7
