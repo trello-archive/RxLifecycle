@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.2.2 (2018-07-29)
+
+- [#275](https://github.com/trello/RxLifecycle/pull/275): Updated dependencies
+
+Normally simply updating dependencies wouldn't justify a new release, except that there are some R8 issues with
+RxLifecycle (due to it being compiled with Android lifecycle 1.0.0 instead of 1.1.0).
+
 ## 2.2.1 (2017-11-15)
 
 - [#248](https://github.com/trello/RxLifecycle/pull/248): Remove generic type declaration for Completable bindings
