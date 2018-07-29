@@ -16,14 +16,14 @@ repositories {
 }
 
 dependencies {
-    compile project(':rxlifecycle-android')
+    api project(':rxlifecycle-android')
 
-    compile rootProject.ext.rxJava
+    implementation rootProject.ext.rxJava
 
-    compile rootProject.ext.preferenceCompat
+    implementation rootProject.ext.preferenceCompat
 
-    testCompile rootProject.ext.junit
-    testCompile rootProject.ext.robolectric
+    testImplementation rootProject.ext.junit
+    testImplementation rootProject.ext.robolectric
 }
 
 apply from: "$rootDir/gradle/artifacts.gradle"

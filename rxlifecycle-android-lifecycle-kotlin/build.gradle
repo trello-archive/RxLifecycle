@@ -17,8 +17,8 @@ repositories {
 }
 
 dependencies {
-    compile kotlinStdlib
-    compile project(':rxlifecycle-android-lifecycle')
+    implementation kotlinStdlib
+    api project(':rxlifecycle-android-lifecycle')
 }
 
 apply from: "$rootDir/gradle/artifacts.gradle"

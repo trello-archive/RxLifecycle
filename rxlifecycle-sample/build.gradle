@@ -26,10 +26,10 @@ repositories {
 }
 
 dependencies {
-    compile project(':rxlifecycle-components')
-    compile project(':rxlifecycle-kotlin')
+    implementation project(':rxlifecycle-components')
+    implementation project(':rxlifecycle-kotlin')
 
-    compile rootProject.ext.appCompat
+    implementation rootProject.ext.appCompat
 
-    compile rootProject.ext.kotlinStdlib
+    implementation rootProject.ext.kotlinStdlib
 }

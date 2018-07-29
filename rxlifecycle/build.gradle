@@ -11,7 +11,7 @@ dependencies {
     compile rootProject.ext.rxJava
     compileOnly rootProject.ext.jsr305Annotations
 
-    testCompile rootProject.ext.junit
+    testImplementation rootProject.ext.junit
 }
 
 // Add sources/javadoc artifacts

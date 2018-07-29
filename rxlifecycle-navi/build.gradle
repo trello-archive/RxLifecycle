@@ -16,11 +16,11 @@ repositories {
 }
 
 dependencies {
-    compile project(':rxlifecycle-android')
+    api project(':rxlifecycle-android')
 
-    compile rootProject.ext.navi
+    api rootProject.ext.navi
 
-    testCompile rootProject.ext.junit
+    testImplementation rootProject.ext.junit
 }
 
 apply from: "$rootDir/gradle/artifacts.gradle"
