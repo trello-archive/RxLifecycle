@@ -135,28 +135,28 @@ myObservable
 ## Installation
 
 ```gradle
-compile 'com.trello.rxlifecycle2:rxlifecycle:2.2.1'
+implementation 'com.trello.rxlifecycle2:rxlifecycle:2.2.1'
 
 // If you want to bind to Android-specific lifecycles
-compile 'com.trello.rxlifecycle2:rxlifecycle-android:2.2.1'
+implementation 'com.trello.rxlifecycle2:rxlifecycle-android:2.2.1'
 
 // If you want pre-written Activities and Fragments you can subclass as providers
-compile 'com.trello.rxlifecycle2:rxlifecycle-components:2.2.1'
+implementation 'com.trello.rxlifecycle2:rxlifecycle-components:2.2.1'
 
 // If you want pre-written support preference Fragments you can subclass as providers
-compile 'com.trello.rxlifecycle2:rxlifecycle-components-preference:2.2.1'
+implementation 'com.trello.rxlifecycle2:rxlifecycle-components-preference:2.2.1'
 
 // If you want to use Navi for providers
-compile 'com.trello.rxlifecycle2:rxlifecycle-navi:2.2.1'
+implementation 'com.trello.rxlifecycle2:rxlifecycle-navi:2.2.1'
 
 // If you want to use Android Lifecycle for providers
-compile 'com.trello.rxlifecycle2:rxlifecycle-android-lifecycle:2.2.1'
+implementation 'com.trello.rxlifecycle2:rxlifecycle-android-lifecycle:2.2.1'
 
 // If you want to use Kotlin syntax
-compile 'com.trello.rxlifecycle2:rxlifecycle-kotlin:2.2.1'
+implementation 'com.trello.rxlifecycle2:rxlifecycle-kotlin:2.2.1'
 
 // If you want to use Kotlin syntax with Android Lifecycle
-compile 'com.trello.rxlifecycle2:rxlifecycle-android-lifecycle-kotlin:2.2.1'
+implementation 'com.trello.rxlifecycle2:rxlifecycle-android-lifecycle-kotlin:2.2.1'
 ```
 
 ## License
