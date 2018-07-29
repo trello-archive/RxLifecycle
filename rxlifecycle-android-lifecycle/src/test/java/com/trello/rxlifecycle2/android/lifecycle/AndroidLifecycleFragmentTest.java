@@ -1,7 +1,6 @@
 package com.trello.rxlifecycle2.android.lifecycle;
 
 import android.arch.lifecycle.Lifecycle;
-import android.arch.lifecycle.LifecycleFragment;
 import android.arch.lifecycle.LifecycleOwner;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -30,9 +29,9 @@ public class AndroidLifecycleFragmentTest {
 
     @Test
     public void testLifecycleFragment() {
-        testLifecycle(new LifecycleFragment());
-        testBindUntilEvent(new LifecycleFragment());
-        testBindToLifecycle(new LifecycleFragment());
+        testLifecycle(new Fragment());
+        testBindUntilEvent(new Fragment());
+        testBindToLifecycle(new Fragment());
     }
 
     private void testLifecycle(LifecycleOwner owner) {

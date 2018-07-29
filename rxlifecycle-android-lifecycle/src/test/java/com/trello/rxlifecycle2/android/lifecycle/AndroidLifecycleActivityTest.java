@@ -1,8 +1,8 @@
 package com.trello.rxlifecycle2.android.lifecycle;
 
 import android.arch.lifecycle.Lifecycle;
-import android.arch.lifecycle.LifecycleActivity;
 import android.arch.lifecycle.LifecycleOwner;
+import android.support.v4.app.FragmentActivity;
 import com.trello.lifecycle2.android.lifecycle.AndroidLifecycle;
 import com.trello.rxlifecycle2.LifecycleProvider;
 import io.reactivex.Observable;
@@ -29,9 +29,9 @@ public class AndroidLifecycleActivityTest {
 
     @Test
     public void testLifecycleActivity() {
-        testLifecycle(Robolectric.buildActivity(LifecycleActivity.class));
-        testBindUntilEvent(Robolectric.buildActivity(LifecycleActivity.class));
-        testBindToLifecycle(Robolectric.buildActivity(LifecycleActivity.class));
+        testLifecycle(Robolectric.buildActivity(FragmentActivity.class));
+        testBindUntilEvent(Robolectric.buildActivity(FragmentActivity.class));
+        testBindToLifecycle(Robolectric.buildActivity(FragmentActivity.class));
     }
 
 

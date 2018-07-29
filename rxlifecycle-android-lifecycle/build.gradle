@@ -13,19 +13,20 @@ android {
 repositories {
     mavenCentral()
     google()
+    jcenter()
 }
 
 dependencies {
-    compile project(':rxlifecycle')
+    api project(':rxlifecycle')
 
-    compile rootProject.ext.rxAndroid
-    compile rootProject.ext.supportAnnotations
-    compile rootProject.ext.lifecycle
+    implementation rootProject.ext.rxAndroid
+    implementation rootProject.ext.supportAnnotations
+    api rootProject.ext.lifecycle
     annotationProcessor rootProject.ext.lifecycleProcessor
 
-    testCompile rootProject.ext.junit
-    testCompile rootProject.ext.robolectric
-    testCompile rootProject.ext.lifecycleExtensions
+    testImplementation rootProject.ext.junit
+    testImplementation rootProject.ext.robolectric
+    testImplementation rootProject.ext.lifecycleExtensions
 }
 
 apply from: "$rootDir/gradle/artifacts.gradle"
