@@ -21,7 +21,7 @@ dependencies {
 
     implementation rootProject.ext.rxJava
 
-    implementation rootProject.ext.appCompat
+    implementation 'androidx.appcompat:appcompat:1.0.0'
 
     testImplementation rootProject.ext.junit
     testImplementation rootProject.ext.robolectric

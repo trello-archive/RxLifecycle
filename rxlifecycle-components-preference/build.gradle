@@ -21,7 +21,7 @@ dependencies {
 
     implementation rootProject.ext.rxJava
 
-    implementation rootProject.ext.preferenceCompat
+    implementation 'androidx.preference:preference:1.0.0'
 
     testImplementation rootProject.ext.junit
     testImplementation rootProject.ext.robolectric

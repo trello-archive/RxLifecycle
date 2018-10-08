@@ -30,7 +30,7 @@ dependencies {
     implementation project(':rxlifecycle-components')
     implementation project(':rxlifecycle-kotlin')
 
-    implementation rootProject.ext.appCompat
+    implementation 'androidx.appcompat:appcompat:1.0.0'
 
     implementation rootProject.ext.kotlinStdlib
 }

@@ -20,7 +20,7 @@ dependencies {
     api project(':rxlifecycle')
 
     implementation rootProject.ext.rxAndroid
-    implementation rootProject.ext.supportAnnotations
+    implementation 'androidx.annotation:annotation:1.0.0'
 
     testImplementation rootProject.ext.junit
     testImplementation rootProject.ext.robolectric

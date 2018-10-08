@@ -1,6 +1,6 @@
 package com.trello.rxlifecycle2;
 
-import android.arch.lifecycle.Lifecycle;
+import androidx.lifecycle.Lifecycle;
 
 import com.trello.lifecycle2.android.lifecycle.RxLifecycleAndroidLifecycle;
 

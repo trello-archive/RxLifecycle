@@ -20,13 +20,13 @@ dependencies {
     api project(':rxlifecycle')
 
     implementation rootProject.ext.rxAndroid
-    implementation rootProject.ext.supportAnnotations
-    api rootProject.ext.lifecycle
-    annotationProcessor rootProject.ext.lifecycleProcessor
+    implementation 'androidx.annotation:annotation:1.0.0'
+    api 'androidx.lifecycle:lifecycle-runtime:2.0.0'
+    annotationProcessor 'androidx.lifecycle:lifecycle-compiler:2.0.0'
 
     testImplementation rootProject.ext.junit
     testImplementation rootProject.ext.robolectric
-    testImplementation rootProject.ext.lifecycleExtensions
+    testImplementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
 }
 
 apply from: "$rootDir/gradle/artifacts.gradle"
