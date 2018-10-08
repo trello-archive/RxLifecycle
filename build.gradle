@@ -25,7 +25,7 @@ apply plugin: 'com.github.ben-manes.versions'
 
 ext {
     minSdkVersion = 14
-    compileSdkVersion = 27
+    compileSdkVersion = 28
     targetSdkVersion = compileSdkVersion
     buildToolsVersion = '28.0.3'
 
