@@ -1,7 +1,7 @@
 buildscript {
     ext {
         //version here to share between build script and projects
-        verKotlin = '1.2.51'
+        verKotlin = '1.2.71'
     }
     repositories {
         google()
