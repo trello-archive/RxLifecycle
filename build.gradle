@@ -25,10 +25,10 @@ apply plugin: 'com.github.ben-manes.versions'
 
 ext {
     minSdkVersion = 14
-    compileSdkVersion = 27
+    compileSdkVersion = 28
     targetSdkVersion = compileSdkVersion
 
-    supportLibVersion = '27.1.1'
+    supportLibVersion = '28.0.0'
     lifecycleVersion = '1.1.1'
     lifecycleRuntimeVersion = '1.1.1'
 
