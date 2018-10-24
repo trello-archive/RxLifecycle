@@ -36,8 +36,8 @@ ext {
     targetCompatibilityVersion = JavaVersion.VERSION_1_7
 
     // Define all dependencies in the base project, to unify & make it easy to update
-    rxJava = 'io.reactivex.rxjava2:rxjava:2.1.17'
-    rxAndroid = 'io.reactivex.rxjava2:rxandroid:2.0.2'
+    rxJava = 'io.reactivex.rxjava2:rxjava:2.2.3'
+    rxAndroid = 'io.reactivex.rxjava2:rxandroid:2.1.0'
     navi = 'com.trello.navi2:navi:2.0.1'
     lifecycle = "android.arch.lifecycle:runtime:$lifecycleRuntimeVersion"
     lifecycleProcessor = "android.arch.lifecycle:compiler:$lifecycleVersion"
