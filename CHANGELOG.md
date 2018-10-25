@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.0.0 (2018-10-25)
+
+- [#285](https://github.com/trello/RxLifecycle/pull/285): Updated base package to com.trello.rxlifecycle3
+- [#284](https://github.com/trello/RxLifecycle/pull/284): Deprecate rxlifecycle-navi
+- [#283](https://github.com/trello/RxLifecycle/pull/283): Upgraded to AndroidX
+
 ## 2.2.2 (2018-07-29)
 
 - [#275](https://github.com/trello/RxLifecycle/pull/275): Updated dependencies
