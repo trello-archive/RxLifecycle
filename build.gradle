@@ -1,14 +1,14 @@
 buildscript {
     ext {
         //version here to share between build script and projects
-        verKotlin = '1.2.51'
+        verKotlin = '1.2.71'
     }
     repositories {
         google()
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.3'
+        classpath 'com.android.tools.build:gradle:3.2.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$verKotlin"
         classpath "org.jetbrains.kotlin:kotlin-android-extensions:$verKotlin"
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.20.0'
@@ -25,11 +25,10 @@ apply plugin: 'com.github.ben-manes.versions'
 
 ext {
     minSdkVersion = 14
-    compileSdkVersion = 27
+    compileSdkVersion = 28
     targetSdkVersion = compileSdkVersion
-    buildToolsVersion = '27.0.3'
 
-    supportLibVersion = '27.1.1'
+    supportLibVersion = '28.0.0'
     lifecycleVersion = '1.1.1'
     lifecycleRuntimeVersion = '1.1.1'
 
@@ -37,8 +36,8 @@ ext {
     targetCompatibilityVersion = JavaVersion.VERSION_1_7
 
     // Define all dependencies in the base project, to unify & make it easy to update
-    rxJava = 'io.reactivex.rxjava2:rxjava:2.1.17'
-    rxAndroid = 'io.reactivex.rxjava2:rxandroid:2.0.2'
+    rxJava = 'io.reactivex.rxjava2:rxjava:2.2.3'
+    rxAndroid = 'io.reactivex.rxjava2:rxandroid:2.1.0'
     navi = 'com.trello.navi2:navi:2.0.1'
     lifecycle = "android.arch.lifecycle:runtime:$lifecycleRuntimeVersion"
     lifecycleProcessor = "android.arch.lifecycle:compiler:$lifecycleVersion"
