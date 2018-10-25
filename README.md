@@ -45,7 +45,6 @@ those implemented?
 You have a few options for that:
 
 1. Use rxlifecycle-components and subclass the provided `RxActivity`, `RxFragment`, etc. classes.
-1. Use [Navi](https://github.com/trello/navi/) + rxlifecycle-navi to generate providers.
 1. Use [Android's lifecycle](https://developer.android.com/topic/libraries/architecture/lifecycle.html) + rxlifecycle-android-lifecycle to generate providers.
 1. Write the implementation yourself.
 
@@ -58,23 +57,6 @@ public class MyActivity extends RxActivity {
         super.onResume();
         myObservable
             .compose(bindToLifecycle())
-            .subscribe();
-    }
-}
-```
-
-If you use rxlifecycle-navi, then you just pass your `NaviComponent` to `NaviLifecycle` to generate a provider:
-
-```java
-public class MyActivity extends NaviActivity {
-    private final LifecycleProvider<ActivityEvent> provider
-        = NaviLifecycle.createActivityLifecycleProvider(this);
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        myObservable
-            .compose(provider.bindToLifecycle())
             .subscribe();
     }
 }
@@ -146,9 +128,6 @@ implementation 'com.trello.rxlifecycle2:rxlifecycle-components:2.2.2'
 // If you want pre-written support preference Fragments you can subclass as providers
 implementation 'com.trello.rxlifecycle2:rxlifecycle-components-preference:2.2.2'
 
-// If you want to use Navi for providers
-implementation 'com.trello.rxlifecycle2:rxlifecycle-navi:2.2.2'
-
 // If you want to use Android Lifecycle for providers
 implementation 'com.trello.rxlifecycle2:rxlifecycle-android-lifecycle:2.2.2'
 
@@ -157,6 +136,10 @@ implementation 'com.trello.rxlifecycle2:rxlifecycle-kotlin:2.2.2'
 
 // If you want to use Kotlin syntax with Android Lifecycle
 implementation 'com.trello.rxlifecycle2:rxlifecycle-android-lifecycle-kotlin:2.2.2'
+
+// If you want to use Navi for providers
+// DEPRECATED: Use rxlifecycle-android-lifecycle instead. This will be removed in a future release.
+implementation 'com.trello.rxlifecycle2:rxlifecycle-navi:2.2.2'
 ```
 
 ## License

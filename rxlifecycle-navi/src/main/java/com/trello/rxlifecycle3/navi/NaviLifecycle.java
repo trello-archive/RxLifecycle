@@ -24,6 +24,10 @@ import androidx.annotation.NonNull;
 
 import static com.trello.rxlifecycle3.internal.Preconditions.checkNotNull;
 
+@Deprecated
+/**
+ * @Deprecated switch to using rxlifecycle-android-lifecycle
+ */
 public final class NaviLifecycle {
 
     @NonNull
