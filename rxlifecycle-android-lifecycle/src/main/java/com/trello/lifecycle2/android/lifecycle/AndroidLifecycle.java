@@ -1,8 +1,8 @@
 package com.trello.lifecycle2.android.lifecycle;
 
-import com.trello.rxlifecycle2.LifecycleProvider;
-import com.trello.rxlifecycle2.LifecycleTransformer;
-import com.trello.rxlifecycle2.RxLifecycle;
+import com.trello.rxlifecycle3.LifecycleProvider;
+import com.trello.rxlifecycle3.LifecycleTransformer;
+import com.trello.rxlifecycle3.RxLifecycle;
 
 import androidx.annotation.CheckResult;
 import androidx.annotation.NonNull;
