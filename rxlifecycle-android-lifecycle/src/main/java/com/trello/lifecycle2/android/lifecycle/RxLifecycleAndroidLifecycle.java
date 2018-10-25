@@ -1,7 +1,7 @@
 package com.trello.lifecycle2.android.lifecycle;
 
-import com.trello.rxlifecycle2.LifecycleTransformer;
-import com.trello.rxlifecycle2.OutsideLifecycleException;
+import com.trello.rxlifecycle3.LifecycleTransformer;
+import com.trello.rxlifecycle3.OutsideLifecycleException;
 
 import androidx.annotation.CheckResult;
 import androidx.annotation.NonNull;
@@ -9,7 +9,7 @@ import androidx.lifecycle.Lifecycle;
 import io.reactivex.Observable;
 import io.reactivex.functions.Function;
 
-import static com.trello.rxlifecycle2.RxLifecycle.bind;
+import static com.trello.rxlifecycle3.RxLifecycle.bind;
 
 public final class RxLifecycleAndroidLifecycle {
 
