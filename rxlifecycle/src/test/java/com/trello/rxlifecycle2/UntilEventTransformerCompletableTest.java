@@ -14,13 +14,14 @@
 
 package com.trello.rxlifecycle2;
 
-import io.reactivex.Completable;
-import io.reactivex.observers.TestObserver;
-import io.reactivex.subjects.PublishSubject;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.concurrent.CancellationException;
+
+import io.reactivex.Completable;
+import io.reactivex.observers.TestObserver;
+import io.reactivex.subjects.PublishSubject;
 
 public class UntilEventTransformerCompletableTest {
 

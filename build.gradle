@@ -28,7 +28,7 @@ ext {
     compileSdkVersion = 28
     targetSdkVersion = compileSdkVersion
 
-    supportLibVersion = '28.0.0'
+    supportLibVersion = '1.0.0'
     lifecycleVersion = '1.1.1'
     lifecycleRuntimeVersion = '1.1.1'
 
@@ -38,14 +38,14 @@ ext {
     // Define all dependencies in the base project, to unify & make it easy to update
     rxJava = 'io.reactivex.rxjava2:rxjava:2.2.3'
     rxAndroid = 'io.reactivex.rxjava2:rxandroid:2.1.0'
-    navi = 'com.trello.navi2:navi:2.0.1'
+    navi = 'com.trello.navi2:navi:2.1.0'
     lifecycle = "android.arch.lifecycle:runtime:$lifecycleRuntimeVersion"
     lifecycleProcessor = "android.arch.lifecycle:compiler:$lifecycleVersion"
     lifecycleExtensions = "android.arch.lifecycle:extensions:$lifecycleVersion"
     kotlinStdlib = "org.jetbrains.kotlin:kotlin-stdlib:$verKotlin"
-    appCompat = "com.android.support:appcompat-v7:$supportLibVersion"
-    preferenceCompat = "com.android.support:preference-v7:$supportLibVersion"
-    supportAnnotations = "com.android.support:support-annotations:$supportLibVersion"
+    appCompat = "androidx.appcompat:appcompat:$supportLibVersion"
+    preferenceCompat = "androidx.preference:preference:$supportLibVersion"
+    supportAnnotations = "androidx.annotation:annotation:$supportLibVersion"
     jsr305Annotations = 'com.google.code.findbugs:jsr305:3.0.2'
     junit = 'junit:junit:4.12'
     robolectric = 'org.robolectric:robolectric:3.8'

@@ -15,19 +15,22 @@
 package com.trello.rxlifecycle2.components;
 
 import android.os.Bundle;
+
 import com.trello.navi2.Event;
 import com.trello.navi2.NaviComponent;
 import com.trello.navi2.internal.NaviEmitter;
 import com.trello.rxlifecycle2.LifecycleProvider;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 import com.trello.rxlifecycle2.navi.NaviLifecycle;
-import io.reactivex.Observable;
-import io.reactivex.observers.TestObserver;
-import io.reactivex.subjects.PublishSubject;
+
 import org.junit.Test;
 
 import java.lang.ref.WeakReference;
 import java.util.HashSet;
+
+import io.reactivex.Observable;
+import io.reactivex.observers.TestObserver;
+import io.reactivex.subjects.PublishSubject;
 
 import static com.trello.navi2.internal.NaviEmitter.createActivityEmitter;
 import static com.trello.rxlifecycle2.android.ActivityEvent.STOP;

@@ -14,11 +14,12 @@
 
 package com.trello.rxlifecycle2;
 
+import java.util.concurrent.CancellationException;
+
 import io.reactivex.Completable;
 import io.reactivex.exceptions.Exceptions;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
-import java.util.concurrent.CancellationException;
 
 final class Functions {
 

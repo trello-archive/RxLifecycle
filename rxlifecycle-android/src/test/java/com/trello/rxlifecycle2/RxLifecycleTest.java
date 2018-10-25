@@ -16,13 +16,11 @@ package com.trello.rxlifecycle2;
 
 import android.app.Activity;
 import android.view.View;
+
 import com.trello.rxlifecycle2.android.ActivityEvent;
 import com.trello.rxlifecycle2.android.FragmentEvent;
 import com.trello.rxlifecycle2.android.RxLifecycleAndroid;
-import io.reactivex.Observable;
-import io.reactivex.observers.TestObserver;
-import io.reactivex.subjects.BehaviorSubject;
-import io.reactivex.subjects.PublishSubject;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,6 +29,11 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import io.reactivex.Observable;
+import io.reactivex.observers.TestObserver;
+import io.reactivex.subjects.BehaviorSubject;
+import io.reactivex.subjects.PublishSubject;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;

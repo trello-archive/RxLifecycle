@@ -14,10 +14,11 @@
 
 package com.trello.rxlifecycle2;
 
-import io.reactivex.observers.TestObserver;
-import io.reactivex.subjects.PublishSubject;
 import org.junit.Before;
 import org.junit.Test;
+
+import io.reactivex.observers.TestObserver;
+import io.reactivex.subjects.PublishSubject;
 
 public class UntilEventTransformerObservableTest {
 

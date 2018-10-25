@@ -14,13 +14,13 @@
 
 package com.trello.rxlifecycle2;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+
 import io.reactivex.Observable;
 import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
-
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
 
 import static com.trello.rxlifecycle2.internal.Preconditions.checkNotNull;
 

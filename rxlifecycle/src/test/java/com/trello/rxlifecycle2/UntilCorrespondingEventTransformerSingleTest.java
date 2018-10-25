@@ -14,16 +14,17 @@
 
 package com.trello.rxlifecycle2;
 
-import io.reactivex.Single;
-import io.reactivex.functions.Function;
-import io.reactivex.observers.TestObserver;
-import io.reactivex.schedulers.TestScheduler;
-import io.reactivex.subjects.PublishSubject;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.TimeUnit;
+
+import io.reactivex.Single;
+import io.reactivex.functions.Function;
+import io.reactivex.observers.TestObserver;
+import io.reactivex.schedulers.TestScheduler;
+import io.reactivex.subjects.PublishSubject;
 
 public class UntilCorrespondingEventTransformerSingleTest {
 

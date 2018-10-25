@@ -1,7 +1,5 @@
 package com.trello.rxlifecycle2;
 
-import android.arch.lifecycle.Lifecycle;
-
 import com.trello.lifecycle2.android.lifecycle.RxLifecycleAndroidLifecycle;
 
 import org.junit.Before;
@@ -10,6 +8,7 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
+import androidx.lifecycle.Lifecycle;
 import io.reactivex.Observable;
 import io.reactivex.observers.TestObserver;
 import io.reactivex.subjects.BehaviorSubject;
