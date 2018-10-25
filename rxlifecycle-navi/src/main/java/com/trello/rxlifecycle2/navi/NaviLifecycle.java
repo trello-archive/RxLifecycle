@@ -14,12 +14,13 @@
 
 package com.trello.rxlifecycle2.navi;
 
-import android.support.annotation.CheckResult;
-import android.support.annotation.NonNull;
 import com.trello.navi2.NaviComponent;
 import com.trello.rxlifecycle2.LifecycleProvider;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 import com.trello.rxlifecycle2.android.FragmentEvent;
+
+import androidx.annotation.CheckResult;
+import androidx.annotation.NonNull;
 
 import static com.trello.rxlifecycle2.internal.Preconditions.checkNotNull;
 

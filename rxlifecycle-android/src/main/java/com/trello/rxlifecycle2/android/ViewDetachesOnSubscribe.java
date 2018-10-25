@@ -15,6 +15,7 @@
 package com.trello.rxlifecycle2.android;
 
 import android.view.View;
+
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.MainThreadDisposable;

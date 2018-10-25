@@ -14,6 +14,10 @@
 
 package com.trello.rxlifecycle2;
 
+import org.reactivestreams.Publisher;
+
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Completable;
 import io.reactivex.CompletableSource;
@@ -29,9 +33,6 @@ import io.reactivex.ObservableTransformer;
 import io.reactivex.Single;
 import io.reactivex.SingleSource;
 import io.reactivex.SingleTransformer;
-import org.reactivestreams.Publisher;
-
-import javax.annotation.ParametersAreNonnullByDefault;
 
 import static com.trello.rxlifecycle2.internal.Preconditions.checkNotNull;
 

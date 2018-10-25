@@ -16,13 +16,15 @@ package com.trello.rxlifecycle2.sample;
 
 import android.os.Bundle;
 import android.util.Log;
+
 import com.trello.rxlifecycle2.android.ActivityEvent;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
+
+import java.util.concurrent.TimeUnit;
+
 import io.reactivex.Observable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
-
-import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends RxAppCompatActivity {
 

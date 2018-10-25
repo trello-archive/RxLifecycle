@@ -1,2 +1,1 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="me.tatarka.rxlifecycle_android_lifecycle_kotlin" />
+<manifest package="me.tatarka.rxlifecycle_android_lifecycle_kotlin" />
