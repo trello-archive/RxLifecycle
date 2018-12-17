@@ -105,7 +105,7 @@ myObservable
 ```
 
 There is an additional rxlifecycle-android-lifecycle-kotlin module to provider extensions to work
-with `LivecycleOwner`'s.
+with `LifecycleOwner`'s.
 
 ```kotlin
 
