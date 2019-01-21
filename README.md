@@ -4,6 +4,8 @@ This library allows one to automatically complete sequences based on a second li
 
 This capability is useful in Android, where incomplete subscriptions can cause memory leaks.
 
+**Looking for an RxJava 2 compatible library? Check out [the RxLifecycle 2.x branch](https://github.com/trello/RxLifecycle/tree/2.x).**
+
 ## Usage
 
 You must start with an `Observable<T>` representing a lifecycle stream. Then you use `RxLifecycle` to bind
