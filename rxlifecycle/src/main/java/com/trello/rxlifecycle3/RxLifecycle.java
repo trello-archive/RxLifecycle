@@ -14,15 +14,14 @@
 
 package com.trello.rxlifecycle3;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nonnull;
+import static com.trello.rxlifecycle3.internal.Preconditions.checkNotNull;
 
 import io.reactivex.Observable;
 import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
-
-import static com.trello.rxlifecycle3.internal.Preconditions.checkNotNull;
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
 
 public class RxLifecycle {
 
@@ -36,23 +35,29 @@ public class RxLifecycle {
      * When the lifecycle event occurs, the source will cease to emit any notifications.
      *
      * @param lifecycle the lifecycle sequence
-     * @param event the event which should conclude notifications from the source
+     * @param events the event which should conclude notifications from the source,
+     *         support multiple events in filling order
      * @return a reusable {@link LifecycleTransformer} that unsubscribes the source at the specified event
      */
     @Nonnull
     @CheckReturnValue
     public static <T, R> LifecycleTransformer<T> bindUntilEvent(@Nonnull final Observable<R> lifecycle,
-                                                                @Nonnull final R event) {
+            @Nonnull final R... events) {
         checkNotNull(lifecycle, "lifecycle == null");
-        checkNotNull(event, "event == null");
-        return bind(takeUntilEvent(lifecycle, event));
+        checkNotNull(events, "event == null");
+        return bind(takeUntilEvent(lifecycle, events));
     }
 
-    private static <R> Observable<R> takeUntilEvent(final Observable<R> lifecycle, final R event) {
+    private static <R> Observable<R> takeUntilEvent(final Observable<R> lifecycle, final R... events) {
         return lifecycle.filter(new Predicate<R>() {
             @Override
             public boolean test(R lifecycleEvent) throws Exception {
-                return lifecycleEvent.equals(event);
+                for (R event : events) {
+                    if (lifecycleEvent.equals(event)) {
+                        return true;
+                    }
+                }
+                return false;
             }
         });
     }
@@ -90,24 +95,24 @@ public class RxLifecycle {
     @Nonnull
     @CheckReturnValue
     public static <T, R> LifecycleTransformer<T> bind(@Nonnull Observable<R> lifecycle,
-                                                      @Nonnull final Function<R, R> correspondingEvents) {
+            @Nonnull final Function<R, R> correspondingEvents) {
         checkNotNull(lifecycle, "lifecycle == null");
         checkNotNull(correspondingEvents, "correspondingEvents == null");
         return bind(takeUntilCorrespondingEvent(lifecycle.share(), correspondingEvents));
     }
 
     private static <R> Observable<Boolean> takeUntilCorrespondingEvent(final Observable<R> lifecycle,
-                                                                       final Function<R, R> correspondingEvents) {
+            final Function<R, R> correspondingEvents) {
         return Observable.combineLatest(
-            lifecycle.take(1).map(correspondingEvents),
-            lifecycle.skip(1),
-            new BiFunction<R, R, Boolean>() {
-                @Override
-                public Boolean apply(R bindUntilEvent, R lifecycleEvent) throws Exception {
-                    return lifecycleEvent.equals(bindUntilEvent);
-                }
-            })
-            .onErrorReturn(Functions.RESUME_FUNCTION)
-            .filter(Functions.SHOULD_COMPLETE);
+                lifecycle.take(1).map(correspondingEvents),
+                lifecycle.skip(1),
+                new BiFunction<R, R, Boolean>() {
+                    @Override
+                    public Boolean apply(R bindUntilEvent, R lifecycleEvent) throws Exception {
+                        return lifecycleEvent.equals(bindUntilEvent);
+                    }
+                })
+                .onErrorReturn(Functions.RESUME_FUNCTION)
+                .filter(Functions.SHOULD_COMPLETE);
     }
 }

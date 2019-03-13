@@ -44,8 +44,8 @@ public abstract class RxFragment extends Fragment implements LifecycleProvider<F
     @Override
     @NonNull
     @CheckResult
-    public final <T> LifecycleTransformer<T> bindUntilEvent(@NonNull FragmentEvent event) {
-        return RxLifecycle.bindUntilEvent(lifecycleSubject, event);
+    public final <T> LifecycleTransformer<T> bindUntilEvent(@NonNull FragmentEvent... events) {
+        return RxLifecycle.bindUntilEvent(lifecycleSubject, events);
     }
 
     @Override

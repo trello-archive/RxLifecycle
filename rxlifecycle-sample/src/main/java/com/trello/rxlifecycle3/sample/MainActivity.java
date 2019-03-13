@@ -38,7 +38,7 @@ public class MainActivity extends RxAppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        // Specifically bind this until onPause()
+        // Specifically bind this until onPause() or OnStart()
         Observable.interval(1, TimeUnit.SECONDS)
             .doOnDispose(new Action() {
                 @Override
@@ -46,13 +46,29 @@ public class MainActivity extends RxAppCompatActivity {
                     Log.i(TAG, "Unsubscribing subscription from onCreate()");
                 }
             })
-            .compose(this.<Long>bindUntilEvent(ActivityEvent.PAUSE))
+            .compose(this.<Long>bindUntilEvent(ActivityEvent.PAUSE,ActivityEvent.START))
             .subscribe(new Consumer<Long>() {
                 @Override
                 public void accept(Long num) throws Exception {
-                    Log.i(TAG, "Started in onCreate(), running until onPause(): " + num);
+                    Log.i(TAG, "Started in onCreate(), running until onPause() or onStart(): " + num);
                 }
             });
+
+        // Specifically bind this until onPause()
+        Observable.interval(1, TimeUnit.SECONDS)
+                .doOnDispose(new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        Log.i(TAG, "Unsubscribing subscription from onCreate()");
+                    }
+                })
+                .compose(this.<Long>bindUntilEvent(ActivityEvent.PAUSE))
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long num) throws Exception {
+                        Log.i(TAG, "Started in onCreate(), running until onPause(): " + num);
+                    }
+                });
     }
 
     @Override

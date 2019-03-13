@@ -44,8 +44,8 @@ public abstract class RxFragmentActivity extends FragmentActivity implements Lif
     @Override
     @NonNull
     @CheckResult
-    public final <T> LifecycleTransformer<T> bindUntilEvent(@NonNull ActivityEvent event) {
-        return RxLifecycle.bindUntilEvent(lifecycleSubject, event);
+    public final <T> LifecycleTransformer<T> bindUntilEvent(@NonNull ActivityEvent... events) {
+        return RxLifecycle.bindUntilEvent(lifecycleSubject, events);
     }
 
     @Override
