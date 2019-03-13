@@ -14,6 +14,11 @@
 
 package com.trello.rxlifecycle3.navi;
 
+import static com.trello.rxlifecycle3.navi.NaviLifecycleMaps.FRAGMENT_EVENT_FILTER;
+import static com.trello.rxlifecycle3.navi.NaviLifecycleMaps.FRAGMENT_EVENT_MAP;
+
+import androidx.annotation.CheckResult;
+import androidx.annotation.NonNull;
 import com.trello.navi2.Event;
 import com.trello.navi2.NaviComponent;
 import com.trello.navi2.rx.RxNavi;
@@ -22,14 +27,8 @@ import com.trello.rxlifecycle3.LifecycleTransformer;
 import com.trello.rxlifecycle3.RxLifecycle;
 import com.trello.rxlifecycle3.android.FragmentEvent;
 import com.trello.rxlifecycle3.android.RxLifecycleAndroid;
-
-import androidx.annotation.CheckResult;
-import androidx.annotation.NonNull;
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
-
-import static com.trello.rxlifecycle3.navi.NaviLifecycleMaps.FRAGMENT_EVENT_FILTER;
-import static com.trello.rxlifecycle3.navi.NaviLifecycleMaps.FRAGMENT_EVENT_MAP;
 
 final class FragmentLifecycleProviderImpl implements LifecycleProvider<FragmentEvent> {
     private final BehaviorSubject<FragmentEvent> lifecycleSubject = BehaviorSubject.create();
@@ -56,8 +55,8 @@ final class FragmentLifecycleProviderImpl implements LifecycleProvider<FragmentE
     @Override
     @NonNull
     @CheckResult
-    public <T> LifecycleTransformer<T> bindUntilEvent(@NonNull FragmentEvent event) {
-        return RxLifecycle.bindUntilEvent(lifecycleSubject, event);
+    public <T> LifecycleTransformer<T> bindUntilEvent(@NonNull FragmentEvent... events) {
+        return RxLifecycle.bindUntilEvent(lifecycleSubject, events);
     }
 
     @Override

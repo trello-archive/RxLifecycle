@@ -31,7 +31,8 @@ import androidx.preference.EditTextPreferenceDialogFragmentCompat;
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
 
-public abstract class RxEditTextPreferenceDialogFragmentCompat extends EditTextPreferenceDialogFragmentCompat implements LifecycleProvider<FragmentEvent> {
+public abstract class RxEditTextPreferenceDialogFragmentCompat extends
+        EditTextPreferenceDialogFragmentCompat implements LifecycleProvider<FragmentEvent> {
 
     private final BehaviorSubject<FragmentEvent> lifecycleSubject = BehaviorSubject.create();
 
@@ -45,8 +46,8 @@ public abstract class RxEditTextPreferenceDialogFragmentCompat extends EditTextP
     @Override
     @NonNull
     @CheckResult
-    public final <T> LifecycleTransformer<T> bindUntilEvent(@NonNull FragmentEvent event) {
-        return RxLifecycle.bindUntilEvent(lifecycleSubject, event);
+    public final <T> LifecycleTransformer<T> bindUntilEvent(@NonNull FragmentEvent... events) {
+        return RxLifecycle.bindUntilEvent(lifecycleSubject, events);
     }
 
     @Override

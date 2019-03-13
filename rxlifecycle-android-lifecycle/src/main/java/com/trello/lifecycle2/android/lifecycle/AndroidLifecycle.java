@@ -47,8 +47,8 @@ public final class AndroidLifecycle implements LifecycleProvider<Lifecycle.Event
     @NonNull
     @Override
     @CheckResult
-    public <T> LifecycleTransformer<T> bindUntilEvent(@NonNull Lifecycle.Event event) {
-        return RxLifecycle.bindUntilEvent(lifecycleSubject, event);
+    public <T> LifecycleTransformer<T> bindUntilEvent(@NonNull Lifecycle.Event... events) {
+        return RxLifecycle.bindUntilEvent(lifecycleSubject, events);
     }
 
     @NonNull
