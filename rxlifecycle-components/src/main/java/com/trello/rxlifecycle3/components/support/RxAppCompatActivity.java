@@ -16,23 +16,35 @@ package com.trello.rxlifecycle3.components.support;
 
 import android.os.Bundle;
 
+import androidx.annotation.CallSuper;
+import androidx.annotation.CheckResult;
+import androidx.annotation.ContentView;
+import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.trello.rxlifecycle3.LifecycleProvider;
 import com.trello.rxlifecycle3.LifecycleTransformer;
 import com.trello.rxlifecycle3.RxLifecycle;
 import com.trello.rxlifecycle3.android.ActivityEvent;
 import com.trello.rxlifecycle3.android.RxLifecycleAndroid;
 
-import androidx.annotation.CallSuper;
-import androidx.annotation.CheckResult;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
 
 public abstract class RxAppCompatActivity extends AppCompatActivity implements LifecycleProvider<ActivityEvent> {
 
     private final BehaviorSubject<ActivityEvent> lifecycleSubject = BehaviorSubject.create();
+
+    public RxAppCompatActivity() {
+        super();
+    }
+
+    @ContentView
+    public RxAppCompatActivity(@LayoutRes int contentLayoutId) {
+        super(contentLayoutId);
+    }
 
     @Override
     @NonNull
