@@ -28,9 +28,9 @@ ext {
     compileSdkVersion = 28
     targetSdkVersion = compileSdkVersion
 
-    supportLibVersion = '1.0.0'
-    lifecycleVersion = '1.1.1'
-    lifecycleRuntimeVersion = '1.1.1'
+    supportLibVersion = '1.1.0'
+    lifecycleVersion = '2.1.0'
+    lifecycleRuntimeVersion = '2.1.0'
 
     sourceCompatibilityVersion = JavaVersion.VERSION_1_7
     targetCompatibilityVersion = JavaVersion.VERSION_1_7
