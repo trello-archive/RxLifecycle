@@ -17,22 +17,34 @@ package com.trello.rxlifecycle3.components.support;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.annotation.CheckResult;
+import androidx.annotation.ContentView;
+import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import com.trello.rxlifecycle3.LifecycleProvider;
 import com.trello.rxlifecycle3.LifecycleTransformer;
 import com.trello.rxlifecycle3.RxLifecycle;
 import com.trello.rxlifecycle3.android.FragmentEvent;
 import com.trello.rxlifecycle3.android.RxLifecycleAndroid;
 
-import androidx.annotation.CheckResult;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
 
 public abstract class RxFragment extends Fragment implements LifecycleProvider<FragmentEvent> {
 
     private final BehaviorSubject<FragmentEvent> lifecycleSubject = BehaviorSubject.create();
+
+    public RxFragment() {
+        super();
+    }
+
+    @ContentView
+    public RxFragment(@LayoutRes int contentLayoutId) {
+        super(contentLayoutId);
+    }
 
     @Override
     @NonNull
