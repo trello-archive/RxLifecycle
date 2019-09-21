@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.1.0 (2019-09-21)
+
+- [#290](https://github.com/trello/RxLifecycle/pull/290): Fixed up some missing rxlifecycle3 conversions
+- [#308](https://github.com/trello/RxLifecycle/pull/308): Support LayoutId constructors for AppCompatActivity and (AndroidX)Fragment
+
 ## 3.0.0 (2018-10-25)
 
 - [#285](https://github.com/trello/RxLifecycle/pull/285): Updated base package to com.trello.rxlifecycle3
