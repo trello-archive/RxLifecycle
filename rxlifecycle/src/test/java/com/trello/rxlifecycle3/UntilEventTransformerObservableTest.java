@@ -40,7 +40,7 @@ public class UntilEventTransformerObservableTest {
         stream.onNext("1");
         stream.onNext("2");
         testObserver.assertValues("1", "2");
-        testObserver.assertNotTerminated();
+        testObserver.assertNotComplete();
     }
 
     @Test
@@ -54,7 +54,7 @@ public class UntilEventTransformerObservableTest {
         stream.onNext("2");
 
         testObserver.assertValues("1", "2");
-        testObserver.assertNotTerminated();
+        testObserver.assertNotComplete();
     }
 
     @Test

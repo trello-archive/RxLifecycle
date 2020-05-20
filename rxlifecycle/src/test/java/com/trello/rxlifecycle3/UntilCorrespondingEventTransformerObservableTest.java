@@ -41,7 +41,7 @@ public class UntilCorrespondingEventTransformerObservableTest {
         stream.onNext("1");
         stream.onNext("2");
         testObserver.assertValues("1", "2");
-        testObserver.assertNotTerminated();
+        testObserver.assertNotComplete();
     }
 
     @Test
@@ -55,7 +55,7 @@ public class UntilCorrespondingEventTransformerObservableTest {
         stream.onNext("2");
 
         testObserver.assertValues("1", "2");
-        testObserver.assertNotTerminated();
+        testObserver.assertNotComplete();
     }
 
     @Test
@@ -70,7 +70,7 @@ public class UntilCorrespondingEventTransformerObservableTest {
         stream.onNext("2");
 
         testObserver.assertValues("1", "2");
-        testObserver.assertNotTerminated();
+        testObserver.assertNotComplete();
     }
 
     @Test
