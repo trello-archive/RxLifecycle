@@ -17,9 +17,9 @@ package com.trello.rxlifecycle3;
 import org.junit.Before;
 import org.junit.Test;
 
-import io.reactivex.processors.PublishProcessor;
-import io.reactivex.subjects.PublishSubject;
-import io.reactivex.subscribers.TestSubscriber;
+import io.reactivex.rxjava3.processors.PublishProcessor;
+import io.reactivex.rxjava3.subjects.PublishSubject;
+import io.reactivex.rxjava3.subscribers.TestSubscriber;
 
 public class UntilLifecycleTransformerFlowableTest {
 

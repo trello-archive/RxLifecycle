@@ -19,10 +19,10 @@ import org.junit.Test;
 
 import java.util.concurrent.CancellationException;
 
-import io.reactivex.Completable;
-import io.reactivex.functions.Function;
-import io.reactivex.observers.TestObserver;
-import io.reactivex.subjects.PublishSubject;
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.functions.Function;
+import io.reactivex.rxjava3.observers.TestObserver;
+import io.reactivex.rxjava3.subjects.PublishSubject;
 
 public class UntilCorrespondingEventTransformerCompletableTest {
 

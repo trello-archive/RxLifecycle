@@ -28,14 +28,14 @@ import org.junit.Test;
 import java.lang.ref.WeakReference;
 import java.util.HashSet;
 
-import io.reactivex.Observable;
-import io.reactivex.observers.TestObserver;
-import io.reactivex.subjects.PublishSubject;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.observers.TestObserver;
+import io.reactivex.rxjava3.subjects.PublishSubject;
 
 import static com.trello.navi2.internal.NaviEmitter.createActivityEmitter;
 import static com.trello.rxlifecycle3.android.ActivityEvent.STOP;
 import static com.trello.rxlifecycle3.navi.NaviLifecycle.createActivityLifecycleProvider;
-import static io.reactivex.subjects.PublishSubject.create;
+import static io.reactivex.rxjava3.subjects.PublishSubject.create;
 import static org.junit.Assert.assertNull;
 
 public class NaviActivityLifecycleTest {

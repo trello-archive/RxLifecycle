@@ -6,8 +6,8 @@ import com.trello.rxlifecycle3.OutsideLifecycleException;
 import androidx.annotation.CheckResult;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.Lifecycle;
-import io.reactivex.Observable;
-import io.reactivex.functions.Function;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.functions.Function;
 
 import static com.trello.rxlifecycle3.RxLifecycle.bind;
 

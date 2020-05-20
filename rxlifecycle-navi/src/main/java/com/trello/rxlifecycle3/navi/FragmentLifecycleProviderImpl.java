@@ -25,8 +25,8 @@ import com.trello.rxlifecycle3.android.RxLifecycleAndroid;
 
 import androidx.annotation.CheckResult;
 import androidx.annotation.NonNull;
-import io.reactivex.Observable;
-import io.reactivex.subjects.BehaviorSubject;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.subjects.BehaviorSubject;
 
 import static com.trello.rxlifecycle3.navi.NaviLifecycleMaps.FRAGMENT_EVENT_FILTER;
 import static com.trello.rxlifecycle3.navi.NaviLifecycleMaps.FRAGMENT_EVENT_MAP;

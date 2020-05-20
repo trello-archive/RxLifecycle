@@ -22,9 +22,9 @@ import com.trello.rxlifecycle3.components.support.RxAppCompatActivity;
 
 import java.util.concurrent.TimeUnit;
 
-import io.reactivex.Observable;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.functions.Action;
+import io.reactivex.rxjava3.functions.Consumer;
 
 public class MainActivity extends RxAppCompatActivity {
 
