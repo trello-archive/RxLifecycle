@@ -6,7 +6,7 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     defaultConfig {
-        applicationId "com.trello.rxlifecycle3.sample"
+        applicationId "com.trello.rxlifecycle4.sample"
         minSdkVersion rootProject.ext.minSdkVersion
 
         targetSdkVersion rootProject.ext.targetSdkVersion
