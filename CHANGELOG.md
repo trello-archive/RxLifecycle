@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.0.0 (2020-05-23)
+
+This major revision was made to support RxJava 3. RxLifecycle 4.0 lives in a new namespace and
+package names so that it can work side-by-side with previous versions of RxLifecycle.
+
+- [#317](https://github.com/trello/RxLifecycle/pull/317): Upgrade to RxJava 3
+- [#319](https://github.com/trello/RxLifecycle/pull/319): Updated namespace to com.trello.rxlifecycle4
+
 ## 3.1.0 (2019-09-21)
 
 - [#290](https://github.com/trello/RxLifecycle/pull/290): Fixed up some missing rxlifecycle3 conversions
