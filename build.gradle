@@ -8,7 +8,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.0'
+        classpath 'com.android.tools.build:gradle:3.6.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$verKotlin"
         classpath "org.jetbrains.kotlin:kotlin-android-extensions:$verKotlin"
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.25.0'
@@ -36,8 +36,8 @@ ext {
     targetCompatibilityVersion = JavaVersion.VERSION_1_7
 
     // Define all dependencies in the base project, to unify & make it easy to update
-    rxJava = 'io.reactivex.rxjava2:rxjava:2.2.12'
-    rxAndroid = 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    rxJava = 'io.reactivex.rxjava3:rxjava:3.0.3'
+    rxAndroid = 'io.reactivex.rxjava3:rxandroid:3.0.0'
     navi = 'com.trello.navi2:navi:2.1.0'
     lifecycle = "androidx.lifecycle:lifecycle-runtime:$lifecycleRuntimeVersion"
     lifecycleProcessor = "androidx.lifecycle:lifecycle-compiler:$lifecycleVersion"

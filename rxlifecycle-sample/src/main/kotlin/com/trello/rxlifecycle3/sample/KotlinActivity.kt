@@ -20,7 +20,7 @@ import com.trello.rxlifecycle3.android.ActivityEvent
 import com.trello.rxlifecycle3.components.support.RxAppCompatActivity
 import com.trello.rxlifecycle3.kotlin.bindToLifecycle
 import com.trello.rxlifecycle3.kotlin.bindUntilEvent
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 import java.util.concurrent.TimeUnit
 
 class KotlinActivity : RxAppCompatActivity() {

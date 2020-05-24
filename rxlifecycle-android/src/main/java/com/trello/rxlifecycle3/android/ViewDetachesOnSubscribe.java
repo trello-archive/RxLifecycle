@@ -16,11 +16,11 @@ package com.trello.rxlifecycle3.android;
 
 import android.view.View;
 
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.android.MainThreadDisposable;
+import io.reactivex.rxjava3.core.ObservableEmitter;
+import io.reactivex.rxjava3.core.ObservableOnSubscribe;
+import io.reactivex.rxjava3.android.MainThreadDisposable;
 
-import static io.reactivex.android.MainThreadDisposable.verifyMainThread;
+import static io.reactivex.rxjava3.android.MainThreadDisposable.verifyMainThread;
 
 final class ViewDetachesOnSubscribe implements ObservableOnSubscribe<Object> {
 

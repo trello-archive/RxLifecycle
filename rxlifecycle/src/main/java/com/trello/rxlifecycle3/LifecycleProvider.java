@@ -17,7 +17,7 @@ package com.trello.rxlifecycle3;
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 
-import io.reactivex.Observable;
+import io.reactivex.rxjava3.core.Observable;
 
 /**
  * Common base interface for activity and fragment lifecycle providers.

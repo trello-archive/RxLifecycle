@@ -17,10 +17,10 @@ package com.trello.rxlifecycle3;
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 
-import io.reactivex.Observable;
-import io.reactivex.functions.BiFunction;
-import io.reactivex.functions.Function;
-import io.reactivex.functions.Predicate;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.functions.BiFunction;
+import io.reactivex.rxjava3.functions.Function;
+import io.reactivex.rxjava3.functions.Predicate;
 
 import static com.trello.rxlifecycle3.internal.Preconditions.checkNotNull;
 

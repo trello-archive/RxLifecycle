@@ -18,8 +18,8 @@ import android.view.View
 import com.trello.rxlifecycle3.LifecycleProvider
 import com.trello.rxlifecycle3.RxLifecycle
 import com.trello.rxlifecycle3.android.RxLifecycleAndroid
-import io.reactivex.*
-import io.reactivex.functions.Function
+import io.reactivex.rxjava3.core.*
+import io.reactivex.rxjava3.functions.Function
 
 // RxLifecycle extensions
 

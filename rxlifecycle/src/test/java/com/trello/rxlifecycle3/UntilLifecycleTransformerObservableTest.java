@@ -17,8 +17,8 @@ package com.trello.rxlifecycle3;
 import org.junit.Before;
 import org.junit.Test;
 
-import io.reactivex.observers.TestObserver;
-import io.reactivex.subjects.PublishSubject;
+import io.reactivex.rxjava3.observers.TestObserver;
+import io.reactivex.rxjava3.subjects.PublishSubject;
 
 public class UntilLifecycleTransformerObservableTest {
 
@@ -40,7 +40,7 @@ public class UntilLifecycleTransformerObservableTest {
         stream.onNext("1");
         stream.onNext("2");
         testObserver.assertValues("1", "2");
-        testObserver.assertNotTerminated();
+        testObserver.assertNotComplete();
     }
 
     @Test

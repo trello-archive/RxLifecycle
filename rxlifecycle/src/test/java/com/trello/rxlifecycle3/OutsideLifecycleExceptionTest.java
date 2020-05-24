@@ -16,11 +16,11 @@ package com.trello.rxlifecycle3;
 
 import org.junit.Test;
 
-import io.reactivex.exceptions.CompositeException;
-import io.reactivex.functions.Function;
-import io.reactivex.functions.Predicate;
-import io.reactivex.observers.TestObserver;
-import io.reactivex.subjects.PublishSubject;
+import io.reactivex.rxjava3.exceptions.CompositeException;
+import io.reactivex.rxjava3.functions.Function;
+import io.reactivex.rxjava3.functions.Predicate;
+import io.reactivex.rxjava3.observers.TestObserver;
+import io.reactivex.rxjava3.subjects.PublishSubject;
 
 public class OutsideLifecycleExceptionTest {
 

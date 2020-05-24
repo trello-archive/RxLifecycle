@@ -17,7 +17,7 @@ package com.trello.rxlifecycle3.android.lifecycle.kotlin
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import com.trello.lifecycle2.android.lifecycle.AndroidLifecycle
-import io.reactivex.*
+import io.reactivex.rxjava3.core.*
 
 fun <T> Observable<T>.bindToLifecycle(owner: LifecycleOwner): Observable<T>
         = this.compose(AndroidLifecycle.createLifecycleProvider(owner).bindToLifecycle())
