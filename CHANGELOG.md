@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.0.1 (2020-10-29)
+
+- [#330](https://github.com/trello/RxLifecycle/pull/330): Corrected package name in rxlifecycle-android-lifecycle-kotlin
+
 ## 4.0.0 (2020-05-23)
 
 This major revision was made to support RxJava 3. RxLifecycle 4.0 lives in a new namespace and
