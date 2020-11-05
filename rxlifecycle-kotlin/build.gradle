@@ -8,6 +8,10 @@ android {
     defaultConfig {
         minSdkVersion rootProject.ext.minSdkVersion
     }
+
+    kotlinOptions {
+        freeCompilerArgs += ["-module-name", "rxlifecycle-kotlin-4"]
+    }
 }
 
 repositories {
