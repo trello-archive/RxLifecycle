@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.0.2 (2020-11-05)
+
+- [#332](https://github.com/trello/RxLifecycle/pull/332): Namespace Kotlin module names
+
 ## 4.0.1 (2020-10-29)
 
 - [#330](https://github.com/trello/RxLifecycle/pull/330): Corrected package name in rxlifecycle-android-lifecycle-kotlin
